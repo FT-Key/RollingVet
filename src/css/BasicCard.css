@@ -1,0 +1,19 @@
+.card {
+
+  width: clamp(18rem, 15vw, 24rem);
+  margin: 0;
+  height: 100%;
+
+  .card-img-top {
+    aspect-ratio: 15/8;
+    object-fit: cover;
+  }
+
+  .card-body{
+    display: grid;
+
+    .btn{
+      align-self: end;
+    }
+  }
+}

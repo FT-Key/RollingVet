@@ -1,0 +1,142 @@
+:root {
+  --transition-duration-short: .5s;
+  --transition-duration-large: 1s;
+  --transition-duration-extra-large: 5s;
+}
+
+body {
+  overflow: overlay;
+  scrollbar-gutter: stable;
+}
+
+.w-33 {
+  width: 33.3% !important;
+}
+
+.w-0 {
+  width: 0% !important;
+}
+
+.container-get {
+
+  display: flex;
+  flex-direction: column;
+  margin: .5rem 0;
+
+  .combinedUrl {
+    max-width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    word-break: break-all;
+    /* Rompe palabras largas para evitar desbordamiento */
+    white-space: normal;
+    /* Permite el ajuste de línea */
+    text-overflow: ellipsis;
+    /* Muestra puntos suspensivos para desbordamiento */
+    cursor: default;
+    height: auto;
+    /* Asegura que la altura se ajuste al contenido */
+  }
+
+  .combinedUrl.abbr {
+    max-width: 90%;
+    height: auto;
+    /* Ajustar automáticamente la altura del contenedor */
+  }
+
+  .fetch-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    transition: all var(--transition-duration-large) ease;
+
+    div:has(.btn-drop) {
+      width: 100%;
+      height: 1rem;
+
+      .btn-drop {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  .keys-div,
+  .domains-div {
+    transition: all var(--transition-duration-large) ease-out;
+    visibility: hidden;
+    opacity: 0;
+    overflow: hidden;
+    height: 0;
+  }
+
+  .keys-div .label-counter {
+    height: 300px;
+    margin: 0 .5rem .5rem .5rem;
+  }
+
+  .keys-div.show,
+  .domains-div.show {
+    visibility: visible;
+    opacity: 1;
+    padding: .5rem 0;
+    height: auto;
+  }
+
+  .btn {
+    transition: background var(--transition-duration-short) ease;
+  }
+
+  .center-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .center-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container-get {
+    flex-direction: row;
+
+    .fetch-div {
+      flex-direction: row;
+
+      div:has(.btn-drop) {
+        width: auto;
+        height: 100%;
+
+        .btn-drop {
+          width: auto;
+        }
+      }
+    }
+
+    .keys-div .label-counter {
+      height: 50%;
+      margin: 0 0 .5rem 0;
+    }
+
+    .keys-div,
+    .domains-div {
+      transition: all var(--transition-duration-large) ease;
+      height: auto;
+    }
+
+    .keys-div.show,
+    .domains-div.show {
+      padding: 1rem 0 1rem 0;
+    }
+  }
+}
