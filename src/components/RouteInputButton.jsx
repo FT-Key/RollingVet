@@ -16,6 +16,7 @@ const RouteInputButton = () => {
   const [viewDomain, setViewDomain] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
+  const [protocol, setProtocol] = useState('https');
 
   const VIEWKEYS_CONFIG = screenWidth > 768
     ? {
@@ -174,13 +175,13 @@ const RouteInputButton = () => {
 
   const combinedUrl = useMemo(() => {
     if (domainInput) {
-      const dominio = `http://${domainInput}/`;
+      const dominio = `${protocol}://${domainInput}/`;
       return `${dominio}${routeInput}`;
     } else if (routeInput) {
-      return `http://${defaultDomain}/${routeInput}`;
+      return `${protocol}://${defaultDomain}/${routeInput}`;
     }
-    return `http://${defaultDomain}`;
-  }, [routeInput, domainInput, defaultDomain]);
+    return `${protocol}://${defaultDomain}`;
+  }, [routeInput, domainInput, defaultDomain, protocol]);
 
   // Dominio por defecto
 
@@ -243,7 +244,7 @@ const RouteInputButton = () => {
 
   const handleRedirect = () => {
     if (routeInput) {
-      const dominio = domainInput ? `http://${domainInput}/` : `http://${defaultDomain}/`;
+      const dominio = domainInput ? `${protocol}://${domainInput}/` : `${protocol}://${defaultDomain}/`;
       saveDomainsAndRoutes();
       const encodedTags = encodeURIComponent(JSON.stringify(tags));
       navigate(`/serverResponse?ruta=${encodeURIComponent(routeInput)}&dominio=${encodeURIComponent(dominio)}&tags=${encodedTags}`);
@@ -271,13 +272,17 @@ const RouteInputButton = () => {
   const handleTagDelete = (tagToDelete) => {
     setTags(tags.filter(tag => tag !== tagToDelete));
   };
-  
+
   const handleViewDomain = () => {
     setViewDomain(!viewDomain);
   };
 
   const handleViewKeys = () => {
     setViewKeys(!viewKeys);
+  };
+
+  const handleProtocolChange = (e) => {
+    setProtocol(e.target.checked ? 'https' : 'http'); // Cambiar protocolo basado en checkbox
   };
 
   return (
@@ -288,7 +293,7 @@ const RouteInputButton = () => {
         <input
           type="text"
           onKeyDown={handleDefaultDomainAdd}
-          placeholder="Ingrese un dominio (sin http://)"
+          placeholder={`Ingrese un dominio (sin ${protocol}://)`}
           className="form-control"
           style={{ maxWidth: '300px', margin: '0 auto' }}
           list={'defaultDomains'}
@@ -323,7 +328,7 @@ const RouteInputButton = () => {
             value={domainInput}
             onChange={handleDomainChange}
             onKeyDown={handleKeyDown}
-            placeholder="Ingrese el dominio (sin http://)"
+            placeholder={`Ingrese el dominio (sin ${protocol}://)`}
             className="form-control my-3"
             style={{ maxWidth: '300px', margin: '0 auto' }}
             list="domains"
@@ -348,6 +353,15 @@ const RouteInputButton = () => {
               <option key={index} value={route} />
             ))}
           </datalist>
+          <label className='mb-2'>
+            HTTPS
+            <input
+              className='ms-2'
+              type="checkbox"
+              checked={protocol === 'https'}
+              onChange={handleProtocolChange}
+            />
+          </label>
           <CustomButton
             className={"pb-2"}
             variant={"primary"}

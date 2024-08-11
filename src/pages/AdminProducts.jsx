@@ -16,20 +16,29 @@ const AdminProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
+    let isMounted = true; // Variable para saber si el componente está montado
+
     const fetchProducts = async () => {
       while (true) {
         try {
           const data = await fetchServerData('http://localhost:3001', '/productos');
-          setProducts(data);
-          break;
+          if (isMounted) {
+            setProducts(data);
+          }
+          break; // Salir del bucle si la petición es exitosa
         } catch (error) {
           console.error('Error trayendo productos:', error);
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          if (!isMounted) return; // Salir si el componente se desmontó
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
         }
       }
     };
 
     fetchProducts();
+
+    return () => {
+      isMounted = false; // Marcar como desmontado al limpiar el efecto
+    };
   }, [updateMark]);
 
   const BLOCKED_CONFIG = {

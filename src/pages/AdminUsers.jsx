@@ -16,20 +16,29 @@ const AdminUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
+    let isMounted = true; // Variable para saber si el componente está montado
+
     const fetchUsers = async () => {
       while (true) {
         try {
           const data = await fetchServerData('http://localhost:3001', '/usuarios');
-          setUsers(data);
-          break;
+          if (isMounted) {
+            setUsers(data);
+          }
+          break; // Salir del bucle si la petición es exitosa
         } catch (error) {
           console.error('Error trayendo usuarios:', error);
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          if (!isMounted) return; // Salir si el componente se desmontó
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
         }
       }
     };
 
     fetchUsers();
+
+    return () => {
+      isMounted = false; // Marcar como desmontado al limpiar el efecto
+    };
   }, [updateMark]);
 
   const BLOQUEADO_CONFIG = {

@@ -11,20 +11,29 @@ const Home = () => {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
+    let isMounted = true; // Variable para saber si el componente está montado
+
     const cargarProductos = async () => {
       while (true) {
         try {
           const data = await fetchServerData('http://localhost:3001', '/productos');
-          setProductos(data);
+          if (isMounted) {
+            setProductos(data);
+          }
           break; // Salir del bucle si la petición es exitosa
         } catch (error) {
           console.error('Error cargando productos:', error);
+          if (!isMounted) return; // Salir si el componente se desmontó
           await new Promise(resolve => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
         }
       }
     };
 
     cargarProductos();
+
+    return () => {
+      isMounted = false; // Marcar como desmontado al limpiar el efecto
+    };
   }, []);
 
   return (
