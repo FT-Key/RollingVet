@@ -10,11 +10,12 @@ const Home = () => {
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     const cargarProductos = async () => {
       while (true) {
         try {
-          const data = await fetchServerData('https://server-templates.vercel.app', '/productos');
+          const data = await fetchServerData(apiUrl, '/productos');
           if (isMounted) {
             setProductos(data);
           }

@@ -2,7 +2,7 @@ const Imagen = ({ url, alt, style, loading = false }) => {
     return (
       <img 
         loading={loading ? 'lazy' : undefined}
-        className='d-block w-100' 
+        className='d-block' 
         src={url} 
         alt={alt} 
         style={style}

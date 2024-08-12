@@ -1,6 +1,7 @@
 import Carousel from 'react-bootstrap/Carousel';
 import Imagen from './Imagen';
 import { useMemo } from 'react';
+import '../css/CarouselFade.css'
 
 function CarouselFade({ data, type }) {
   // Use useMemo para evitar recalcuar en cada render
@@ -16,7 +17,6 @@ function CarouselFade({ data, type }) {
                 url={prod.imageUrl}
                 alt={prod.name}
                 loading={index === 0}
-                style={styles.carouselImg}
               />
               <Carousel.Caption>
                 <h3>{prod.name}</h3>
@@ -29,14 +29,6 @@ function CarouselFade({ data, type }) {
     </>
   );
 }
-
-const styles = {
-  carouselImg: {
-    objectFit: 'cover',
-    overflow: "hidden",
-    aspectRatio: "2/.5",
-  }
-};
 
 const getRandomItems = (array, numItems) => {
   // Shuffle array and get the first `numItems` items

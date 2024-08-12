@@ -1,0 +1,24 @@
+.carousel-inner {
+  height: 400px;
+
+  .carousel-item {
+    height: 100%;
+  }
+
+  img {
+    object-fit: cover;
+    overflow: hidden;
+    aspect-ratio: 2000/500;
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .carousel-inner {
+    height: auto;
+
+    img {
+      width: 100%;
+    }
+  }
+}
