@@ -53,9 +53,11 @@ const AdminProducts = () => {
   };
 
   const handleToggleLockClick = async (product) => {
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     try {
       const updatedProduct = { ...product, blocked: !product.blocked };
-      await putServerData('http://localhost:3001', `/productos/${product._id}`, updatedProduct);
+      await putServerData(apiUrl, `/productos/${product._id}`, updatedProduct);
       setUpdateMark(prevMark => !prevMark);
     } catch (error) {
       console.error('Error actualizando estado bloqueado del producto:', error);
@@ -69,8 +71,10 @@ const AdminProducts = () => {
         {
           label: 'Sí',
           onClick: async () => {
+            const apiUrl = import.meta.env.VITE_API_URL;
+
             try {
-              await deleteServerData('http://localhost:3001', `/productos/${productId}`);
+              await deleteServerData(apiUrl, `/productos/${productId}`);
               setProducts(products.filter(product => product.id !== productId));
             } catch (error) {
               console.error('Error eliminando producto:', error);

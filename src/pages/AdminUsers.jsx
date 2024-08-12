@@ -53,9 +53,11 @@ const AdminUsers = () => {
   };
 
   const handleToggleLockClick = async (user) => {
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     try {
       const updatedUser = { ...user, bloqueado: !user.bloqueado };
-      await putServerData('http://localhost:3001', `/usuarios/${user._id}`, updatedUser);
+      await putServerData(apiUrl, `/usuarios/${user._id}`, updatedUser);
       setUpdateMark(prevMark => !prevMark);
     } catch (error) {
       console.error('Error actualizando estado bloqueado del usuario:', error);
@@ -69,8 +71,10 @@ const AdminUsers = () => {
         {
           label: 'Sí',
           onClick: async () => {
+            const apiUrl = import.meta.env.VITE_API_URL;
+
             try {
-              await deleteServerData('http://localhost:3001', `/usuarios/${userId}`);
+              await deleteServerData(apiUrl, `/usuarios/${userId}`);
               setUsers(users.filter(user => user.id !== userId));
             } catch (error) {
               console.error('Error eliminando usuario:', error);
