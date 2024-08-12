@@ -1,4 +1,4 @@
-.container {
+.container-NF {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,17 +10,17 @@
   color: #333;
 }
 
-.title {
+.title-NF {
   font-size: 48px;
   margin: 0;
 }
 
-.message {
+.message-NF {
   font-size: 24px;
   margin: 10px 0;
 }
 
-.link {
+.link-NF {
   font-size: 18px;
   color: #007bff;
   text-decoration: none;
