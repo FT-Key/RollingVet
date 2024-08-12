@@ -5,11 +5,12 @@ import { fetchServerData } from '../helpers/ServerCalling';
 const ServerResponse = () => {
   const [respuesta, setRespuesta] = useState(null);
   const location = useLocation();
-
+  
   // Extraer la ruta, el dominio y las tags de los parámetros de consulta
   const queryParams = new URLSearchParams(location.search);
   const ruta = queryParams.get('ruta') || null; // Valor por defecto si no se proporciona
-  const dominio = queryParams.get('dominio') || "http://localhost:3001/"; // Valor por defecto
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const dominio = queryParams.get('dominio') || apiUrl; // Valor por defecto
   const tags = queryParams.get('tags') ? JSON.parse(decodeURIComponent(queryParams.get('tags'))) : []; // Extraer y parsear las tags
 
   // Función para filtrar las claves especificadas en tags de forma recursiva

@@ -17,11 +17,12 @@ const AdminProducts = () => {
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     const fetchProducts = async () => {
       while (true) {
         try {
-          const data = await fetchServerData('http://localhost:3001', '/productos');
+          const data = await fetchServerData(apiUrl, '/productos');
           if (isMounted) {
             setProducts(data);
           }

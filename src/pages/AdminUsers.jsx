@@ -17,11 +17,12 @@ const AdminUsers = () => {
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     const fetchUsers = async () => {
       while (true) {
         try {
-          const data = await fetchServerData('http://localhost:3001', '/usuarios');
+          const data = await fetchServerData(apiUrl, '/usuarios');
           if (isMounted) {
             setUsers(data);
           }

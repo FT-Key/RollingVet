@@ -42,8 +42,9 @@ const GoogleAuth = ({ type }) => {
       }
 
       // Enviar el token al servidor para su verificación
-      
-      const serverResponse = await fetch('http://localhost:3001/auth/google', {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      const serverResponse = await fetch(`${apiUrl}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
