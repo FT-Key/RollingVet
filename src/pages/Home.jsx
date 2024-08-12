@@ -3,8 +3,6 @@ import { Col, Row } from 'react-bootstrap';
 import BasicCard from '../components/BasicCard';
 import CarouselFade from '../components/CarouselFade';
 import '../css/Home.css';
-import CustomButton from '../components/CustomButton';
-import BasicModal from '../components/BasicModal';
 import { fetchServerData } from "../helpers/ServerCalling.js";
 
 const Home = () => {
@@ -16,7 +14,7 @@ const Home = () => {
     const cargarProductos = async () => {
       while (true) {
         try {
-          const data = await fetchServerData('http://localhost:3001', '/productos');
+          const data = await fetchServerData('https://server-templates.vercel.app', '/productos');
           if (isMounted) {
             setProductos(data);
           }
