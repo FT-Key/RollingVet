@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import BasicCard from '../components/BasicCard';
-import CarouselFade from '../components/CarouselFade';
-import '../css/Home.css';
-import { fetchServerData } from "../helpers/ServerCalling.js";
+import React, { useState, useEffect } from "react";
+import { Col, Row } from "react-bootstrap";
+import BasicCard from "../components/BasicCard";
+import CarouselFade from "../components/CarouselFade";
+import "../css/Home.css";
+import { getProducts } from "../helpers/ServerProducts.js";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
-    const apiUrl = import.meta.env.VITE_API_URL;
 
     const cargarProductos = async () => {
       while (true) {
         try {
-          const data = await fetchServerData(apiUrl, '/productos');
+          const data = await getProducts();
           if (isMounted) {
             setProductos(data);
           }
           break; // Salir del bucle si la petición es exitosa
         } catch (error) {
-          console.error('Error cargando productos:', error);
+          console.error("Error cargando productos:", error);
           if (!isMounted) return; // Salir si el componente se desmontó
-          await new Promise(resolve => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
+          await new Promise((resolve) => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
         }
       }
     };
@@ -37,14 +36,14 @@ const Home = () => {
 
   return (
     <>
-      <h2 className='my-5 text-center'>Bienvenido a la Página Principal</h2>
+      <h2 className="my-5 text-center">Bienvenido a la Página Principal</h2>
 
-      <CarouselFade data={productos} type={'productCarousel'} />
+      <CarouselFade data={productos} type={"productCarousel"} />
 
-      <Row className='row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3'>
+      <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
         {productos.map((prod) => (
-          <Col className='p-0' key={prod.id}>
-            <BasicCard data={prod} type={'productCard'} />
+          <Col className="p-0" key={prod.id}>
+            <BasicCard data={prod} type={"productCard"} />
           </Col>
         ))}
       </Row>

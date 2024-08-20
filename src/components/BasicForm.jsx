@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { postServerData } from '../helpers/ServerCalling';
 
 function BasicForm({ type }) {
 
@@ -16,6 +17,7 @@ function BasicForm({ type }) {
     userPass: '',
     userPassConf: ''
   });
+  const [clearForm, setClearForm] = useState(false);
   //
 
   // useEffect para observar cambios en el tipo y limpiar los formularios
@@ -31,7 +33,12 @@ function BasicForm({ type }) {
       userPass: '',
       userPassConf: ''
     });
-  }, [type]);
+
+    // Seteo el clearForm para limpiar los formularios al desmontar el componente
+    return () => {
+      setClearForm(true);
+    };
+  }, [clearForm]);
 
   // Funciones
   ////CHANGE
@@ -54,22 +61,70 @@ function BasicForm({ type }) {
   }
 
   ////CLICK
-  const handleClickRegister = (ev) => {
+  const handleClickRegister = async (ev) => {
+    ev.preventDefault();
+
     if (type !== "registro") {
       return console.log("Error al cargar página de registro.");
     }
 
-    ev.preventDefault();
     console.log(formRegister);
+
+    if (formRegister.userPass !== formRegister.userPassConf) {
+      return console.log("Las contraseñas no coinciden");
+    }
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    const serverResponse = await postServerData(apiUrl, '/reg', formRegister);
+
+    if (serverResponse.ok) {
+      const serverData = await serverResponse.json(); // Lee los datos del servidor
+      const { token: jwtToken } = serverData; // Desestructura el token del JSON
+
+      // Almacenar el token JWT en localStorage
+      localStorage.setItem('authToken', jwtToken);
+
+      // Opcionalmente, decodificar el token para mostrar datos del usuario
+      const decodedToken = jwtDecode(jwtToken);
+
+      console.log("Registro exitoso")
+      console.log(decodedToken)
+
+    } else if (!serverResponse.ok) {
+      throw new Error('Error en el servidor al registrarse');
+    }
   }
 
-  const handleClickLogin = (ev) => {
+  const handleClickLogin = async (ev) => {
+    ev.preventDefault();
+
     if (type !== "inicioSesion") {
       return console.log("Error al cargar página de inicio de sesión.");
     }
 
-    ev.preventDefault();
     console.log(formLogin);
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    const serverResponse = await postServerData(apiUrl, '/auth', formLogin);
+
+    if (serverResponse.ok) {
+      const serverData = await serverResponse.json(); // Lee los datos del servidor
+      const { token: jwtToken } = serverData; // Desestructura el token del JSON
+
+      // Almacenar el token JWT en localStorage
+      localStorage.setItem('authToken', jwtToken);
+
+      // Opcionalmente, decodificar el token para mostrar datos del usuario
+      const decodedToken = jwtDecode(jwtToken);
+
+      console.log("Sesión iniciada con éxito")
+      console.log(decodedToken)
+
+    } else if (!serverResponse.ok) {
+      throw new Error('Error en el servidor al iniciar sesión');
+    }
   }
 
 
