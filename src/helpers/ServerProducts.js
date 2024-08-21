@@ -1,4 +1,4 @@
-import { fetchServerData } from "./ServerCalling";
+import { fetchServerData, postServerData } from "./ServerCalling";
 
 export async function getProducts() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -32,5 +32,36 @@ export async function getOneProduct(productId) {
   } catch (error) {
     console.error("Error fetching product:", error);
     return null; // o puedes manejar el error de otra forma, dependiendo de tu aplicación
+  }
+}
+
+export async function uploadImage(productId, body) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  try {
+    // Llamar a postServerData para subir la imagen
+    const response = await postServerData(apiUrl, `/productos/agregarImagen/${productId}`, body);
+
+    // Si la respuesta no es exitosa, lanzar un error
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.msg || "Error al subir la imagen");
+    }
+
+    // Si la respuesta es exitosa, obtener los datos
+    const data = await response.json();
+
+    return {
+      success: true,
+      data,  // Devuelve los datos de la respuesta
+      message: "Imagen subida exitosamente",
+    };
+  } catch (error) {
+    // En caso de error, devolver un objeto con el mensaje de error
+    return {
+      success: false,
+      data: null,
+      message: error.message || "Error desconocido al subir la imagen",
+    };
   }
 }

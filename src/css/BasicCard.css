@@ -6,7 +6,7 @@
 
   .card-img-top {
     aspect-ratio: 15/8;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .card-body{

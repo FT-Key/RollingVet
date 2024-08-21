@@ -17,14 +17,18 @@ export const fetchServerData = async (dominio, ruta, token = '') => {
 
 export const postServerData = async (dominio, ruta, body, token = "") => {
   try {
+    const isFormData = body instanceof FormData;
+
     const response = await fetch(`${dominio}${ruta}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
+        // Solo agregar 'Content-Type' si el body no es FormData
+        ...(!isFormData && { "Content-Type": "application/json" }),
       },
-      body: JSON.stringify(body),
+      body: isFormData ? body : JSON.stringify(body),  // Si es FormData, lo enviamos tal cual
     });
+
     const data = await response.json();
     return data;
   } catch (error) {

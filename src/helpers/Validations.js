@@ -182,9 +182,11 @@ export function validarGarantia(cadena) {
   return regex.test(cadena);
 }
 
-export function validarFecha(cadena) {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  return regex.test(cadena);
+export function validarFecha(fecha) {
+  if (Object.prototype.toString.call(fecha) !== "[object Date]" || isNaN(fecha)) {
+    return false; // No es un objeto Date válido
+  }
+  return true; // Es una fecha válida de JavaScript
 }
 
 export function validarDescuento(cadena) {

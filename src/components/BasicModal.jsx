@@ -6,6 +6,7 @@ import { putServerData } from "../helpers/ServerCalling";
 import UserFormModal from "./UserFormModal";
 import ProductsFormModal from "./ProductsFormModal";
 import { validateProductFields, validateUserFields } from "./Validators";
+import { uploadImage } from "../helpers/ServerProducts";
 
 const BasicModal = ({
   type,
@@ -17,7 +18,7 @@ const BasicModal = ({
 }) => {
   const [formData, setFormData] = useState(
     (type === "adminUsers" && userData) ||
-      (type === "adminProducts" && productData)
+    (type === "adminProducts" && productData)
   );
   const [editedData, setEditedData] = useState(formData);
   const [errors, setErrors] = useState({});
@@ -36,12 +37,19 @@ const BasicModal = ({
   }, [formData]);
 
   const handleChange = (e) => {
-    const { name, value, type: inputType, checked } = e.target;
-
+    const { name, value, type: inputType, checked, files } = e.target;
     const updatedData = { ...editedData };
 
-    if (name.includes("[")) {
-      // Si el nombre incluye corchetes, es un campo dentro de un array
+    if (inputType === "file") {
+      // Solo almacenar el archivo en una variable temporal, sin modificar el editedData
+      if (files && files.length > 0) {
+        updatedData["uploadedFile"] = files[0]; // Guardar temporalmente el archivo
+      }
+    } else if (inputType === "date") {
+      // Convertir la fecha del input (HTML) al formato de fecha de JavaScript
+      updatedData[name] = new Date(value);
+    } else if (name.includes("[")) {
+      // Lógica para manejar arrays
       const [mainKey, index, subKey] = name
         .match(/(\w+)\[(\d+)\]\.(\w+)/)
         .slice(1);
@@ -56,7 +64,7 @@ const BasicModal = ({
         ...updatedData[mainKey].slice(idx + 1),
       ];
     } else if (name.includes(".")) {
-      // Si el nombre incluye punto, es un campo en un objeto anidado
+      // Lógica para manejar objetos anidados
       const [mainKey, subKey] = name.split(".");
       updatedData[mainKey] = {
         ...updatedData[mainKey],
@@ -88,19 +96,21 @@ const BasicModal = ({
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      console.log(errors);
+      console.log("Errores: ", errors);
       return;
     }
 
     try {
-      // Llamar a la función putServerData para actualizar el producto en el servidor
+      const { uploadedFile, ...productDataWithoutFile } = editedData;
+
+      // Hacer la petición PUT para actualizar el producto, excluyendo el archivo
       let updatedData;
       switch (true) {
         case type === "adminUsers":
           updatedData = await putServerData(
             "http://localhost:3001",
             `/usuarios/${editedData._id}`,
-            editedData
+            productDataWithoutFile
           );
           break;
 
@@ -108,12 +118,26 @@ const BasicModal = ({
           updatedData = await putServerData(
             "http://localhost:3001",
             `/productos/${editedData._id}`,
-            editedData
+            productDataWithoutFile
           );
           break;
 
         default:
           break;
+      }
+
+      // Si hay un archivo seleccionado, realizar la subida en una llamada separada
+      if (uploadedFile) {
+        const fileData = new FormData();
+        fileData.append("image", uploadedFile);  // Importante que sea 'image'
+
+        const uploadResponse = await uploadImage(editedData._id, fileData);
+
+        if (!uploadResponse) {
+          throw new Error(uploadResponse.message);
+        }
+
+        console.log("Archivo subido:", uploadResponse.message, uploadResponse.data);
       }
 
       setFormData(editedData);

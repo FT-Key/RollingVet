@@ -1,7 +1,14 @@
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { formatDate } from "../helpers/FormatDateHTML";
 
 const ProductsFormModal = ({ handleChange, editedData }) => {
+  const [imageOption, setImageOption] = useState("Agregar URL");
+
+  const handleImageOptionChange = (e) => {
+    setImageOption(e.target.value);
+  };
+
   return (
     <Container fluid className="container-adminProducts">
       <div>
@@ -76,16 +83,51 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
           placeholder="Modelo"
         />
       </div>
+
+      {/* Opción para la imagen */}
       <div>
-        <label>Imagen URL</label>
-        <input
-          type="text"
-          name="imageUrl"
-          value={editedData.imageUrl || ""}
-          onChange={handleChange}
-          placeholder="URL de la imagen"
-        />
+        <label>Imagen</label>
+        <select value={imageOption} onChange={handleImageOptionChange}>
+          <option value="Agregar URL">Agregar URL</option>
+          <option value="Subir archivo">Subir archivo</option>
+          <option value="Seleccionar existente">Seleccionar imagen ya existente</option>
+        </select>
+
+        {/* Mostrar input según la opción seleccionada */}
+        {imageOption === "Agregar URL" && (
+          <div>
+            <label>URL de la imagen</label>
+            <input
+              type="text"
+              name="imageUrl"
+              value={editedData.imageUrl || ""}
+              onChange={handleChange}
+              placeholder="URL de la imagen"
+            />
+          </div>
+        )}
+
+        {imageOption === "Subir archivo" && (
+          <div>
+            <label>Subir archivo</label>
+            <input type="file" name="imageFile" onChange={handleChange} />
+          </div>
+        )}
+
+        {imageOption === "Seleccionar existente" && (
+          <div>
+            <label>Seleccionar imagen existente</label>
+            <select name="imageUrl" onChange={handleChange}>
+              {editedData.imageUrls && editedData.imageUrls.map((url, index) => (
+                <option key={index} value={url}>
+                  {url}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
+
       <div>
         <label>Calificaciones</label>
         <input
