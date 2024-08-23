@@ -35,7 +35,7 @@ export async function getOneProduct(productId) {
   }
 }
 
-export async function uploadImage(productId, body) {
+export async function uploadProductImage(productId, body) {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   try {

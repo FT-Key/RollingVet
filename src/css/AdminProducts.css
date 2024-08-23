@@ -1,4 +1,4 @@
-[class*="container"] {
+[class*="container"].adminProducts {
 
   --border-radius-table: 5px;
   --border-weight: 1.5px;
@@ -14,7 +14,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      border-bottom: var(--border-weight) solid black;
+      border-bottom: none;
       overflow: hidden;
       padding: 3px;
       background-color: white;
@@ -41,7 +41,7 @@
     .row.header.normal {
       display: flex !important;
     }
-  
+
     .row.header.responsive {
       display: none !important;
     }
@@ -63,7 +63,8 @@
 
   }
 
-  .row:first-child, .row:nth-child(2) {
+  .row:first-child,
+  .row:nth-child(2) {
     border-top-left-radius: var(--border-radius-table);
     border-top-right-radius: var(--border-radius-table);
   }
@@ -74,7 +75,7 @@
     border-bottom-right-radius: var(--border-radius-table);
   }
 
-  .btn-delete{
+  .btn-delete {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -9,21 +9,29 @@ export function validarNombreUsuario(nombreUsuario) {
   return regex.test(nombreUsuario);
 }
 
-export function validarContraseniaUsuario(nombreUsuario) {
+/* export function validarContraseniaUsuario(contraseniaUsuario) {
   // Expresión regular
   const regex =
     /^(?=.*[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ])(?=.*\d)[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\d_]{6,30}$/;
 
-  // Comprobar si el valor de nombreUsuario cumple con la expresión regular
-  return regex.test(nombreUsuario);
+  // Comprobar si el valor de contraseniaUsuario cumple con la expresión regular
+  return regex.test(contraseniaUsuario);
 }
 
-export function validarCorreoElectronico(correo) {
+export function validarContraseniaUsuarioGoogle(contraseniaUsuarioGoogle) {
+  // Expresión regular
+  const regex = /^\d+$/;
+
+  // Comprobar si el valor de contraseniaUsuarioGoogle cumple con la expresión regular
+  return regex.test(contraseniaUsuarioGoogle);
+} */
+
+export function validarCorreoElectronico(correoUsuario) {
   // Expresión regular
   const regex = /^[a-zA-Z0-9_]{3,40}@[a-zA-Z0-9_]+\.[a-zA-Z0-9]+$/;
 
   // Comprobar si el valor de correoUsuario cumple con la expresión regular
-  return regex.test(correo);
+  return regex.test(correoUsuario);
 }
 
 export function validarNombre(nombre) {
@@ -36,6 +44,21 @@ export function validarApellido(apellido) {
   // Expresión regular para validar que el apellido solo contenga letras y tenga al menos 2 caracteres
   const apellidoRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ]{2,}$/;
   return apellidoRegex.test(apellido);
+}
+
+export function validarFotoPerfil(cadena) {
+  // Expresión regular para URLs absolutas
+  const regexURL = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i;
+  // Expresión regular para rutas locales
+  const regexLocal = /^(\.\/|\.\.\/).*\/.*\.(?:png|jpg|jpeg|gif|webp)$/i;
+  // Expresión regular para rutas google
+  const regexGoogle = /^https:\/\/lh3\.googleusercontent\.com\/[a-zA-Z0-9\/._-]+=[a-zA-Z0-9=-]+$/i;
+  // Expresión regular para URLs de via.placeholder.com con tamaños entre 100 y 5000
+  const regexPlaceholder = /^https:\/\/via\.placeholder\.com\/([1-9]\d{2,3}|10000)x([1-9]\d{2,3}|10000)$/;
+  const regexPicsum = /^https:\/\/picsum\.photos\/(?:id\/\d+\/)?(?:seed\/\w+\/)?(\d{2,4})(?:\/(\d{2,4}))?(?:\.(?:jpg|webp))?(?:\/?(?:\?(?:random=\d+|grayscale|blur=\d+|blur|grayscale&blur=\d+)|&?random=\d+|&?grayscale|&?blur=\d+|&?blur)*)?$/i;
+
+  // Comprobar si la cadena cumple con alguna de las tres expresiones regulares
+  return regexURL.test(cadena) || regexLocal.test(cadena) || regexPlaceholder.test(cadena) || regexPicsum.test(cadena) || regexGoogle.test(cadena);
 }
 
 export function validarDireccion(direccion) {

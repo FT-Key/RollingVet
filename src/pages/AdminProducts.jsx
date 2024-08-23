@@ -109,7 +109,7 @@ const AdminProducts = () => {
 
   return (
     <>
-      <Container className="py-3">
+      <Container className="py-3 adminProducts">
         <Row className="text-center text-white header responsive">
           <Col>Productos</Col>
         </Row>

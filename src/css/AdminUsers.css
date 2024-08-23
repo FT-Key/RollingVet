@@ -1,4 +1,4 @@
-[class*="container"] {
+[class*="container"].adminUsers {
 
   --border-radius-table: 5px;
   --border-weight: 1.5px;
@@ -14,7 +14,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      border-bottom: var(--border-weight) solid black;
+      border-bottom: none;
       overflow: hidden;
       padding: 3px;
       background-color: white;
@@ -74,4 +74,11 @@
     border-bottom-left-radius: var(--border-radius-table);
     border-bottom-right-radius: var(--border-radius-table);
   }
+}
+
+.container-adminUsers {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

@@ -14,7 +14,8 @@ import {
   validarDescuento,
   //Usuarios
   validarNombreUsuario,
-  validarContraseniaUsuario,
+  /* validarContraseniaUsuario,
+  validarContraseniaUsuarioGoogle, */
   validarCorreoElectronico,
   validarNombre,
   validarApellido,
@@ -30,6 +31,7 @@ import {
   validarBiografia,
   validarEnlacesRedesSociales,
   validarSelect,
+  validarFotoPerfil,
 } from "../helpers/Validations";
 
 import {
@@ -43,6 +45,8 @@ import {
 } from "../utils/usersConst.utils";
 
 export function validateUserFields(data) {
+  console.log("Objeto a VALIDAR: ", data)
+  console.log("Objeto DIRECCION: ", data?.direccion)
   let validationErrors = {};
 
   if (!validarNombreUsuario(data.nombreUsuario)) {
@@ -53,9 +57,15 @@ export function validateUserFields(data) {
     validationErrors.email = "Email inválido";
   }
 
-  if (!validarContraseniaUsuario(data.contrasenia)) {
-    validationErrors.contrasenia = "Contraseña inválida";
-  }
+  /* if (data.tipoRegistro == "normal") {
+    if (!validarContraseniaUsuario(data.contrasenia)) {
+      validationErrors.contrasenia = "Contraseña inválida";
+    }
+  } else if (data.tipoRegistro == "google") {
+    if (!validarContraseniaUsuarioGoogle(data.contrasenia)) {
+      validationErrors.contrasenia = "Contraseña inválida";
+    }
+  } */
 
   if (!validarNombre(data.nombre)) {
     validationErrors.nombre = "Nombre inválido";
@@ -65,7 +75,12 @@ export function validateUserFields(data) {
     validationErrors.apellido = "Apellido inválido";
   }
 
-  if (validarDireccion(data.direccion)) {
+  if (data.fotoPerfil && !validarFotoPerfil(data.fotoPerfil)) {
+    validationErrors.fotoPerfil = "Foto de perfil inválida";
+  }
+
+  if (data.direccion && validarDireccion(data.direccion)) {
+    console.log("Entra Aqui check")
     if (!validarCalle(data.direccion.calle)) {
       validationErrors.calle = "Calle inválida";
     }
@@ -85,11 +100,11 @@ export function validateUserFields(data) {
     if (!validarSelect(data.direccion.pais, PAISES)) {
       validationErrors.pais = "País inválido";
     }
-  } else {
+  } else if (data.direccion && validarDireccion(data.direccion)) {
     validationErrors.direccion = "Dirección inválida";
   }
 
-  if (!validarTelefono(data.telefono)) {
+  if (data.telefono && !validarTelefono(data.telefono)) {
     validationErrors.telefono = "Teléfono inválido";
   }
 
@@ -105,26 +120,28 @@ export function validateUserFields(data) {
     validationErrors.preferencias = "Preferencias inválidas";
   }
 
-  data.preguntasSeguridad.forEach((conjunto) => {
-    if (validarPreguntasDeSeguridad(conjunto)) {
-      if (!validarSelect(conjunto.pregunta, PREGUNTAS_SEGURIDAD)) {
-        validationErrors.pregunta = "Pregunta de seguridad inválida";
-      }
+  if (data.preguntasSeguridad) {
+    data.preguntasSeguridad.forEach((conjunto) => {
+      if (conjunto && validarPreguntasDeSeguridad(conjunto)) {
+        if (!validarSelect(conjunto.pregunta, PREGUNTAS_SEGURIDAD)) {
+          validationErrors.pregunta = "Pregunta de seguridad inválida";
+        }
 
-      if (!validarRespuesta(conjunto.respuesta)) {
-        validationErrors.respuesta = "Respuesta inválida";
+        if (!validarRespuesta(conjunto.respuesta)) {
+          validationErrors.respuesta = "Respuesta inválida";
+        }
+      } else {
+        validationErrors.preguntasSeguridad =
+          "Campo incompleto en pregunta de seguridad";
       }
-    } else {
-      validationErrors.preguntasSeguridad =
-        "Campo incompleto en pregunta de seguridad";
-    }
-  });
+    });
+  }
 
-  if (!validarBiografia(data.biografia)) {
+  if (data.biografia && data.biografia != '' && !validarBiografia(data.biografia)) {
     validationErrors.biografia = "Biografía inválida";
   }
 
-  if (!validarEnlacesRedesSociales(data.enlacesRedesSociales)) {
+  if (data.enlacesRedesSociales && !validarEnlacesRedesSociales(data.enlacesRedesSociales)) {
     validationErrors.enlacesRedesSociales =
       "Enlaces de redes sociales inválidos";
   }
@@ -133,7 +150,7 @@ export function validateUserFields(data) {
     validationErrors.estadoSuscripcion = "Estado de suscripción inválido";
   }
 
-  if (!validarSelect(data.region, REGIONES)) {
+  if (data.region && !validarSelect(data.region, REGIONES)) {
     validationErrors.region = "Región inválida";
   }
 
@@ -175,7 +192,7 @@ export function validateProductFields(data) {
     validationErrors.model = "Modelo inválido";
   }
 
-  if (!validarImagenURL(data.imageUrl)) {
+  if (data.imageUrl && !validarImagenURL(data.imageUrl)) {
     validationErrors.imageUrl = "URL de la imagen inválida";
   }
 

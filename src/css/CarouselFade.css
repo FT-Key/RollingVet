@@ -11,6 +11,14 @@
     aspect-ratio: 2000/500;
     width: auto;
   }
+
+  h3 {
+    -webkit-text-stroke: .3px black;
+  }
+
+  p {
+    -webkit-text-stroke: .3px black;
+  }
 }
 
 @media screen and (min-width: 768px) {

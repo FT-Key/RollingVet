@@ -6,7 +6,8 @@ import { putServerData } from "../helpers/ServerCalling";
 import UserFormModal from "./UserFormModal";
 import ProductsFormModal from "./ProductsFormModal";
 import { validateProductFields, validateUserFields } from "./Validators";
-import { uploadImage } from "../helpers/ServerProducts";
+import { uploadProductImage } from "../helpers/ServerProducts";
+import { uploadProfileImage } from "../helpers/ServerUsers";
 
 const BasicModal = ({
   type,
@@ -22,6 +23,13 @@ const BasicModal = ({
   );
   const [editedData, setEditedData] = useState(formData);
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    // Restablecer editedData cuando se cierra el modal
+    if (!show) {
+      setEditedData(formData);
+    }
+  }, [show, formData]);
 
   useEffect(() => {
     // Actualizar el estado en función del tipo de datos
@@ -42,8 +50,16 @@ const BasicModal = ({
 
     if (inputType === "file") {
       // Solo almacenar el archivo en una variable temporal, sin modificar el editedData
+      console.log("FILES: ", files)
+      console.log("NAME: ", name)
       if (files && files.length > 0) {
+
+        // Crear un enlace temporal para mostrar la imagen
+        const fileUrl = URL.createObjectURL(files[0]);
+
         updatedData["uploadedFile"] = files[0]; // Guardar temporalmente el archivo
+        updatedData[name] = fileUrl;
+        console.log("UPDATED DATA: ", updatedData)
       }
     } else if (inputType === "date") {
       // Convertir la fecha del input (HTML) al formato de fecha de JavaScript
@@ -83,6 +99,26 @@ const BasicModal = ({
 
     switch (true) {
       case type === "adminUsers":
+        if (typeof editedData.fotoPerfil === "string" && editedData.fotoPerfil.startsWith("blob:")) {
+          // Elimina el campo fotoPerfil si comienza con 'blob:'
+          delete editedData.fotoPerfil;
+        }
+        break;
+
+      case type === "adminProducts":
+        if (typeof editedData.imageUrl === "string" && editedData.imageUrl.startsWith("blob:")) {
+          // Elimina el campo imageUrl si comienza con 'blob:'
+          delete editedData.imageUrl;
+        }
+        break;
+
+      default:
+        break;
+    }
+    console.log("DATOS DEL PRODUCTO: ", editedData)
+
+    switch (true) {
+      case type === "adminUsers":
         validationErrors = validateUserFields(editedData);
         break;
 
@@ -94,9 +130,10 @@ const BasicModal = ({
         break;
     }
 
+    console.log("ValidationErrors.Length: ", Object.keys(validationErrors).length)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      console.log("Errores: ", errors);
+      console.log("Errores: ", validationErrors);
       return;
     }
 
@@ -131,7 +168,19 @@ const BasicModal = ({
         const fileData = new FormData();
         fileData.append("image", uploadedFile);  // Importante que sea 'image'
 
-        const uploadResponse = await uploadImage(editedData._id, fileData);
+        let uploadResponse;
+        switch (true) {
+          case type === "adminUsers":
+            uploadResponse = await uploadProfileImage(editedData._id, fileData);
+            break;
+
+          case type === "adminProducts":
+            uploadResponse = await uploadProductImage(editedData._id, fileData);
+            break;
+
+          default:
+            break;
+        }
 
         if (!uploadResponse) {
           throw new Error(uploadResponse.message);
@@ -147,6 +196,80 @@ const BasicModal = ({
     } catch (error) {
       console.error("Error al guardar el producto:", error);
     }
+  };
+
+  const handleEnabledData = (section, isEnabled) => {
+    // Clonamos editedData para no modificar el estado directamente
+    const updatedData = { ...editedData };
+
+    switch (section) {
+      case "direccion":
+        if (isEnabled) {
+          updatedData.direccion = updatedData.direccion || {
+            calle: '',
+            ciudad: '',
+            estado: '',
+            codigoPostal: '',
+            pais: ''
+          };
+        } else if (updatedData.direccion) {
+          updatedData.direccion = Object.fromEntries(
+            Object.entries(updatedData.direccion).filter(([_, value]) => value !== '')
+          );
+          if (Object.keys(updatedData.direccion).length === 0) {
+            delete updatedData.direccion;
+          }
+        }
+        break;
+
+      case "preguntasSeguridad":
+        if (isEnabled) {
+          updatedData.preguntasSeguridad = updatedData.preguntasSeguridad || [];
+        } else if (updatedData.preguntasSeguridad) {
+          updatedData.preguntasSeguridad = updatedData.preguntasSeguridad.filter(pregunta =>
+            pregunta.pregunta !== '' || pregunta.respuesta !== ''
+          );
+          if (updatedData.preguntasSeguridad.length === 0) {
+            delete updatedData.preguntasSeguridad;
+          }
+        }
+        break;
+
+      case "enlacesRedesSociales":
+        if (isEnabled) {
+          updatedData.enlacesRedesSociales = updatedData.enlacesRedesSociales || {
+            twitter: '',
+            linkedin: ''
+          };
+        } else if (updatedData.enlacesRedesSociales) {
+          updatedData.enlacesRedesSociales = Object.fromEntries(
+            Object.entries(updatedData.enlacesRedesSociales).filter(([_, value]) => value !== '')
+          );
+          if (Object.keys(updatedData.enlacesRedesSociales).length === 0) {
+            delete updatedData.enlacesRedesSociales;
+          }
+        }
+        break;
+
+      case "fotosPerfil":
+        if (isEnabled) {
+          updatedData.fotoPerfil = updatedData.fotoPerfil || '';
+          updatedData.fotosPerfil = updatedData.fotosPerfil || [];
+        } else {
+          // Si está deshabilitado, eliminamos ambos campos si están vacíos
+          if (!updatedData.fotoPerfil) delete updatedData.fotoPerfil;
+          if (!updatedData.fotosPerfil || updatedData.fotosPerfil.length === 0) {
+            delete updatedData.fotosPerfil;
+          }
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    // Actualizamos el estado con los datos modificados
+    setEditedData(updatedData);
   };
 
   return (
@@ -167,7 +290,7 @@ const BasicModal = ({
       </Modal.Header>
       <Modal.Body>
         {type === "adminUsers" && (
-          <UserFormModal handleChange={handleChange} editedData={editedData} />
+          <UserFormModal handleChange={handleChange} editedData={editedData} handleEnabledData={handleEnabledData} />
         )}
 
         {type === "adminProducts" && (

@@ -131,3 +131,36 @@ export async function removeFromFavs(idProducto) {
     console.log("No se encontro token de autorización");
   }
 }
+
+
+
+export async function uploadProfileImage(userId, body) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  try {
+    // Llamar a postServerData para subir la imagen
+    const response = await postServerData(apiUrl, `/usuarios/agregarFotoPerfil/${userId}`, body);
+
+    // Si la respuesta no es exitosa, lanzar un error
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.msg || "Error al subir la imagen");
+    }
+
+    // Si la respuesta es exitosa, obtener los datos
+    const data = await response.json();
+
+    return {
+      success: true,
+      data,  // Devuelve los datos de la respuesta
+      message: "Imagen subida exitosamente",
+    };
+  } catch (error) {
+    // En caso de error, devolver un objeto con el mensaje de error
+    return {
+      success: false,
+      data: null,
+      message: error.message || "Error desconocido al subir la imagen",
+    };
+  }
+}

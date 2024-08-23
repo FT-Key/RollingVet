@@ -9,6 +9,7 @@ import { putServerData, deleteServerData } from "../helpers/ServerCalling";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { getUsers } from "../helpers/ServerUsers";
+import ProfileImage from "../components/ProfileImage";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -80,6 +81,8 @@ const AdminUsers = () => {
               console.error("Error eliminando usuario:", error);
             }
 
+            setUpdateMark(prevMark => !prevMark);
+
             // Elimina el contenedor del alert del DOM después de cerrar el alert
             const alertContainer = document.querySelector(
               ".react-confirm-alert"
@@ -107,7 +110,7 @@ const AdminUsers = () => {
 
   return (
     <>
-      <Container className="py-3">
+      <Container className="py-3 adminUsers">
         <Row className="text-center text-white header responsive">
           <Col>Usuarios</Col>
         </Row>
@@ -115,10 +118,11 @@ const AdminUsers = () => {
         <Row className="text-center text-white header normal">
           <Col md={1}>ID</Col>
           <Col md={2}>Nombre de Usuario</Col>
+          <Col md={2}>Foto Perfil</Col>
           <Col md={1}>Nombre</Col>
-          <Col md={3}>Email</Col>
+          <Col md={2}>Email</Col>
           <Col md={2}>Bloqueado</Col>
-          <Col md={2}>Editar</Col>
+          <Col md={1}>Editar</Col>
           <Col md={1}>Eliminar</Col>
         </Row>
 
@@ -134,8 +138,11 @@ const AdminUsers = () => {
             <Col xs={12} md={2}>
               {user.nombreUsuario}
             </Col>
+            <Col xs={12} md={2}>
+              <ProfileImage source={user.fotoPerfil} width="100px" />
+            </Col>
             <Col xs={12} md={1}>{`${user.nombre} ${user.apellido}`}</Col>
-            <Col xs={12} md={3}>
+            <Col xs={12} md={2}>
               {user.email}
             </Col>
             <Col xs={12} md={2}>
@@ -147,7 +154,7 @@ const AdminUsers = () => {
                 onClick={() => handleToggleLockClick(user)}
               />
             </Col>
-            <Col xs={12} md={2}>
+            <Col xs={12} md={1}>
               <CustomButton
                 paddingB={false}
                 className={"my-1"}

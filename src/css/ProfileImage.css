@@ -1,0 +1,31 @@
+.profile-aligner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #d2d2d285;
+  /* 'dimgrey' con opacidad del 50% */
+  width: 100%;
+}
+
+.profile-container {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  /* Cuadrado */
+  mask-image: radial-gradient(circle, black 50%, transparent 51%);
+  -webkit-mask-image: radial-gradient(circle, black 70%, transparent 70%);
+  background-clip: content-box;
+  /* Asegura que el color se vea solo en las áreas no enmascaradas */
+  overflow: hidden;
+}
+
+.profile-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  /* Imagen detrás del div */
+}
