@@ -19,6 +19,8 @@ function NavigationBar() {
             <NavDropdown.Item as={Link} to="/Servers">Servers</NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/adminUsers">Admin Usuarios</NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/adminProducts">Admin Productos</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/favoritos">Favoritos</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/carrito">Carrito</NavDropdown.Item>
             <NavDropdown.Item as={Link} to="/NotFound">404 Not Found</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item as={Link} to="/NotFound">404 Not Found</NavDropdown.Item>

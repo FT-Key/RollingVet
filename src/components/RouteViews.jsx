@@ -10,6 +10,8 @@ import ServerResponse from "../pages/ServerResponse";
 import Servers from "../pages/Servers";
 import AdminProducts from "../pages/AdminProducts";
 import ProductDetail from "../pages/ProductDetail";
+import Favoritos from "../pages/Favoritos";
+import Carrito from "../pages/Carrito";
 
 const RouteViews = () => {
   return (
@@ -22,6 +24,8 @@ const RouteViews = () => {
         <Route path="/servers" element={<Servers />} />
         <Route path="/adminUsers" element={<AdminUsers />} />
         <Route path="/adminProducts" element={<AdminProducts />} />
+        <Route path="/favoritos" element={<Favoritos />} />
+        <Route path="/carrito" element={<Carrito />} />
         <Route path="/productDetail/:productId" element={<ProductDetail />} />
         <Route path="/serverResponse" element={<ServerResponse />} />
         <Route path="/*" element={<NotFound />} />
