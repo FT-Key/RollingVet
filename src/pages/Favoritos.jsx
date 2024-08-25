@@ -1,25 +1,17 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
 import { getFavs } from "../helpers/ServerUsers";
 import { Col, Row } from "react-bootstrap";
 import BasicCard from "../components/BasicCard";
-import { isTokenValid } from "../helpers/Token.helper";
 
 const Favoritos = () => {
-  const navigate = useNavigate();
   const [favoritos, setFavoritos] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
 
-    if (token && isTokenValid(token)) {
-      (async () => {
-        const favs = await getFavs();
-        setFavoritos(favs.productos);
-      })();
-    } else {
-      navigate('/inicioSesion');
-    }
+    (async () => {
+      const favs = await getFavs();
+      setFavoritos(favs.productos);
+    })();
 
   }, []);
   return (

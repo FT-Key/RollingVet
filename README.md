@@ -1,13 +1,13 @@
 🔴🟠🟡🔵🟢🟣
 
 🔴 Tetris en NotFound
-🔴 Sobre mi
 🔴 Contacto
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
-🔴Rutas protegidas
+🟡 Sobre mi
+🟡Rutas protegidas
 🟡 Completar datos de usuario
-🔵 Carrito
+🟡 Carrito
 🔵 Favoritos
 🔵 Editar usuarios
 🔵 Editar productos

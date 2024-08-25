@@ -1,8 +1,14 @@
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode"; // Usa la exportación nombrada
 import "../css/GoogleAuth.css";
+import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
+import { useNavigate } from "react-router-dom";
 
 const GoogleAuth = ({ type, useParameter }) => {
+
+  const navigate = useNavigate();
+  const { loginContext } = useAuth(); // Usar loginContext para manejar el login
+
   const handleSuccess = async (response) => {
     try {
       let token;
@@ -45,8 +51,9 @@ const GoogleAuth = ({ type, useParameter }) => {
         console.log("Respuesta server", serverData);
         const { token: jwtToken } = serverData; // Desestructura el token del JSON
 
-        // Almacenar el token JWT en localStorage
-        localStorage.setItem("authToken", jwtToken);
+        // Llamar al login del contexto global
+        loginContext(jwtToken);
+        navigate(-1);
       } else if (!serverResponse.ok) {
         // Leer el cuerpo de la respuesta para obtener el mensaje de error
         const errorMessage = await serverResponse.json();

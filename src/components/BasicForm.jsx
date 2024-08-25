@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { postServerData } from '../helpers/ServerCalling';
+import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
 
 function BasicForm({ type }) {
+
+  const navigate = useNavigate();
+  const { loginContext } = useAuth(); // Usar loginContext para manejar el login
 
   // Estados
   const [formLogin, setFormLogin] = useState({
@@ -68,8 +72,6 @@ function BasicForm({ type }) {
       return console.log("Error al cargar página de registro.");
     }
 
-    console.log(formRegister);
-
     if (formRegister.userPass !== formRegister.userPassConf) {
       return console.log("Las contraseñas no coinciden");
     }
@@ -82,14 +84,9 @@ function BasicForm({ type }) {
       const serverData = await serverResponse.json(); // Lee los datos del servidor
       const { token: jwtToken } = serverData; // Desestructura el token del JSON
 
-      // Almacenar el token JWT en localStorage
-      localStorage.setItem('authToken', jwtToken);
-
-      // Opcionalmente, decodificar el token para mostrar datos del usuario
-      const decodedToken = jwtDecode(jwtToken);
-
+      loginContext(jwtToken);
+      navigate(-1);
       console.log("Registro exitoso")
-      console.log(decodedToken)
 
     } else if (!serverResponse.ok) {
       throw new Error('Error en el servidor al registrarse');
@@ -103,24 +100,17 @@ function BasicForm({ type }) {
       return console.log("Error al cargar página de inicio de sesión.");
     }
 
-    console.log(formLogin);
-
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    const serverResponse = await postServerData(apiUrl, '/auth', formLogin);
+    const serverResponse = await postServerData(apiUrl, '/login', formLogin);
 
     if (serverResponse.ok) {
       const serverData = await serverResponse.json(); // Lee los datos del servidor
       const { token: jwtToken } = serverData; // Desestructura el token del JSON
 
-      // Almacenar el token JWT en localStorage
-      localStorage.setItem('authToken', jwtToken);
-
-      // Opcionalmente, decodificar el token para mostrar datos del usuario
-      const decodedToken = jwtDecode(jwtToken);
-
+      loginContext(jwtToken);
+      navigate(-1);
       console.log("Sesión iniciada con éxito")
-      console.log(decodedToken)
 
     } else if (!serverResponse.ok) {
       throw new Error('Error en el servidor al iniciar sesión');

@@ -1,25 +1,17 @@
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import BasicCard from "../components/BasicCard";
 import { getCart } from "../helpers/ServerUsers";
-import { isTokenValid } from "../helpers/Token.helper";
 
 const Carrito = () => {
-  const navigate = useNavigate();
   const [carrito, setCarrito] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
 
-    if (token && isTokenValid(token)) {
-      (async () => {
-        const cart = await getCart();
-        setCarrito(cart.productos);
-      })();
-    } else {
-      navigate('/inicioSesion');
-    }
+    (async () => {
+      const cart = await getCart();
+      setCarrito(cart.productos);
+    })();
 
   }, []);
   return (
