@@ -1,4 +1,5 @@
 import { deleteServerData, fetchServerData, postServerData } from "./ServerCalling";
+import { getToken } from "./Token.helper";
 
 export async function getUsers() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -30,7 +31,7 @@ export async function getOneUser(userId) {
 
 export async function addToCart(idProducto) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("authToken"); // Obtén el token del almacenamiento local
+  const token = getToken(); // Obtén el token del almacenamiento local
   if (token) {
     try {
       await postServerData(
@@ -49,7 +50,7 @@ export async function addToCart(idProducto) {
 
 export async function addToFav(idProducto) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("authToken"); // Obtén el token del almacenamiento local
+  const token = getToken(); // Obtén el token del almacenamiento local
   if (token) {
     try {
       await postServerData(
@@ -68,7 +69,7 @@ export async function addToFav(idProducto) {
 
 export async function getCart() {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("authToken"); // Obtén el token del almacenamiento local
+  const token = getToken(); // Obtén el token del almacenamiento local
   if (token) {
     try {
       const cart = await fetchServerData(apiUrl, `/favncart/carrito`, token); // Pasar el token a fetchServerData
@@ -83,7 +84,7 @@ export async function getCart() {
 
 export async function getFavs() {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("authToken"); // Obtén el token del almacenamiento local
+  const token = getToken(); // Obtén el token del almacenamiento local
   if (token) {
     try {
       const favs = await fetchServerData(apiUrl, `/favncart/fav`, token); // Pasar el token a fetchServerData
@@ -98,7 +99,7 @@ export async function getFavs() {
 
 export async function removeFromCart(idProducto) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("authToken"); // Obtén el token del almacenamiento local
+  const token = getToken(); // Obtén el token del almacenamiento local
   if (token) {
     try {
       await deleteServerData(
@@ -116,7 +117,7 @@ export async function removeFromCart(idProducto) {
 
 export async function removeFromFavs(idProducto) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("authToken"); // Obtén el token del almacenamiento local
+  const token = getToken(); // Obtén el token del almacenamiento local
   if (token) {
     try {
       await deleteServerData(

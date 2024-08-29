@@ -15,6 +15,7 @@ import Carrito from "../pages/Carrito";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SobreMi from "../pages/SobreMi";
 import Contacto from "../pages/Contacto";
+import CarritoSuccess from "../pages/CarritoSuccess";
 
 const RouteViews = () => {
   return (
@@ -60,6 +61,14 @@ const RouteViews = () => {
           element={
             <ProtectedRoute requiredRole={['cliente', 'admin']}>
               <Carrito />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/carrito/success"
+          element={
+            <ProtectedRoute requiredRole={['cliente', 'admin']}>
+              <CarritoSuccess />
             </ProtectedRoute>
           }
         />

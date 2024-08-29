@@ -1,8 +1,9 @@
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode"; // Usa la exportación nombrada
 import "../css/GoogleAuth.css";
 import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
 import { useNavigate } from "react-router-dom";
+import { postServerData } from "../helpers/ServerCalling";
+import { redirectPrevious } from "../helpers/Redirects";
 
 const GoogleAuth = ({ type, useParameter }) => {
 
@@ -32,37 +33,19 @@ const GoogleAuth = ({ type, useParameter }) => {
         userInfo = await userResponse.json();
       }
 
-      // Enviar el token al servidor para su verificación
+      // Enviar el token al servidor para su verificación usando postServerData
       const apiUrl = import.meta.env.VITE_API_URL;
-      const fetchUrl =
-        useParameter === "login" ? `${apiUrl}/login` : `${apiUrl}/register`;
-      console.log("Se envia solicitud a: ", fetchUrl);
+      const ruta = useParameter === "login" ? "/login" : "/register";
 
-      const serverResponse = await fetch(fetchUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
-      });
+      const serverData = await postServerData(apiUrl, ruta, { token });
 
-      if (serverResponse.ok) {
-        const serverData = await serverResponse.json(); // Lee los datos del servidor
-        console.log("Respuesta server", serverData);
-        const { token: jwtToken } = serverData; // Desestructura el token del JSON
+      console.log(serverData.msg);
+      const { token: jwtToken } = serverData; // Desestructura el token del JSON
 
-        // Llamar al login del contexto global
-        loginContext(jwtToken);
-        navigate(-1);
-      } else if (!serverResponse.ok) {
-        // Leer el cuerpo de la respuesta para obtener el mensaje de error
-        const errorMessage = await serverResponse.json();
+      // Llamar al login del contexto global
+      loginContext(jwtToken);
+      redirectPrevious(navigate);
 
-        console.error("Error del servidor:", errorMessage);
-        throw new Error(errorMessage);
-      }
-
-      // Aquí puedes manejar la respuesta del servidor (guardar el token JWT, redirigir al usuario, etc.)
     } catch (error) {
       console.error(
         "Error al obtener la información del usuario o al llamar a la API de Google:",
@@ -74,7 +57,7 @@ const GoogleAuth = ({ type, useParameter }) => {
   const handleError = (error) => {
     console.log("Inicio de sesión fallido");
     console.log(error);
-    // maneja el error del inicio de sesión
+    // Maneja el error del inicio de sesión
   };
 
   const loginWithGoogle = useGoogleLogin({

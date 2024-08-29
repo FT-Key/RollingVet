@@ -3,10 +3,11 @@ import BasicForm from '../components/BasicForm';
 import GoogleAuth from '../components/GoogleAuth';
 import { Container } from 'react-bootstrap';
 import { useEffect } from 'react';
+import { getToken } from '../helpers/Token.helper';
 
 const Login = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('authToken');
+  const token = getToken();
 
   useEffect(() => {
     if (token) {

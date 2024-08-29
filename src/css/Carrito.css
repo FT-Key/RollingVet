@@ -1,0 +1,34 @@
+.carrito-row {
+  [class*="col"] {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      aspect-ratio: 1 / 1;
+      max-width: 5rem;
+      object-fit: contain;
+    }
+  }
+}
+
+.cart-remove-btn {
+  background-color: #dc3545;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cart-remove-btn:hover {
+  background-color: #c82333;
+}

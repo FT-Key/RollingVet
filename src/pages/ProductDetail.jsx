@@ -1,24 +1,26 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getOneProduct } from "../helpers/ServerProducts";
 import "../css/ProductDetail.css";
 import {
   addToCart,
   addToFav,
-  getCart,
-  getFavs,
   removeFromCart,
   removeFromFavs,
 } from "../helpers/ServerUsers";
+import { useAuth } from '../context/AuthContext';
+import Loading from "../components/Loading";
+import { Col, Container, Row } from "react-bootstrap";
+import Zoom from '../components/Zoom'; // Importa el componente Zoom
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const [producto, setProducto] = useState(null);
-  const [updateMark, setUpdateMark] = useState();
-  const [booleanUpdateMark, setBooleanUpdateMark] = useState(false);
   const [cart, setCart] = useState([]); // Nuevo estado para el carrito
   const [favorites, setFavorites] = useState([]); // Nuevo estado para los favoritos
+  const { user, carrito, favoritos, setUpdateMark, setBooleanUpdateMark } = useAuth();
+  const navigate = useNavigate();
 
   const BUTTON_CART_TEXT = (inCart) =>
     inCart ? "Quitar de carrito" : "Agregar a carrito";
@@ -26,16 +28,11 @@ const ProductDetail = () => {
     inFavs ? "Quitar de favoritos" : "Agregar a favoritos";
 
   useEffect(() => {
-    const fetchFavsAndCart = async () => {
-      const cart = await getCart();
-      const favs = await getFavs();
-      const listaCarrito = cart.productos.map((prod) => prod._id);
-      const listaFavoritos = favs.productos.map((prod) => prod._id);
-      setCart(listaCarrito);
-      setFavorites(listaFavoritos);
-    };
-    fetchFavsAndCart();
-  }, []);
+    const listaCarrito = carrito.map((prod) => prod._id);
+    const listaFavoritos = favoritos.map((prod) => prod._id);
+    setCart(listaCarrito);
+    setFavorites(listaFavoritos);
+  }, [carrito, favoritos]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -45,24 +42,10 @@ const ProductDetail = () => {
     fetchProduct();
   }, [productId]);
 
-  useEffect(() => {
-    const fetchCartAndFavs = async () => {
-      if (updateMark === "cart") {
-        const nuevoCarrito = await getCart();
-        const listaCarrito = nuevoCarrito.productos.map((prod) => prod._id);
-        setCart(listaCarrito);
-      } else if (updateMark === "fav") {
-        const nuevosFavoritos = await getFavs();
-        const listaFavoritos = nuevosFavoritos.productos.map(
-          (prod) => prod._id
-        );
-        setFavorites(listaFavoritos);
-      }
-    };
-    fetchCartAndFavs();
-  }, [updateMark, booleanUpdateMark]);
-
   const handleButtonCart = async () => {
+
+    redirection();
+
     if (!cart.includes(productId)) {
       const addToCartFunction = async () => {
         await addToCart(productId);
@@ -81,6 +64,9 @@ const ProductDetail = () => {
   };
 
   const handleButtonFav = async () => {
+
+    redirection();
+
     if (!favorites.includes(productId)) {
       const addToFavFunction = async () => {
         await addToFav(productId);
@@ -98,54 +84,77 @@ const ProductDetail = () => {
     }
   };
 
+  const redirection = () => {
+    if (!user) {
+      navigate('/inicioSesion');
+    }
+  }
+
   if (!producto) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
     <div className="product-detail">
-      <h1>{producto.name}</h1>
-      <img src={producto.imageUrl} alt={producto.name} />
-      <p>
-        <strong>Description:</strong> {producto.description}
-      </p>
-      <p>
-        <strong>Category:</strong> {producto.category}
-      </p>
-      <p>
-        <strong>Brand:</strong> {producto.brand}
-      </p>
-      <p>
-        <strong>Model:</strong> {producto.model}
-      </p>
-      <p className="product-price">${producto.price}</p>
-      <p>
-        <strong>Stock:</strong> {producto.stock}
-      </p>
-      <p>
-        <strong>Ratings:</strong> {producto.ratings}/5
-      </p>
-      <p>
-        <strong>Warranty:</strong> {producto.warranty}
-      </p>
-      <p>
-        <strong>Release Date:</strong>{" "}
-        {new Date(producto.releaseDate).toLocaleDateString()}
-      </p>
-      {producto.discount && (
-        <p>
-          <strong>Discount:</strong> {producto.discount}
-        </p>
-      )}
+      <Container fluid>
+        <Row>
 
-      <div className="product-buttons">
-        <button className={"btn btn-success"} onClick={handleButtonCart}>
-          {BUTTON_CART_TEXT(cart.includes(productId))}
-        </button>
-        <button className={"btn btn-warning"} onClick={handleButtonFav}>
-          {BUTTON_FAVS_TEXT(favorites.includes(productId))}
-        </button>
-      </div>
+          <Col xs={12}>
+            <h1>{producto.name}</h1>
+          </Col>
+
+          <Col xs={12} md={6}>
+            {/* Envuelve la imagen dentro del componente Zoom */}
+            <Zoom imageUrl={producto.imageUrl}>
+            </Zoom>
+          </Col>
+
+          <Col xs={12} md={6}>
+            <p>
+              <strong>Description:</strong> {producto.description}
+            </p>
+            <p>
+              <strong>Category:</strong> {producto.category}
+            </p>
+            <p>
+              <strong>Brand:</strong> {producto.brand}
+            </p>
+            <p>
+              <strong>Model:</strong> {producto.model}
+            </p>
+            <p className="product-price">${producto.price}</p>
+            <p>
+              <strong>Stock:</strong> {producto.stock}
+            </p>
+            <p>
+              <strong>Ratings:</strong> {producto.ratings}/5
+            </p>
+            <p>
+              <strong>Warranty:</strong> {producto.warranty}
+            </p>
+            <p>
+              <strong>Release Date:</strong>{" "}
+              {new Date(producto.releaseDate).toLocaleDateString()}
+            </p>
+            {producto.discount && (
+              <p>
+                <strong>Discount:</strong> {producto.discount}
+              </p>
+            )}
+
+            <div className="product-buttons">
+              <button className={"btn btn-success"} onClick={handleButtonCart}>
+                {BUTTON_CART_TEXT(cart.includes(productId))}
+              </button>
+              <button className={"btn btn-warning"} onClick={handleButtonFav}>
+                {BUTTON_FAVS_TEXT(favorites.includes(productId))}
+              </button>
+            </div>
+          </Col>
+
+        </Row>
+      </Container>
+
     </div>
   );
 };

@@ -1,21 +1,24 @@
 🔴🟠🟡🔵🟢🟣
 
+🔒 Carrito (completar compra en el backend con mercadoPago)
 🔴 Tetris en NotFound
-🔴 Contacto
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
+🔴 Filtros
+🟠 Contacto
 🟡 Sobre mi
-🟡Rutas protegidas
 🟡 Completar datos de usuario
-🟡 Carrito
+🔵 Cerrar Sesión
+🔵 MercadoPago
+🔵 Rutas protegidas
 🔵 Favoritos
 🔵 Editar usuarios
 🔵 Editar productos
+🟢 Lógica de registro
 🟢 Lógica de registro Google
-🟢 Lógica de registro (Falta generar token e iniciar sesion)
-🟢 Lógica de inicio de sesion (Revisar)
-🟢 Lógica de inicio de sesion Google (Revisar)
+🟢 Lógica de inicio de sesion
+🟢 Lógica de inicio de sesion Google
 🟢 Validaciones inputs productos
-🟢 Bloqueo de producto
 🟢 Validaciones inputs usuarios
+🟢 Bloqueo de producto
 🟢 Bloqueo de usuario

@@ -1,0 +1,28 @@
+.container-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+}
+
+.checkIcon-cart {
+  font-size: 100px;
+  color: green;
+  margin-bottom: 20px;
+}
+
+.button-cart {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-cart:hover {
+  background-color: darkgreen;
+}

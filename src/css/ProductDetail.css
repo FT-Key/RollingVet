@@ -1,12 +1,16 @@
 /* ProductDetail.css */
 
 .product-detail {
-  max-width: 800px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 20px;
   background-color: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .row {
+    gap: 20px;
+  }
 }
 
 .product-detail h1 {
@@ -47,4 +51,19 @@
   justify-content: start;
   margin-top: 20px;
   gap: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .product-detail {
+    max-width: 1500px;
+    margin: 0 15%;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .row {
+      gap: 0;
+    }
+  }
 }
