@@ -62,3 +62,11 @@ abbr[title] {
   color: white;
   background-color: #ff0019;
 }
+
+.hidden-space{
+  visibility: hidden;
+}
+
+.show-space{
+  visibility: visible;
+}

@@ -3,7 +3,7 @@ import { Container, Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { postServerData } from '../helpers/ServerCalling';
 import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
-import { redirectPrevious } from '../helpers/Redirects';
+import { redirectAfterLogin } from '../helpers/Redirects';
 
 function BasicForm({ type }) {
 
@@ -86,7 +86,7 @@ function BasicForm({ type }) {
       const { token: jwtToken } = serverData; // Desestructura el token del JSON
 
       loginContext(jwtToken);
-      redirectPrevious(navigate);
+      redirectAfterLogin(navigate);
       console.log("Registro exitoso")
 
     } else if (!serverResponse.ok) {
@@ -110,7 +110,7 @@ function BasicForm({ type }) {
       const { token: jwtToken } = serverData; // Desestructura el token del JSON
 
       loginContext(jwtToken);
-      redirectPrevious(navigate);
+      redirectAfterLogin(navigate);
       console.log("Sesión iniciada con éxito")
 
     } else if (!serverResponse.ok) {

@@ -1,13 +1,23 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { useAuth } from '../context/AuthContext';
 import '../css/NavigationBar.css';
 import SVG from './SVG';
+import { RedirectToLogin, RedirectToRegister } from '../helpers/Redirects';
 
 function NavigationBar() {
   const { user, carrito, favoritos, logoutContext } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLoginRedirect = () => {
+    RedirectToLogin({ navigate });
+  };
+
+  const handleRegisterRedirect = () => {
+    RedirectToRegister({ navigate });
+  };
 
   const handleLogout = () => {
     logoutContext();
@@ -28,6 +38,8 @@ function NavigationBar() {
             <NavDropdown.Divider />
             {user && (user.rol === 'admin' || user.rol === 'cliente') && (
               <>
+                <NavDropdown.Item as={Link} to="/turnos">Solicitar turno</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/turnos/lista">Mis turnos</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/favoritos">Favoritos</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/carrito">Carrito</NavDropdown.Item>
               </>
@@ -37,12 +49,13 @@ function NavigationBar() {
             <NavDropdown className='ps-2' title="Admin" id="admin-nav-dropdown">
               <NavDropdown.Item as={Link} to="/adminUsers">Admin Usuarios</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/adminProducts">Admin Productos</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/adminAppointments">Admin Turnos</NavDropdown.Item>
             </NavDropdown>
           )}
           {!user && (
             <div className='contenedor-links'>
-              <Nav.Link className='ps-2' as={Link} to="/inicioSesion">Iniciar Sesión</Nav.Link>
-              <Nav.Link className='ps-2' as={Link} to="/registro">Registrarse</Nav.Link>
+              <Nav.Link className='ps-2' onClick={handleLoginRedirect}>Iniciar Sesión</Nav.Link>
+              <Nav.Link className='ps-2' onClick={handleRegisterRedirect}>Registrarse</Nav.Link>
             </div>
           )}
           {user && (user.rol === 'admin' || user.rol === 'cliente') && (
@@ -51,24 +64,24 @@ function NavigationBar() {
               <abbr title="Carrito" className='abbr'>
                 <Link to="/carrito" className='carrito-link'>
                   <SVG
-                    name={carrito.length > 0 ? 'cart-go' : 'cart-normal'}
+                    name={carrito.length > 0 ? 'cart-go-fill' : 'cart-normal-fill'}
                     width="28px"
                     height="28px"
-                    color={carrito.length > 0 ? 'green' : 'black'}
+                    color={carrito.length > 0 ? 'green' : 'transparent'}
                   />
-                  {carrito.length > 0 && <span className="cart-item-count">{carrito.length}</span>}
+                  <span className={`cart-item-count${carrito.length > 0 ? ' show-space' : ' hidden-space'}`}>{carrito.length}</span>
                 </Link>
               </abbr>
 
               <abbr title="Favoritos" className='abbr'>
                 <Link to="/favoritos" className='favoritos-link'>
                   <SVG
-                    name={favoritos.length > 0 ? 'favs-heart-fill' : 'favs-heart-void'}
+                    name={'favs-heart-fill'}
                     width="28px"
                     height="28px"
-                    color={favoritos.length > 0 ? '#ff0019' : 'black'}
+                    color={favoritos.length > 0 ? '#ff0019' : 'transparent'}
                   />
-                  {favoritos.length > 0 && <span className="favs-item-count">{favoritos.length}</span>}
+                  <span className={`favs-item-count${favoritos.length > 0 ? ' show-space' : ' hidden-space'}`}>{favoritos.length}</span>
                 </Link>
               </abbr>
               <Nav.Link className='ps-2 text-danger' onClick={handleLogout}>Cerrar Sesión</Nav.Link>

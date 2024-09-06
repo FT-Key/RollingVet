@@ -5,12 +5,23 @@
   justify-content: center;
   flex: 1;
   text-align: center;
+  gap: 20px;
 }
 
 .checkIcon-cart {
   font-size: 100px;
+}
+
+.success {
   color: green;
-  margin-bottom: 20px;
+}
+
+.failure {
+  color: red;
+}
+
+.pending {
+  color: yellow;
 }
 
 .button-cart {

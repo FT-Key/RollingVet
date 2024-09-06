@@ -13,6 +13,7 @@ import { useAuth } from '../context/AuthContext';
 import Loading from "../components/Loading";
 import { Col, Container, Row } from "react-bootstrap";
 import Zoom from '../components/Zoom'; // Importa el componente Zoom
+import { RedirectToLogin } from "../helpers/Redirects";
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -86,7 +87,7 @@ const ProductDetail = () => {
 
   const redirection = () => {
     if (!user) {
-      navigate('/inicioSesion');
+      RedirectToLogin({ navigate });
     }
   }
 
@@ -111,34 +112,34 @@ const ProductDetail = () => {
 
           <Col xs={12} md={6}>
             <p>
-              <strong>Description:</strong> {producto.description}
+              <strong>Descripción:</strong> {producto.description}
             </p>
             <p>
-              <strong>Category:</strong> {producto.category}
+              <strong>Categoría:</strong> {producto.category}
             </p>
             <p>
-              <strong>Brand:</strong> {producto.brand}
+              <strong>Marca:</strong> {producto.brand}
             </p>
             <p>
-              <strong>Model:</strong> {producto.model}
+              <strong>Modelo:</strong> {producto.model}
             </p>
             <p className="product-price">${producto.price}</p>
             <p>
               <strong>Stock:</strong> {producto.stock}
             </p>
             <p>
-              <strong>Ratings:</strong> {producto.ratings}/5
+              <strong>Calificaciones:</strong> {producto.ratings}/5
             </p>
             <p>
-              <strong>Warranty:</strong> {producto.warranty}
+              <strong>Garantía:</strong> {producto.warranty}
             </p>
             <p>
-              <strong>Release Date:</strong>{" "}
+              <strong>Fecha de publicación:</strong>{" "}
               {new Date(producto.releaseDate).toLocaleDateString()}
             </p>
             {producto.discount && (
               <p>
-                <strong>Discount:</strong> {producto.discount}
+                <strong>Descuento:</strong> {producto.discount}
               </p>
             )}
 

@@ -22,3 +22,37 @@
 .fav-remove-btn:hover {
   background-color: #c82333;
 }
+
+.favorites-empty{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.empty-favorites {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.empty-favorites-img {
+  width: 150px;
+  height: auto;
+}
+
+.empty-favorites-message {
+  font-size: 2rem;
+  color: #333;
+}
+
+.empty-favorites-text {
+  font-size: 1rem;
+  color: #666;
+}

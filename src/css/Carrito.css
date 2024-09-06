@@ -9,6 +9,7 @@
       aspect-ratio: 1 / 1;
       max-width: 5rem;
       object-fit: contain;
+      cursor: pointer;
     }
   }
 }
@@ -31,4 +32,48 @@
 
 .cart-remove-btn:hover {
   background-color: #c82333;
+}
+
+.cart-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.empty-cart {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.empty-cart-img {
+  width: 150px;
+  height: auto;
+}
+
+.empty-cart-message {
+  font-size: 2rem;
+  color: #333;
+}
+
+.empty-cart-text {
+  font-size: 1rem;
+  color: #666;
+}
+
+.cart-header {
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+}
+
+.cart-footer {
+  border-bottom-left-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
 }

@@ -3,7 +3,7 @@ import "../css/GoogleAuth.css";
 import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
 import { useNavigate } from "react-router-dom";
 import { postServerData } from "../helpers/ServerCalling";
-import { redirectPrevious } from "../helpers/Redirects";
+import { redirectAfterLogin } from "../helpers/Redirects";
 
 const GoogleAuth = ({ type, useParameter }) => {
 
@@ -44,7 +44,7 @@ const GoogleAuth = ({ type, useParameter }) => {
 
       // Llamar al login del contexto global
       loginContext(jwtToken);
-      redirectPrevious(navigate);
+      redirectAfterLogin(navigate);
 
     } catch (error) {
       console.error(

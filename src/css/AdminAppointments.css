@@ -1,0 +1,144 @@
+.containerAdminAppointments {
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Estilos generales */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+    font-size: 2rem;
+  }
+
+  /* Formulario de búsqueda */
+  form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+
+  form .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  form .form-label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #555;
+  }
+
+  form .form-control {
+    width: 250px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  /* Tabla */
+  .table {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    background-color: white;
+    border: 1px solid #ddd;
+  }
+
+  .table thead th {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  /* Bordes redondeados */
+  .table thead th:last-child {
+    border-top-right-radius: 10px;
+  }
+
+  .table thead th:first-child {
+    border-top-left-radius: 10px;
+  }
+
+  /* Bordes redondeados end */
+
+  .table tbody td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1rem;
+    min-height: 40px;
+  }
+
+  .table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .table tbody tr:hover {
+    background-color: #eaeaea;
+  }
+
+  /* Mensajes de estado */
+  p {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  p.text-danger {
+    color: red;
+    font-weight: bold;
+  }
+
+  p.cargando {
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+
+  .turnoLibre {
+    color: green;
+  }
+
+  .turnoPendiente {
+    color: goldenrod;
+  }
+
+  .turnoCompletado {
+    color: blue;
+  }
+
+  .turnoCancelado {
+    color: orangered;
+  }
+
+  .turnoNoAsistido {
+    color: red;
+  }
+
+  .turnoCaducado {
+    color: orange;
+  }
+
+  .turnoNoAsignado {
+    color: green;
+  }
+
+  .sinAcciones{
+    color: grey;
+  }
+}

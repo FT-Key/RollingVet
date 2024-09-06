@@ -15,7 +15,10 @@ import Carrito from "../pages/Carrito";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SobreMi from "../pages/SobreMi";
 import Contacto from "../pages/Contacto";
-import CarritoSuccess from "../pages/CarritoSuccess";
+import CarritoResult from "../pages/CarritoResult";
+import AppointmentRequest from "../pages/AppointmentRequest";
+import AppointmentList from "../pages/AppointmentsList";
+import AdminAppointments from "../pages/AdminAppointments";
 
 const RouteViews = () => {
   return (
@@ -46,6 +49,14 @@ const RouteViews = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/adminAppointments"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminAppointments />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Rutas protegidas solo para usuarios autenticados */}
         <Route
@@ -65,13 +76,30 @@ const RouteViews = () => {
           }
         />
         <Route
-          path="/carrito/success"
+          path="/carrito/result/:result"
           element={
             <ProtectedRoute requiredRole={['cliente', 'admin']}>
-              <CarritoSuccess />
+              <CarritoResult />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/turnos"
+          element={
+            <ProtectedRoute requiredRole={['cliente', 'admin']}>
+              <AppointmentRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/turnos/lista"
+          element={
+            <ProtectedRoute requiredRole={['cliente', 'admin']}>
+              <AppointmentList />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/productDetail/:productId" element={<ProductDetail />} />
         <Route path="/serverResponse" element={<ServerResponse />} />
         <Route path="/*" element={<NotFound />} />

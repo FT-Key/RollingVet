@@ -13,6 +13,61 @@ export const AuthProvider = ({ children }) => {
   const [favoritos, setFavoritos] = useState([]); // Estado de favoritos  
   const [updateMark, setUpdateMark] = useState();
   const [booleanUpdateMark, setBooleanUpdateMark] = useState(false);
+  const [cantidades, setCantidades] = useState({}); // Estado para las cantidades de los productos en el carrito
+
+  const updateCartQuantities = (productos = []) => {
+    setCantidades((prevCantidades) => {
+      const nuevasCantidades = { ...prevCantidades };
+  
+      // Si no hay productos en el carrito, vaciar el estado de cantidades
+      if (productos.length === 0) {
+        return {};
+      }
+  
+      // Recorre los productos para inicializar o actualizar las cantidades
+      productos.forEach((prod) => {
+        if (!(prod._id in nuevasCantidades)) {
+          nuevasCantidades[prod._id] = 1; // Inicializa la cantidad si no está definida
+        }
+      });
+  
+      return nuevasCantidades;
+    });
+  };  
+
+  const handleCantidadChange = (id, nuevaCantidad) => {
+    setCantidades((prevCantidades) => ({ ...prevCantidades, [id]: parseInt(nuevaCantidad) }));
+  };
+
+  useEffect(() => {
+    const fetchCartAndFavs = async () => {
+      try {
+        if (updateMark === 'cart') {
+          const cartData = await getCart();
+          setCarrito(cartData?.productos || []);
+          updateCartQuantities(cartData?.productos || []);
+        }
+
+        if (updateMark === 'fav') {
+          const favsData = await getFavs();
+          setFavoritos(favsData?.productos || []);
+        }
+      } catch (error) {
+        console.error('Error al obtener carrito o favoritos:', error);
+      }
+    };
+
+    fetchCartAndFavs();
+  }, [updateMark, booleanUpdateMark]);
+
+  useEffect(() => {
+    const start = async () => {
+      await checkToken();
+      updateCartQuantities();
+    }
+
+    start();
+  }, []);
 
   const checkToken = async () => {
     const token = getToken();
@@ -56,30 +111,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    checkToken();
-  }, []);
-
-  useEffect(() => {
-    const fetchCartAndFavs = async () => {
-      try {
-        if (updateMark === "cart") {
-          const nuevoCarrito = await getCart();
-          const listaCarrito = nuevoCarrito?.productos || []; // Usar optional chaining para evitar errores
-          setCarrito(listaCarrito);
-        } else if (updateMark === "fav") {
-          const nuevosFavoritos = await getFavs();
-          const listaFavoritos = nuevosFavoritos?.productos || []; // Usar optional chaining para evitar errores
-          setFavoritos(listaFavoritos);
-        }
-      } catch (error) {
-        console.error("Error al obtener carrito o favoritos:", error);
-      }
-    };
-
-    fetchCartAndFavs();
-  }, [updateMark, booleanUpdateMark]);
-
   const loginContext = async (token) => {
     try {
       const decodedToken = jwtDecode(token);
@@ -87,17 +118,8 @@ export const AuthProvider = ({ children }) => {
       setToken(token);
       setTokenExpiry(decodedToken.exp);
 
-      // Cargar carrito y favoritos al iniciar sesión
-      const cartData = await getCart();
-      const favsData = await getFavs();
-
-      // Eliminar cada producto del carrito
-      for (const singleCart of cartData.productos) {
-        await removeFromCart(singleCart._id);
-      }
-
-      setCarrito([]);
-      setFavoritos(favsData.productos || []);
+      // Limpiar carrito
+      await clearCart();
 
       // Llamar a checkToken para establecer el temporizador
       checkToken();
@@ -107,19 +129,40 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logoutContext = () => {
-    setUser(null);
-    setTokenExpiry(null);
-    setCarrito([]);
-    setFavoritos([]);
-    removeToken();
+  const clearCart = async () => {
+    try {
+      const cartData = await getCart();
+      if (cartData.productos.length > 0) {
+        for (const singleCart of cartData.productos) {
+          await removeFromCart(singleCart._id);
+        }
+      }
+      setCarrito([]);
+      setCantidades({});
+      setUpdateMark('cart');
+      setBooleanUpdateMark(prev => !prev);
+    } catch (error) {
+      console.error("Error al limpiar el carrito:", error);
+    }
+  };
 
-    // Llamar a checkToken para actualizar bien el contexto
-    checkToken();
+  const logoutContext = async () => {
+    try {
+      setUser(null);
+      setTokenExpiry(null);
+      await clearCart();
+      setCarrito([]);
+      setFavoritos([]);
+      setCantidades({});
+      removeToken();
+      await checkToken(); // Asegúrate de que checkToken no borre el token prematuramente
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loginContext, logoutContext, loading, carrito, setCarrito, favoritos, setFavoritos, setUpdateMark, setBooleanUpdateMark }}>
+    <AuthContext.Provider value={{ user, loginContext, logoutContext, loading, carrito, setCarrito, favoritos, setFavoritos, setUpdateMark, setBooleanUpdateMark, clearCart, cantidades, setCantidades, handleCantidadChange }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,16 +1,17 @@
 🔴🟠🟡🔵🟢🟣
 
-🔒 Carrito (completar compra en el backend con mercadoPago)
 🔴 Tetris en NotFound
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
 🔴 Filtros
 🟠 Contacto
+🟡 Turnero (estados de turno, admin turnos)
 🟡 Sobre mi
 🟡 Completar datos de usuario
-🔵 Cerrar Sesión
 🔵 MercadoPago
+🔵 Cerrar Sesión
 🔵 Rutas protegidas
+🔵 Carrito
 🔵 Favoritos
 🔵 Editar usuarios
 🔵 Editar productos

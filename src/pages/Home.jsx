@@ -36,7 +36,7 @@ const Home = () => {
 
   return (
     <>
-      <h2 className="my-5 text-center">Bienvenido a la Página Principal</h2>
+      <h2 className="my-5 text-center">¡Bienvenido a nuestra tienda!</h2>
 
       <CarouselFade data={productos} type={"productCarousel"} />
 

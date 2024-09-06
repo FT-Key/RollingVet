@@ -1,0 +1,157 @@
+.appointmentList {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+
+  h2.empty {
+    text-align: center;
+    color: #666;
+    font-size: 24px;
+  }
+
+  .false-btn {
+
+    --bs-btn-padding-x: 0.75rem;
+    --bs-btn-padding-y: 0.375rem;
+    --bs-btn-font-family: ;
+    --bs-btn-font-size: 1rem;
+    --bs-btn-font-weight: 400;
+    --bs-btn-line-height: 1.5;
+    --bs-btn-color: var(--bs-body-color);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-width: var(--bs-border-width);
+    --bs-btn-border-color: transparent;
+    --bs-btn-border-radius: var(--bs-border-radius);
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+    --bs-btn-disabled-opacity: 0.65;
+    --bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), .5);
+    display: inline-block;
+    padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);
+    font-family: var(--bs-btn-font-family);
+    font-size: var(--bs-btn-font-size);
+    font-weight: var(--bs-btn-font-weight);
+    line-height: var(--bs-btn-line-height);
+    color: var(--bs-btn-color);
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+    background-color: var(--bs-btn-bg);
+  }
+
+  [class*="container"].list {
+
+    --border-radius-table: 5px;
+    --border-weight: 1.5px;
+
+    .row {
+
+      border-top: var(--border-weight) solid black;
+      border-left: var(--border-weight) solid black;
+      border-right: var(--border-weight) solid black;
+      overflow: hidden;
+
+      [class*="col"] {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: none;
+        overflow: hidden;
+        padding: 3px;
+        background-color: white;
+      }
+
+      [class*="col"]:last-child {
+        border-bottom: none;
+      }
+    }
+
+    @media screen and (min-width: 768px) {
+      .row {
+
+        [class*="col"] {
+          border-bottom: none;
+          border-right: var(--border-weight) solid black;
+        }
+
+        [class*="col"]:last-child {
+          border-right: none;
+        }
+      }
+
+      .row.header.normal {
+        display: flex !important;
+      }
+
+      .row.header.responsive {
+        display: none !important;
+      }
+    }
+
+    .row.header.normal {
+      display: none;
+    }
+
+    .row.header.responsive {
+      display: flex;
+    }
+
+    .row.header {
+
+      [class*="col"] {
+        background-color: green;
+      }
+
+    }
+
+    .row:first-child {
+      border-top-left-radius: var(--border-radius-table);
+      border-top-right-radius: var(--border-radius-table);
+    }
+
+    .row:last-child {
+      border-bottom: var(--border-weight) solid black;
+      border-bottom-left-radius: var(--border-radius-table);
+      border-bottom-right-radius: var(--border-radius-table);
+    }
+  }
+
+  .turnoLibre {
+    color: green;
+  }
+
+  .turnoPendiente {
+    color: goldenrod;
+  }
+
+  .turnoCompletado {
+    color: blue;
+  }
+
+  .turnoCancelado {
+    color: orangered;
+  }
+
+  .turnoNoAsistido {
+    color: red;
+  }
+
+  .turnoCaducado {
+    color: orange;
+  }
+
+  .turnoNoAsignado {
+    color: red;
+  }
+
+  .sinAcciones{
+    color: grey;
+  }
+}
