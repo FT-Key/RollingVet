@@ -1,3 +1,5 @@
+Se prepara este proyecto como template para el proyecto final de RollingCode comision 104i
+
 🔴🟠🟡🔵🟢🟣
 
 🔴 Tetris en NotFound
