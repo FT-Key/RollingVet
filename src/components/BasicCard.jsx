@@ -8,10 +8,10 @@ function BasicCard({ data, type }) {
     <>
       {type === "productCard" && (
         <Card>
-          <Card.Img variant="top" src={data.imageUrl} />
+          <Card.Img variant="top" src={data.imagenUrl} />
           <Card.Body>
-            <Card.Title>{data.name}</Card.Title>
-            <Card.Text>{data.description}</Card.Text>
+            <Card.Title>{data.nombre}</Card.Title>
+            <Card.Text>{data.descripcion}</Card.Text>
             <div>
               <Button
                 as={Link}

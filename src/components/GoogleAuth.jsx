@@ -1,104 +1,56 @@
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import "../css/GoogleAuth.css";
+import React from 'react';
+import { auth, googleProvider } from '../firebase/firebaseConfig.js'; // Importa tu configuración de Firebase
 import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
-import { useNavigate } from "react-router-dom";
-import { postServerData } from "../helpers/ServerCalling";
-import { redirectAfterLogin } from "../helpers/Redirects";
+import { useNavigate } from 'react-router-dom';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { postServerData } from '../helpers/ServerCalling.js';
+import '../css/GoogleAuth.css';
 
-const GoogleAuth = ({ type, useParameter }) => {
-
+const GoogleAuth = ({ useParameter }) => {
+  const { loginContext } = useAuth();
   const navigate = useNavigate();
-  const { loginContext } = useAuth(); // Usar loginContext para manejar el login
 
-  const handleSuccess = async (response) => {
+  const handleSuccess = async (result) => {
     try {
-      let token;
-      let userInfo;
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const idToken = credential.idToken; // Obtén el id_token en lugar del access_token
 
-      // Manejar la estructura de la respuesta según el origen
-      if (response.credential) {
-        token = response.credential;
-        userInfo = JSON.parse(atob(token.split(".")[1]));
-      } else if (response.access_token) {
-        token = response.access_token;
-        // Puedes realizar una llamada a la API de Google para obtener la información del usuario usando el access_token si es necesario
-        const userResponse = await fetch(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        userInfo = await userResponse.json();
-      }
-
-      // Enviar el token al servidor para su verificación usando postServerData
+      // Envía el id_token al servidor para su verificación
       const apiUrl = import.meta.env.VITE_API_URL;
       const ruta = useParameter === "login" ? "/login" : "/register";
 
-      const serverData = await postServerData(apiUrl, ruta, { token });
+      const serverData = await postServerData(apiUrl, ruta, { token: idToken });
 
       console.log(serverData.msg);
-      const { token: jwtToken } = serverData; // Desestructura el token del JSON
+      const { token: jwtToken } = serverData;
 
-      // Llamar al login del contexto global
+      // Llama al login del contexto global
       loginContext(jwtToken);
-      redirectAfterLogin(navigate);
-
+      navigate('/');
     } catch (error) {
-      console.error(
-        "Error al obtener la información del usuario o al llamar a la API de Google:",
-        error
-      );
+      console.error("Error al obtener la información del usuario o al llamar a la API:", error);
     }
   };
 
   const handleError = (error) => {
     console.log("Inicio de sesión fallido");
     console.log(error);
-    // Maneja el error del inicio de sesión
   };
 
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: (credentialResponse) => {
-      handleSuccess(credentialResponse);
-    },
-    onError: (error) => {
+  const handleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      handleSuccess(result);
+    } catch (error) {
       handleError(error);
-      // Maneja el error del inicio de sesión (por ejemplo, muestra un mensaje al usuario)
-    },
-  });
+    }
+  };
 
   return (
-    <>
-      {type === "default" && (
-        <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
-      )}
-
-      {type === "custom" && (
-        <button
-          className="btn btn-light google-login"
-          onClick={() => loginWithGoogle()}
-        >
-          <i className="bi bi-google pe-1" />
-          Continuar con Google
-        </button>
-      )}
-
-      {type === "onetap" && (
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            handleSuccess(credentialResponse);
-          }}
-          onError={(error) => {
-            console.log("Inicio de sesión One Tap fallido");
-            handleError(error);
-          }}
-          useOneTap
-        />
-      )}
-    </>
+    <button className="btn btn-light google-login" onClick={handleLogin}>
+      <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style={{ width: '20px', marginRight: '10px' }} />
+      Continuar con Google
+    </button>
   );
 };
 

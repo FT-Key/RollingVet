@@ -18,15 +18,17 @@ const AppointmentList = () => {
       try {
         // Cambiar la ruta para obtener los turnos del usuario específico
         const response = await fetchServerData(apiUrl, '/turnos/listaTurnos', token);
-        console.log("RESPonse: ", response)
+        console.log("Respuesta del servidor: ", response.message)
 
-        // Transforma las fechas antes de actualizar el estado
-        const listaTurnos = response.map(turno => ({
-          ...turno,
-          fecha: formatDate(turno.fecha), // Asegúrate de que la función formatDate maneje el formato deseado
-        }));
+        if (Array.isArray(response) && response.length > 0) {
+          // Transforma las fechas antes de actualizar el estado
+          const listaTurnos = response.map(turno => ({
+            ...turno,
+            fecha: formatDate(turno.fecha), // Asegúrate de que la función formatDate maneje el formato deseado
+          }));
 
-        setTurnos(listaTurnos);
+          setTurnos(listaTurnos);
+        }
       } catch (error) {
         console.error('Error al obtener turnos:', error);
       }

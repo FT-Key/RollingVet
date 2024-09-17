@@ -17,7 +17,7 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
       </div>
 
       <div>
-        <ProductImage source={editedData.imageUrl || ''} />
+        <ProductImage source={editedData.imagenUrl || ''} />
       </div>
       {/* Opción para la imagen */}
       <div>
@@ -35,7 +35,7 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
             <input
               type="text"
               name="imageUrl"
-              value={editedData.imageUrl || ""}
+              value={editedData.imagenUrl || ""}
               onChange={handleChange}
               placeholder="URL de la imagen"
             />
@@ -45,15 +45,15 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         {imageOption === "Subir archivo" && (
           <div>
             <label>Subir archivo</label>
-            <input type="file" name="imageUrl" onChange={handleChange} />
+            <input type="file" name="imagenUrl" onChange={handleChange} />
           </div>
         )}
 
         {imageOption === "Seleccionar existente" && (
           <div>
             <label>Seleccionar imagen existente</label>
-            <select name="imageUrl" value={editedData.imageUrl} onChange={handleChange}>
-              {editedData.imageUrls && editedData.imageUrls.map((url, index) => {
+            <select name="imagenUrl" value={editedData.imagenUrl} onChange={handleChange}>
+              {editedData.imagenesUrls && editedData.imagenesUrls.map((url, index) => {
                 const shortenedUrl = url.length > 35 ? `${url.substring(0, 35)}...` : url;
                 return (
                   <option key={index} value={url}>
@@ -70,8 +70,8 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Nombre</label>
         <input
           type="text"
-          name="name"
-          value={editedData.name || ""}
+          name="nombre"
+          value={editedData.nombre || ""}
           onChange={handleChange}
           placeholder="Nombre del producto"
         />
@@ -80,8 +80,8 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Precio</label>
         <input
           type="number"
-          name="price"
-          value={editedData.price || ""}
+          name="precio"
+          value={editedData.precio || ""}
           onChange={handleChange}
           placeholder="Precio"
         />
@@ -89,8 +89,8 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
       <div>
         <label>Descripción</label>
         <textarea
-          name="description"
-          value={editedData.description || ""}
+          name="descripcion"
+          value={editedData.descripcion || ""}
           onChange={handleChange}
           placeholder="Descripción del producto"
         />
@@ -99,8 +99,8 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Categoría</label>
         <input
           type="text"
-          name="category"
-          value={editedData.category || ""}
+          name="categoria"
+          value={editedData.categoria || ""}
           onChange={handleChange}
           placeholder="Categoría"
         />
@@ -109,8 +109,8 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Stock</label>
         <input
           type="number"
-          name="stock"
-          value={editedData.stock || ""}
+          name="cantidadEnStock"
+          value={editedData.cantidadEnStock || ""}
           onChange={handleChange}
           placeholder="Stock"
         />
@@ -119,20 +119,20 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Marca</label>
         <input
           type="text"
-          name="brand"
-          value={editedData.brand || ""}
+          name="proveedor"
+          value={editedData.proveedor || ""}
           onChange={handleChange}
           placeholder="Marca"
         />
       </div>
       <div>
-        <label>Modelo</label>
+        <label>Código de barras</label>
         <input
           type="text"
-          name="model"
-          value={editedData.model || ""}
+          name="codigoDeBarras"
+          value={editedData.codigoDeBarras || ""}
           onChange={handleChange}
-          placeholder="Modelo"
+          placeholder="Código de barras"
         />
       </div>
 
@@ -140,8 +140,8 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Calificaciones</label>
         <input
           type="number"
-          name="ratings"
-          value={editedData.ratings || ""}
+          name="calificaciones"
+          value={editedData.calificaciones.toString() || ""}
           onChange={handleChange}
           step="0.1"
           min="0"
@@ -153,18 +153,18 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Garantía</label>
         <input
           type="text"
-          name="warranty"
-          value={editedData.warranty || ""}
+          name="garantia"
+          value={editedData.garantia || ""}
           onChange={handleChange}
           placeholder="Garantía"
         />
       </div>
       <div>
-        <label>Fecha de Lanzamiento</label>
+        <label>Fecha de Ingreso</label>
         <input
           type="date"
-          name="releaseDate"
-          value={formatDate(editedData.releaseDate) || ""}
+          name="fechaDeIngreso"
+          value={formatDate(editedData.fechaDeIngreso) || ""}
           onChange={handleChange}
         />
       </div>
@@ -172,8 +172,8 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
         <label>Descuento</label>
         <input
           type="text"
-          name="discount"
-          value={editedData.discount || ""}
+          name="descuento"
+          value={editedData.descuento || ""}
           onChange={handleChange}
           placeholder="Descuento"
         />

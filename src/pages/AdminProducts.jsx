@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -9,12 +9,17 @@ import { putServerData, deleteServerData } from "../helpers/ServerCalling";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { getProducts } from "../helpers/ServerProducts";
+import PaginationComponent from "../components/PaginationComponent";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  // PAGINACION
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
@@ -22,9 +27,15 @@ const AdminProducts = () => {
     const fetchProducts = async () => {
       while (true) {
         try {
-          const data = await getProducts();
+          const data = await getProducts(currentPage, limit);
           if (isMounted) {
-            setProducts(data);
+            setProducts(data.productos);
+            setTotalPages(
+              Math.ceil(
+                data.pagination.totalProductos /
+                (data.pagination.limit || data.pagination.totalProductos)
+              )
+            );
           }
           break; // Salir del bucle si la petición es exitosa
         } catch (error) {
@@ -40,7 +51,7 @@ const AdminProducts = () => {
     return () => {
       isMounted = false; // Marcar como desmontado al limpiar el efecto
     };
-  }, [updateMark]);
+  }, [updateMark, currentPage, limit]);
 
   const BLOCKED_CONFIG = {
     true: { text: "Habilitar", color: "success" },
@@ -56,7 +67,7 @@ const AdminProducts = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     try {
-      const updatedProduct = { ...product, blocked: !product.blocked };
+      const updatedProduct = { ...product, bloqueado: !product.bloqueado };
       await putServerData(apiUrl, `/productos/${product._id}`, updatedProduct);
       setUpdateMark((prevMark) => !prevMark);
     } catch (error) {
@@ -107,6 +118,11 @@ const AdminProducts = () => {
     });
   };
 
+  // Cálculo para agregar espacios vacíos
+  const fillEmptySpaces = useMemo(() => {
+    return Array(limit - products.length).fill(null);
+  }, [products.length, limit]);
+
   return (
     <>
       <Container className="py-3 adminProducts">
@@ -115,63 +131,36 @@ const AdminProducts = () => {
         </Row>
 
         <Row className="text-center header text-white normal">
-          <Col xs={12} md={1}>
-            ID
-          </Col>
-          <Col xs={12} md={2}>
-            Image
-          </Col>
-          <Col xs={12} md={2}>
-            Nombre
-          </Col>
-          <Col xs={12} md={2}>
-            Categoría
-          </Col>
-          <Col xs={12} md={1}>
-            Precio
-          </Col>
-          <Col xs={12} md={2}>
-            Bloqueado
-          </Col>
-          <Col xs={12} md={1}>
-            Editar
-          </Col>
-          <Col xs={12} md={1}>
-            Eliminar
-          </Col>
+          <Col xs={12} md={1}>ID</Col>
+          <Col xs={12} md={2}>Image</Col>
+          <Col xs={12} md={2}>Nombre</Col>
+          <Col xs={12} md={2}>Categoría</Col>
+          <Col xs={12} md={1}>Precio</Col>
+          <Col xs={12} md={2}>Bloqueado</Col>
+          <Col xs={12} md={1}>Editar</Col>
+          <Col xs={12} md={1}>Eliminar</Col>
         </Row>
 
+        {/* Renderizar los productos */}
         {products.map((product) => (
-          <Row
-            key={product.id}
-            className="text-center"
-            style={{ background: "white" }}
-          >
-            <Col xs={12} md={1}>
-              {product.id}
-            </Col>
+          <Row key={product.id} className="text-center" style={{ background: "white" }}>
+            <Col xs={12} md={1}>{product.id}</Col>
             <Col xs={12} md={2}>
               <img
-                src={product.imageUrl}
-                alt={product.name}
+                src={product.imagenUrl}
+                alt={product.nombre}
                 style={{ width: "100px", height: "auto" }}
               />
             </Col>
-            <Col xs={12} md={2}>
-              {product.name}
-            </Col>
-            <Col xs={12} md={2}>
-              {product.category}
-            </Col>
-            <Col xs={12} md={1}>
-              ${product.price}
-            </Col>
+            <Col xs={12} md={2}>{product.nombre}</Col>
+            <Col xs={12} md={2}>{product.categoria}</Col>
+            <Col xs={12} md={1}>${product.precio}</Col>
             <Col xs={12} md={2}>
               <CustomButton
                 paddingB={false}
                 className={"my-1"}
-                variant={BLOCKED_CONFIG[product.blocked].color}
-                buttonText={BLOCKED_CONFIG[product.blocked].text}
+                variant={BLOCKED_CONFIG[product.bloqueado].color}
+                buttonText={BLOCKED_CONFIG[product.bloqueado].text}
                 onClick={() => handleToggleLockClick(product)}
               />
             </Col>
@@ -197,6 +186,29 @@ const AdminProducts = () => {
           </Row>
         ))}
 
+        {/* Renderizar espacios vacíos para mantener la consistencia visual */}
+        {fillEmptySpaces.map((_, index) => (
+          <Row key={`empty-${index}`}>
+            <Col xs={12} md={1}>
+            </Col>
+            <Col xs={12} md={2}>
+              <img className="void-image" src="/Espacio-transparente.png" alt="vacio" />
+            </Col>
+            <Col xs={12} md={2}>
+            </Col>
+            <Col xs={12} md={2}>
+            </Col>
+            <Col xs={12} md={1}>
+            </Col>
+            <Col xs={12} md={2}>
+            </Col>
+            <Col xs={12} md={1}>
+            </Col>
+            <Col xs={12} md={1}>
+            </Col>
+          </Row>
+        ))}
+
         {selectedProduct && (
           <BasicModal
             type="adminProducts"
@@ -207,6 +219,12 @@ const AdminProducts = () => {
           />
         )}
       </Container>
+
+      <PaginationComponent
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setPage={setCurrentPage}
+      />
     </>
   );
 };

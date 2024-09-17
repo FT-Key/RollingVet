@@ -6,8 +6,11 @@ import { putServerData } from "../helpers/ServerCalling";
 import UserFormModal from "./UserFormModal";
 import ProductsFormModal from "./ProductsFormModal";
 import { validateProductFields, validateUserFields } from "./Validators";
-import { uploadProductImage } from "../helpers/ServerProducts";
-import { uploadProfileImage } from "../helpers/ServerUsers";
+import { putProduct, uploadProductImage } from "../helpers/ServerProducts";
+import { putUser, uploadProfileImage } from "../helpers/ServerUsers";
+import AnimalsFormModal from "./AnimalsFormModal";
+import { putAnimal, uploadAnimalImage } from "../helpers/ServerAnimals";
+import { getToken } from "../helpers/Token.helper";
 
 const BasicModal = ({
   type,
@@ -16,10 +19,12 @@ const BasicModal = ({
   userData,
   functionUpdateData,
   productData,
+  animalData,
 }) => {
   const [formData, setFormData] = useState(
     (type === "adminUsers" && userData) ||
-    (type === "adminProducts" && productData)
+    (type === "adminProducts" && productData) ||
+    (type === "adminAnimals" && animalData)
   );
   const [editedData, setEditedData] = useState(formData);
   const [errors, setErrors] = useState({});
@@ -37,8 +42,10 @@ const BasicModal = ({
       setFormData(productData);
     } else if (type === "adminUsers") {
       setFormData(userData);
+    } else if (type === "adminAnimals") {
+      setFormData(animalData);
     }
-  }, [type, userData, productData]);
+  }, [type, userData, productData, animalData]);
 
   useEffect(() => {
     setEditedData(formData);
@@ -46,6 +53,7 @@ const BasicModal = ({
 
   const handleChange = (e) => {
     const { name, value, type: inputType, checked, files } = e.target;
+    console.log("LLEGA: ", name, value, inputType, checked, files)
     const updatedData = { ...editedData };
 
     if (inputType === "file") {
@@ -88,9 +96,14 @@ const BasicModal = ({
       };
     } else {
       // Para campos no anidados
-      updatedData[name] = inputType === "checkbox" ? checked : value;
+      // Verificación especial para el campo de calificaciones
+      if (name === "calificaciones") {
+        updatedData[name] = parseFloat(value); // Convertir el valor a float
+      } else {
+        updatedData[name] = inputType === "checkbox" ? checked : value;
+      }
     }
-
+    console.log("UPDATED DATA: ", updatedData)
     setEditedData(updatedData);
   };
 
@@ -106,9 +119,16 @@ const BasicModal = ({
         break;
 
       case type === "adminProducts":
-        if (typeof editedData.imageUrl === "string" && editedData.imageUrl.startsWith("blob:")) {
+        if (typeof editedData.imagenUrl === "string" && editedData.imagenUrl.startsWith("blob:")) {
           // Elimina el campo imageUrl si comienza con 'blob:'
-          delete editedData.imageUrl;
+          delete editedData.imagenUrl;
+        }
+        break;
+
+      case type === "adminAnimals":
+        if (typeof editedData.fotoUrl === "string" && editedData.fotoUrl.startsWith("blob:")) {
+          // Elimina el campo imageUrl si comienza con 'blob:'
+          delete editedData.fotoUrl;
         }
         break;
 
@@ -130,8 +150,8 @@ const BasicModal = ({
         break;
     }
 
-    console.log("ValidationErrors.Length: ", Object.keys(validationErrors).length)
-    if (Object.keys(validationErrors).length > 0) {
+    //console.log("ValidationErrors.Length: ", Object.keys(validationErrors).length)
+    if (validationErrors && Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       console.log("Errores: ", validationErrors);
       return;
@@ -142,21 +162,20 @@ const BasicModal = ({
 
       // Hacer la petición PUT para actualizar el producto, excluyendo el archivo
       let updatedData;
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const token = getToken();
+
       switch (true) {
         case type === "adminUsers":
-          updatedData = await putServerData(
-            "http://localhost:3001",
-            `/usuarios/${editedData._id}`,
-            productDataWithoutFile
-          );
+          updatedData = await putUser(editedData._id, productDataWithoutFile);
           break;
 
         case type === "adminProducts":
-          updatedData = await putServerData(
-            "http://localhost:3001",
-            `/productos/${editedData._id}`,
-            productDataWithoutFile
-          );
+          updatedData = await putProduct(editedData._id, productDataWithoutFile);
+          break;
+
+        case type === "adminAnimals":
+          updatedData = await putAnimal(editedData._id, productDataWithoutFile);
           break;
 
         default:
@@ -176,6 +195,10 @@ const BasicModal = ({
 
           case type === "adminProducts":
             uploadResponse = await uploadProductImage(editedData._id, fileData);
+            break;
+
+          case type === "adminAnimals":
+            uploadResponse = await uploadAnimalImage(editedData._id, fileData);
             break;
 
           default:
@@ -284,7 +307,7 @@ const BasicModal = ({
           {(type === "adminUsers" &&
             `Editando usuario: ${formData.nombreUsuario}`) ||
             (type === "adminProducts" &&
-              `Editando Producto: ${formData.name}`) ||
+              `Editando Producto: ${formData.nombre}`) ||
             "Modal Title"}
         </Modal.Title>
       </Modal.Header>
@@ -299,12 +322,19 @@ const BasicModal = ({
             editedData={editedData}
           />
         )}
+
+        {type === "adminAnimals" && (
+          <AnimalsFormModal
+            handleChange={handleChange}
+            editedData={editedData}
+          />
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
           Close
         </Button>
-        {(type === "adminUsers" || type === "adminProducts") && (
+        {(type === "adminUsers" || type === "adminProducts" || type === "adminAnimals") && (
           <Button onClick={handleSaveChanges}>Guardar cambios</Button>
         )}
       </Modal.Footer>

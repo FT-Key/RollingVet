@@ -162,54 +162,55 @@ export function validateUserFields(data) {
 }
 
 export function validateProductFields(data) {
+  console.log("ENTRA: ", data)
   let validationErrors = {};
 
-  if (!validarNombreProducto(data.name)) {
-    validationErrors.name = "Nombre de producto inválido";
+  if (!validarNombreProducto(data.nombre)) {
+    validationErrors.nombre = "Nombre de producto inválido";
   }
 
-  if (!validarPrecio(data.price)) {
-    validationErrors.price = "Precio inválido";
+  if (!validarPrecio(data.precio)) {
+    validationErrors.precio = "Precio inválido";
   }
 
-  if (!validarDescripcion(data.description)) {
-    validationErrors.description = "Descripción inválida";
+  if (!validarDescripcion(data.descripcion)) {
+    validationErrors.descripcion = "Descripción inválida";
   }
 
-  if (!validarCategoria(data.category)) {
-    validationErrors.category = "Categoría inválida";
+  if (!validarCategoria(data.categoria)) {
+    validationErrors.categoria = "Categoría inválida";
   }
 
-  if (!validarStock(data.stock)) {
-    validationErrors.stock = "Stock inválido";
+  if (!validarStock(data.cantidadEnStock)) {
+    validationErrors.cantidadEnStock = "Stock inválido";
   }
 
-  if (!validarMarca(data.brand)) {
-    validationErrors.brand = "Marca inválida";
+  if (!validarMarca(data.proveedor)) {
+    validationErrors.proveedor = "Marca inválida";
   }
 
-  if (!validarModelo(data.model)) {
+  /* if (!validarModelo(data.model)) {
     validationErrors.model = "Modelo inválido";
+  } */
+
+  if (data.imagenUrl && !validarImagenURL(data.imagenUrl)) {
+    validationErrors.imagenUrl = "URL de la imagen inválida";
   }
 
-  if (data.imageUrl && !validarImagenURL(data.imageUrl)) {
-    validationErrors.imageUrl = "URL de la imagen inválida";
+  if (!validarCalificaciones(data.calificaciones)) {
+    validationErrors.calificaciones = "Calificaciones inválidas";
   }
 
-  if (!validarCalificaciones(data.ratings)) {
-    validationErrors.ratings = "Calificaciones inválidas";
+  if (!validarGarantia(data.garantia)) {
+    validationErrors.garantia = "Garantía inválida";
   }
 
-  if (!validarGarantia(data.warranty)) {
-    validationErrors.warranty = "Garantía inválida";
+  if (!validarFecha(data.fechaDeIngreso)) {
+    validationErrors.fechaDeIngreso = "Fecha de ingreso inválida";
   }
 
-  if (!validarFecha(data.releaseDate)) {
-    validationErrors.releaseDate = "Fecha de lanzamiento inválida";
-  }
-
-  if (!validarDescuento(data.discount)) {
-    validationErrors.discount = "Descuento inválido";
+  if (!validarDescuento(data.descuento)) {
+    validationErrors.descuento = "Descuento inválido";
   }
 
   return validationErrors;

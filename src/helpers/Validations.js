@@ -178,7 +178,7 @@ export function validarImagenURL(cadena) {
   // Expresión regular para rutas locales
   const regexLocal = /^(\.\/|\.\.\/).*\/.*\.(?:png|jpg|jpeg|gif|webp)$/i;
   // Expresión regular para URLs de via.placeholder.com con tamaños entre 100 y 5000
-  const regexPlaceholder = /^https:\/\/via\.placeholder\.com\/([1-9]\d{2,3}|10000)x([1-9]\d{2,3}|10000)$/;
+  const regexPlaceholder = /^https:\/\/via\.placeholder\.com\/([1-9]\d{2,3}|10000)(x([1-9]\d{2,3}|10000))?$/;
   const regexPicsum = /^https:\/\/picsum\.photos\/(?:id\/\d+\/)?(?:seed\/\w+\/)?(\d{2,4})(?:\/(\d{2,4}))?(?:\.(?:jpg|webp))?(?:\/?(?:\?(?:random=\d+|grayscale|blur=\d+|blur|grayscale&blur=\d+)|&?random=\d+|&?grayscale|&?blur=\d+|&?blur)*)?$/i;
 
   // Comprobar si la cadena cumple con alguna de las tres expresiones regulares
@@ -187,13 +187,21 @@ export function validarImagenURL(cadena) {
 
 export function validarCalificaciones(cadena) {
   // La expresión regular acepta números enteros del 1 al 10 y números con un decimal usando punto o coma
-  const regex = /^(10|[1-9](?:[\.,]\d)?)$/;
+  const regex = /^(?:[0-4](?:,[0-9])?|5)$/;
   return regex.test(cadena);
 }
 
 export function validarGarantia(cadena) {
-  // Acepta garantía en años (e.g., "2 años") o en meses (e.g., "6 meses")
+  console.log("ingresa: ", cadena);
+
+  // Acepta garantía en años (e.g., "2 años"), en meses (e.g., "6 meses"), o 'Sin garantía'
   const regex = /^\d{1,2}\s*(mes|meses|año|años)$/;
+
+  // Verifica si la cadena es 'Sin garantía'
+  if (cadena.toLowerCase() === 'sin garantía' || cadena.toLowerCase() === 'sin garantia') {
+    return true;
+  }
+
   // Asegúrate de que el número de meses esté entre 1 y 12
   const meses = cadena.match(/^(\d{1,2})\s*(mes|meses)$/);
   if (meses) {
@@ -202,11 +210,14 @@ export function validarGarantia(cadena) {
       return true;
     }
   }
+
+  // Verifica si la cadena coincide con la expresión regular general
   return regex.test(cadena);
 }
 
 export function validarFecha(fecha) {
-  if (Object.prototype.toString.call(fecha) !== "[object Date]" || isNaN(fecha)) {
+  const fechaTest = new Date();
+  if (Object.prototype.toString.call(fechaTest) !== "[object Date]" || isNaN(fechaTest)) {
     return false; // No es un objeto Date válido
   }
   return true; // Es una fecha válida de JavaScript

@@ -5,7 +5,7 @@ export const RedirectToLogin = ({ navigate }) => {
 
 export const RedirectToRegister = ({ navigate }) => {
   savePreviousRoute();
-  navigate('/inicioSesion');
+  navigate('/registro');
 };
 
 const savePreviousRoute = () => {
