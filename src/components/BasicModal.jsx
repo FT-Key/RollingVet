@@ -287,9 +287,22 @@ const BasicModal = ({
         }
         break;
 
+      case "mascotas":
+        if (isEnabled) {
+          updatedData.mascotas = updatedData.mascotas || [];
+        } else {
+          // Si está deshabilitado, eliminamos el campo si el array de mascotas está vacío
+          if (!updatedData.mascotas || updatedData.mascotas.length === 0) {
+            delete updatedData.mascotas;
+          }
+        }
+        break;
+
       default:
         break;
     }
+
+    console.log("UPDATED DATA: ", updatedData)
 
     // Actualizamos el estado con los datos modificados
     setEditedData(updatedData);

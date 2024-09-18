@@ -21,6 +21,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
   const [showSocialLinks, setShowSocialLinks] = useState(false);
   const [showImageSection, setShowImageSection] = useState(false);
   const [imageBackUp, setImageBackUp] = useState(editedData.fotoPerfil);
+  const [showPetSection, setShowPetSection] = useState(false);
   const [showNewPetSection, setShowNewPetSection] = useState(false);
   const [petOption, setPetOption] = useState("Agregar nueva mascota");
   const [newPet, setNewPet] = useState({ nombre: "", tipo: "", edad: "", raza: "" });
@@ -85,8 +86,11 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
         }
         handleEnabledData("fotosPerfil", !showImageSection);
       case "petsSection":
+        setShowPetSection(!showPetSection);
+        handleEnabledData("mascotas", !showPetSection);
+        break;
+      case "newPetSection":
         setShowNewPetSection(!showNewPetSection);
-        handleEnabledData("mascotas", !showNewPetSection);
         break;
       default:
         break;
@@ -118,7 +122,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
       handleEnabledData("fotosPerfil", false);
     }
 
-    if (showNewPetSection) {
+    if (showPetSection) {
       handleEnabledData("mascotas", true);
     } else {
       handleEnabledData("mascotas", false);
@@ -250,10 +254,10 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
 
       {/* Sección de mascotas */}
       <button className="btn btn-secondary mb-2" onClick={() => toggleSection("petsSection")}>
-        {showNewPetSection ? "Cancelar" : "Agregar/Eliminar Mascotas"}
+        {showPetSection ? "Cancelar" : "Agregar/Eliminar Mascotas"}
       </button>
 
-      {showNewPetSection && (
+      {showPetSection && (
         <div>
           <h3>Mascotas del usuario</h3>
           <ul>
