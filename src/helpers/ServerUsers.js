@@ -1,23 +1,36 @@
-import { deleteServerData, fetchServerData, postServerData } from "./ServerCalling";
+import { deleteServerData, fetchServerData, postServerData, putServerData } from "./ServerCalling";
 import { getToken } from "./Token.helper";
 
-export async function getUsers() {
+export async function getUsers(page, limit) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const rawData = await fetchServerData(apiUrl, "/usuarios");
+  const token = getToken();
+  const rawData = await fetchServerData(apiUrl, `/usuarios?${page ? `page=${page}&` : ''}${limit ? `limit=${limit}` : ''}`, token);
+
   // Convertir fechaNacimiento, ultimoIngreso, creadoEn y actualizadoEn de string a Date
-  const data = rawData.map((user) => ({
+  const data = rawData.usuarios.map((user) => ({
     ...user,
     fechaNacimiento: new Date(user.fechaNacimiento),
     ultimoIngreso: new Date(user.ultimoIngreso),
     creadoEn: new Date(user.creadoEn),
     actualizadoEn: new Date(user.actualizadoEn),
   }));
-  return data;
+
+  return {
+    usuarios: data,
+    ...(rawData.totalUsuarios ? {
+      pagination: {
+        totalUsuarios: rawData.totalUsuarios,
+        page: rawData.page,
+        limit: rawData.limit
+      }
+    } : {})
+  };
 }
 
 export async function getOneUser(userId) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const rawData = await fetchServerData(apiUrl, `/usuarios/${userId}`);
+  const token = getToken();
+  const rawData = await fetchServerData(apiUrl, `/usuarios/${userId}`, token);
   // Convertir fechaNacimiento, ultimoIngreso, creadoEn y actualizadoEn de string a Date
   const data = {
     ...rawData,
@@ -27,6 +40,25 @@ export async function getOneUser(userId) {
     actualizadoEn: new Date(rawData.actualizadoEn),
   };
   return data;
+}
+
+export async function putUser(userId, body) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken(); // Obtén el token del almacenamiento local
+  if (token) {
+    try {
+      await putServerData(
+        apiUrl, // Tu dominio
+        `/usuarios/${userId}`,
+        body, // No necesitas un body para agregar al carrito
+        token
+      );
+    } catch (error) {
+      console.error("Error agregando producto al carrito:", error);
+    }
+  } else {
+    console.log("No se encontro token de autorización");
+  }
 }
 
 export async function addToCart(idProducto) {

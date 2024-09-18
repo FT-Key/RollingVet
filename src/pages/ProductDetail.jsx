@@ -101,45 +101,45 @@ const ProductDetail = () => {
         <Row>
 
           <Col xs={12}>
-            <h1>{producto.name}</h1>
+            <h1>{producto.nombre}</h1>
           </Col>
 
           <Col xs={12} md={6}>
             {/* Envuelve la imagen dentro del componente Zoom */}
-            <Zoom imageUrl={producto.imageUrl}>
+            <Zoom imageUrl={producto.imagenUrl}>
             </Zoom>
           </Col>
 
           <Col xs={12} md={6}>
             <p>
-              <strong>Descripción:</strong> {producto.description}
+              <strong>Descripción:</strong> {producto.descripcion}
             </p>
             <p>
-              <strong>Categoría:</strong> {producto.category}
+              <strong>Categoría:</strong> {producto.categoria}
             </p>
             <p>
-              <strong>Marca:</strong> {producto.brand}
+              <strong>codigo de barras:</strong> {producto.codigoDeBarras}
             </p>
             <p>
-              <strong>Modelo:</strong> {producto.model}
+              <strong>Proveedor:</strong> {producto.proveedor}
             </p>
-            <p className="product-price">${producto.price}</p>
+            <p className="product-price">${producto.precio}</p>
             <p>
-              <strong>Stock:</strong> {producto.stock}
-            </p>
-            <p>
-              <strong>Calificaciones:</strong> {producto.ratings}/5
+              <strong>Stock:</strong> {producto.cantidadEnStock}
             </p>
             <p>
-              <strong>Garantía:</strong> {producto.warranty}
+              <strong>Calificaciones:</strong> {producto.calificaciones}/5
+            </p>
+            <p>
+              <strong>Garantía:</strong> {producto.garantia}
             </p>
             <p>
               <strong>Fecha de publicación:</strong>{" "}
-              {new Date(producto.releaseDate).toLocaleDateString()}
+              {new Date(producto.fechaDeIngreso).toLocaleDateString()}
             </p>
-            {producto.discount && (
+            {producto.descuento && (
               <p>
-                <strong>Descuento:</strong> {producto.discount}
+                <strong>Descuento:</strong> {producto.descuento}
               </p>
             )}
 

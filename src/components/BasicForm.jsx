@@ -104,20 +104,19 @@ function BasicForm({ type }) {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     const serverResponse = await postServerData(apiUrl, '/login', formLogin);
+    console.log("RESPONSE: ", serverResponse)
 
-    if (serverResponse.ok) {
-      const serverData = await serverResponse.json(); // Lee los datos del servidor
-      const { token: jwtToken } = serverData; // Desestructura el token del JSON
+    if (serverResponse.token) {
+      const { token: jwtToken } = serverResponse; // Desestructura el token del JSON
 
       loginContext(jwtToken);
       redirectAfterLogin(navigate);
       console.log("Sesión iniciada con éxito")
 
-    } else if (!serverResponse.ok) {
+    } else if (!serverResponse.token) {
       throw new Error('Error en el servidor al iniciar sesión');
     }
   }
-
 
   // Constantes
   const TEXT_TYPE = {

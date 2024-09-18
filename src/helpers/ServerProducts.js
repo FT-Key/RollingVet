@@ -1,14 +1,25 @@
-import { fetchServerData, postServerData } from "./ServerCalling";
+import { fetchServerData, postServerData, putServerData } from "./ServerCalling";
 
-export async function getProducts() {
+export async function getProducts(page, limit) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const rawData = await fetchServerData(apiUrl, "/productos");
+  const rawData = await fetchServerData(apiUrl, `/productos?${page ? `page=${page}&` : ''}${limit ? `limit=${limit}` : ''}`);
+
   // Convertir releaseDate de string a Date
-  const data = rawData.map((product) => ({
+  const data = rawData.productos.map((product) => ({
     ...product,
     releaseDate: new Date(product.releaseDate),
   }));
-  return data;
+
+  return {
+    productos: data,
+    ...(rawData.totalProductos ? {
+      pagination: {
+        totalProductos: rawData.totalProductos,
+        page: rawData.page,
+        limit: rawData.limit
+      }
+    } : {})
+  };
 }
 
 export async function getOneProduct(productId) {
@@ -32,6 +43,25 @@ export async function getOneProduct(productId) {
   } catch (error) {
     console.error("Error fetching product:", error);
     return null; // o puedes manejar el error de otra forma, dependiendo de tu aplicación
+  }
+}
+
+export async function putProduct(productId, body) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken(); // Obtén el token del almacenamiento local
+  if (token) {
+    try {
+      await putServerData(
+        apiUrl, // Tu dominio
+        `/productos/${productId}`,
+        body, // No necesitas un body para agregar al carrito
+        token
+      );
+    } catch (error) {
+      console.error("Error agregando producto al carrito:", error);
+    }
+  } else {
+    console.log("No se encontro token de autorización");
   }
 }
 

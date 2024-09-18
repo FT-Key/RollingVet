@@ -6,8 +6,6 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import AdminUsers from "../pages/AdminUsers";
-import ServerResponse from "../pages/ServerResponse";
-import Servers from "../pages/Servers";
 import AdminProducts from "../pages/AdminProducts";
 import ProductDetail from "../pages/ProductDetail";
 import Favoritos from "../pages/Favoritos";
@@ -19,6 +17,7 @@ import CarritoResult from "../pages/CarritoResult";
 import AppointmentRequest from "../pages/AppointmentRequest";
 import AppointmentList from "../pages/AppointmentsList";
 import AdminAppointments from "../pages/AdminAppointments";
+import AdminAnimals from "../pages/AdminAnimals";
 
 const RouteViews = () => {
   return (
@@ -30,7 +29,6 @@ const RouteViews = () => {
         <Route path="/registro" element={<Register />} />
         <Route path="/sobreMi" element={<SobreMi />} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/servers" element={<Servers />} />
 
         {/* Rutas protegidas para roles específicos */}
         <Route
@@ -54,6 +52,14 @@ const RouteViews = () => {
           element={
             <ProtectedRoute requiredRole="admin">
               <AdminAppointments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/adminAnimals"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminAnimals />
             </ProtectedRoute>
           }
         />
@@ -101,7 +107,6 @@ const RouteViews = () => {
         />
 
         <Route path="/productDetail/:productId" element={<ProductDetail />} />
-        <Route path="/serverResponse" element={<ServerResponse />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />

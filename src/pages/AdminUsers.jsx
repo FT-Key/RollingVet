@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -10,12 +10,17 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { getUsers } from "../helpers/ServerUsers";
 import ProfileImage from "../components/ProfileImage";
+import PaginationComponent from "../components/PaginationComponent";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  // PAGINACION
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
@@ -23,9 +28,11 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
       while (true) {
         try {
-          const data = await getUsers();
+          const data = await getUsers(currentPage, limit);
+
           if (isMounted) {
-            setUsers(data);
+            setUsers(data.usuarios);
+            setTotalPages(Math.ceil(data.pagination.totalUsuarios / (data.pagination.limit || data.pagination.totalUsuarios)));
           }
           break; // Salir del bucle si la petición es exitosa
         } catch (error) {
@@ -41,7 +48,7 @@ const AdminUsers = () => {
     return () => {
       isMounted = false; // Marcar como desmontado al limpiar el efecto
     };
-  }, [updateMark]);
+  }, [updateMark, currentPage, limit]);
 
   const BLOQUEADO_CONFIG = {
     true: { text: "Desbloquear", color: "success" },
@@ -107,6 +114,11 @@ const AdminUsers = () => {
       ],
     });
   };
+
+  // Cálculo para agregar espacios vacíos
+  const fillEmptySpaces = useMemo(() => {
+    return Array(limit - users.length).fill(null);
+  }, [users.length, limit]);
 
   return (
     <>
@@ -176,6 +188,29 @@ const AdminUsers = () => {
           </Row>
         ))}
 
+        {/* Renderizar espacios vacíos para mantener la consistencia visual */}
+        {fillEmptySpaces.map((_, index) => (
+          <Row key={`empty-${index}`}>
+            <Col xs={12} md={1}>
+            </Col>
+            <Col xs={12} md={2}>
+              <img className="void-image" src="/Espacio-transparente.png" alt="vacio" />
+            </Col>
+            <Col xs={12} md={2}>
+            </Col>
+            <Col xs={12} md={1}>
+            </Col>
+            <Col xs={12} md={2}>
+            </Col>
+            <Col xs={12} md={2}>
+            </Col>
+            <Col xs={12} md={1}>
+            </Col>
+            <Col xs={12} md={1}>
+            </Col>
+          </Row>
+        ))}
+
         {selectedUser && (
           <BasicModal
             type="adminUsers"
@@ -186,6 +221,11 @@ const AdminUsers = () => {
           />
         )}
       </Container>
+      <PaginationComponent
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setPage={setCurrentPage}
+      />
     </>
   );
 };

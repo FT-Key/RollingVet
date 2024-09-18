@@ -1,28 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import BasicCard from "../components/BasicCard";
 import CarouselFade from "../components/CarouselFade";
 import "../css/Home.css";
 import { getProducts } from "../helpers/ServerProducts.js";
+import PaginationComponent from "../components/PaginationComponent.jsx";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
+  const [productosCarrusel, setProductosCarrusel] = useState(false);
+  const [animalesAdopcion, setAnimalesAdopcion] = useState(false);
+  // PAGINACION
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(3);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    let isMounted = true; // Variable para saber si el componente está montado
+    let isMounted = true;
 
     const cargarProductos = async () => {
       while (true) {
         try {
-          const data = await getProducts();
+          const data = await getProducts(currentPage, limit);
+
           if (isMounted) {
-            setProductos(data);
+            setProductos(data.productos);
+            setTotalPages(
+              Math.ceil(
+                data.pagination.totalProductos /
+                  (data.pagination.limit || data.pagination.totalTurnos)
+              )
+            );
           }
-          break; // Salir del bucle si la petición es exitosa
+
+          if (!productosCarrusel) {
+            const dataCarrusel = await getProducts();
+            if (isMounted) {
+              setProductosCarrusel(dataCarrusel.productos);
+            }
+          }
+
+          if (!animalesAdopcion) {
+            const dataAdopcion = await getProducts(); // Aquí deberías obtener productos relacionados con adopción
+            if (isMounted) {
+              setAnimalesAdopcion(dataAdopcion.productos);
+            }
+          }
+
+          break;
         } catch (error) {
           console.error("Error cargando productos:", error);
-          if (!isMounted) return; // Salir si el componente se desmontó
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
+          if (!isMounted) return;
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       }
     };
@@ -30,23 +59,84 @@ const Home = () => {
     cargarProductos();
 
     return () => {
-      isMounted = false; // Marcar como desmontado al limpiar el efecto
+      isMounted = false;
     };
-  }, []);
+  }, [currentPage, limit]);
 
   return (
     <>
-      <h2 className="my-5 text-center">¡Bienvenido a nuestra tienda!</h2>
+      {/* Sección de presentación */}
+      <section className="home-hero">
+        <div className="hero-content text-center">
+          <h1>RollingVet</h1>
+          <p>
+            Veterinaria especializada en caninos y felinos. Venta de productos
+            para animales, comida, estética, salud, accesorios. Adopción de
+            animales y planes de seguimiento de salud.
+          </p>
+        </div>
+      </section>
 
-      <CarouselFade data={productos} type={"productCarousel"} />
+      {/* Sección del carrusel de productos destacados */}
+      <section className="carousel-section">
+        <h2 className="text-center">Productos Destacados</h2>
+        {productosCarrusel && <CarouselFade data={productosCarrusel} type={"productCarousel"} />}
+      </section>
 
-      <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
-        {productos.map((prod) => (
-          <Col className="p-0" key={prod.id}>
-            <BasicCard data={prod} type={"productCard"} />
-          </Col>
-        ))}
-      </Row>
+      {/* Sección de los 3 planes */}
+      <section className="plans-section">
+        <Container>
+          <h2 className="text-center">Nuestros Planes</h2>
+          <Row className="row-cols-sm-1 row-cols-lg-3 my-3 custom-row">
+            <Col>
+              <div className="plan-card text-center">
+                <h3>Plan Básico</h3>
+                <img src="/Plan-1-01.png" alt="plan básico" />
+                <p>Incluye vacunación y revisión anual.</p>
+              </div>
+            </Col>
+            <Col>
+              <div className="plan-card text-center">
+                <h3>Plan Completo</h3>
+                <img src="/Plan-2-01.png" alt="plan completo" />
+                <p>Vacunación, desparasitación y revisión semestral.</p>
+              </div>
+            </Col>
+            <Col>
+              <div className="plan-card text-center">
+                <h3>Plan Premium</h3>
+                <img src="/Plan-3-01.png" alt="plan premium" />
+                <p>Todos los servicios de salud y seguimiento personalizado.</p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Sección de productos */}
+      <section className="products-section">
+        <Container>
+          <h2 className="text-center">Nuestros Productos</h2>
+          <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
+            {productos.map((prod) => (
+              <Col className="p-0" key={prod.id}>
+                <BasicCard data={prod} type={"productCard"} />
+              </Col>
+            ))}
+          </Row>
+          <PaginationComponent
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setPage={setCurrentPage}
+          />
+        </Container>
+      </section>
+
+      {/* Sección de adopción */}
+      <section className="adoption-section">
+        <h2 className="text-center">Adopción de Animales</h2>
+        {animalesAdopcion && <CarouselFade data={animalesAdopcion} type={"adoptionCarousel"} />}
+      </section>
     </>
   );
 };

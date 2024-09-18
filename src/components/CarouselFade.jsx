@@ -14,13 +14,13 @@ function CarouselFade({ data, type }) {
           {randomItems.map((prod, index) => (
             <Carousel.Item interval={2000} key={prod.id || index}>
               <Imagen
-                url={prod.imageUrl}
-                alt={prod.name}
+                url={prod.imagenUrl}
+                alt={prod.nombre}
                 loading={index === 0}
               />
               <Carousel.Caption>
-                <h3>{prod.name}</h3>
-                <p>{prod.description}</p>
+                <h3>{prod.nombre}</h3>
+                <p>{prod.descripcion}</p>
               </Carousel.Caption>
             </Carousel.Item>
           ))}

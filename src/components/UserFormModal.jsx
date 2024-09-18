@@ -8,6 +8,9 @@ import {
   ROLES,
   TEMAS,
 } from "../utils/usersConst.utils";
+import {
+  ESPECIES
+} from "../utils/animalsConst.utils";
 import { useState, useEffect } from "react";
 import ProfileImage from "./ProfileImage";
 
@@ -18,9 +21,48 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
   const [showSocialLinks, setShowSocialLinks] = useState(false);
   const [showImageSection, setShowImageSection] = useState(false);
   const [imageBackUp, setImageBackUp] = useState(editedData.fotoPerfil);
+  const [showPetSection, setShowPetSection] = useState(false);
+  const [showNewPetSection, setShowNewPetSection] = useState(false);
+  const [petOption, setPetOption] = useState("Agregar nueva mascota");
+  const [newPet, setNewPet] = useState({ nombre: "", tipo: "", edad: "", raza: "" });
+
+  const handleNewPetChange = (e) => {
+    const { name, value } = e.target;
+    setNewPet((prevPet) => ({ ...prevPet, [name.split(".")[1]]: value }));
+  };
+
+  const handleAddNewPet = () => {
+    // Verificar si los campos requeridos están completos
+    if (newPet.nombre && newPet.tipo && newPet.edad) {
+      // Agregar el ID del dueño a la nueva mascota
+      const newPetWithOwner = { ...newPet, dueño: editedData._id };
+
+      const updatedMascotas = [...editedData.mascotas, newPetWithOwner];
+
+      handleChange({ target: { name: "mascotas", value: updatedMascotas } });
+
+      // Resetear el formulario de nueva mascota
+      setNewPet({ nombre: "", tipo: "", edad: "", raza: "" });
+
+      // Cerrar el formulario de nueva mascota
+      toggleSection("newPetSection");
+    } else {
+      alert("Por favor, completa todos los campos requeridos.");
+    }
+  };
+
+  const handleDeletePet = (index) => {
+    const updatedMascotas = editedData.mascotas.filter((_, i) => i !== index);
+    handleChange({ target: { name: "mascotas", value: updatedMascotas } });
+  };
+
 
   const handleImageOptionChange = (e) => {
     setImageOption(e.target.value);
+  };
+
+  const handlePetOptionChange = (e) => {
+    setPetOption(e.target.value);
   };
 
   const toggleSection = (section) => {
@@ -43,6 +85,13 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           editedData.fotoPerfil = imageBackUp;
         }
         handleEnabledData("fotosPerfil", !showImageSection);
+      case "petsSection":
+        setShowPetSection(!showPetSection);
+        handleEnabledData("mascotas", !showPetSection);
+        break;
+      case "newPetSection":
+        setShowNewPetSection(!showNewPetSection);
+        break;
       default:
         break;
     }
@@ -72,16 +121,25 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
     } else {
       handleEnabledData("fotosPerfil", false);
     }
-  }, [showAddress, showSecurityQuestions, showSocialLinks, showImageSection]);
+
+    if (showPetSection) {
+      handleEnabledData("mascotas", true);
+    } else {
+      handleEnabledData("mascotas", false);
+    }
+  }, [showAddress, showSecurityQuestions, showSocialLinks, showImageSection, showNewPetSection]);
 
   return (
     <Container fluid className="container-adminUsers">
+
       <div>
         <p className="m-0">ID: {editedData.id || "ID"}</p>
       </div>
+
       <div>
         <ProfileImage source={editedData.fotoPerfil || ''} />
       </div>
+
       {/* Botón para mostrar/ocultar la sección de edición de imágenes */}
       <button className="btn btn-secondary mb-2" onClick={() => toggleSection("imageSection")}>
         {showImageSection ? "Cancelar" : "Editar foto de perfil"}
@@ -134,6 +192,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           )}
         </div>
       )}
+
       <div>
         <label>Nombre de Usuario</label>
         <input
@@ -144,6 +203,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           placeholder="Nombre de Usuario"
         />
       </div>
+
       <div>
         <label>Email</label>
         <input
@@ -154,6 +214,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           placeholder="Email"
         />
       </div>
+
       {/*<div>
         <label>Contraseña</label>
         <input
@@ -168,6 +229,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           onChange={handleChange}
         />
       </div>*/}
+
       <div>
         <label>Nombre</label>
         <input
@@ -178,6 +240,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           placeholder="Nombre"
         />
       </div>
+
       <div>
         <label>Apellido</label>
         <input
@@ -188,6 +251,78 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           placeholder="Apellido"
         />
       </div>
+
+      {/* Sección de mascotas */}
+      <button className="btn btn-secondary mb-2" onClick={() => toggleSection("petsSection")}>
+        {showPetSection ? "Cancelar" : "Agregar/Eliminar Mascotas"}
+      </button>
+
+      {showPetSection && (
+        <div>
+          <h3>Mascotas del usuario</h3>
+          <ul>
+            {editedData.mascotas.map((mascota, index) => (
+              <li key={index}>
+                {mascota.nombre} ({mascota.tipo})
+                <button onClick={() => handleDeletePet(index)}>X</button>
+              </li>
+            ))}
+          </ul>
+
+          <button className="btn btn-secondary mb-2" onClick={() => toggleSection("newPetSection")}>
+            {showNewPetSection ? "Cancelar" : "Agregar nueva mascota"}
+          </button>
+
+          {showNewPetSection && (
+            <div>
+              <label>Nombre</label>
+              <input
+                type="text"
+                name="nombre"
+                value={newPet.nombre || ""}
+                onChange={(e) => setNewPet({ ...newPet, nombre: e.target.value })}
+                placeholder="Nombre de la mascota"
+              />
+
+              <label>Tipo</label>
+              <select
+                name="tipo"
+                value={newPet.tipo || ""}
+                onChange={(e) => setNewPet({ ...newPet, tipo: e.target.value })}
+              >
+                <option value="">Seleccionar tipo</option>
+                {ESPECIES.map((especie, index) => (
+                  <option key={index} value={especie}>
+                    {especie}
+                  </option>
+                ))}
+              </select>
+
+              <label>Edad</label>
+              <input
+                type="number"
+                name="edad"
+                value={newPet.edad || ""}
+                onChange={(e) => setNewPet({ ...newPet, edad: e.target.value })}
+                placeholder="Edad de la mascota"
+              />
+
+              <label>Raza (Opcional)</label>
+              <input
+                type="text"
+                name="raza"
+                value={newPet.raza || ""}
+                onChange={(e) => setNewPet({ ...newPet, raza: e.target.value })}
+                placeholder="Raza de la mascota"
+              />
+
+              <button className="btn btn-primary" onClick={handleAddNewPet}>
+                Agregar Mascota
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       <button className="btn btn-secondary mb-2" onClick={() => toggleSection("address")}>
         {showAddress ? "Ocultar Dirección" : "Mostrar Dirección"}
@@ -292,7 +427,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
         </div>
       )}
 
-      <div>
+      {/* <div>
         <label>Estado de Suscripción</label>
         <select
           name="estadoSuscripcion"
@@ -305,7 +440,8 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
+
       <div>
         <label>Idioma</label>
         <select
@@ -320,6 +456,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           ))}
         </select>
       </div>
+
       <div>
         <label>Región</label>
         <select
@@ -334,6 +471,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           ))}
         </select>
       </div>
+
       <div>
         <label>Rol</label>
         <select
@@ -348,6 +486,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           ))}
         </select>
       </div>
+
       <div>
         <label>Tema</label>
         <select
@@ -362,6 +501,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           ))}
         </select>
       </div>
+
     </Container>
   );
 };

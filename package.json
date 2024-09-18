@@ -1,5 +1,5 @@
 {
-  "name": "templates",
+  "name": "rollingvet",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@mercadopago/sdk-react": "^0.0.19",
-    "@react-oauth/google": "^0.12.1",
     "axios": "^1.7.5",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "express": "^4.19.2",
+    "firebase": "^10.13.1",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",

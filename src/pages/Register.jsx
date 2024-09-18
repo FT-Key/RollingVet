@@ -25,7 +25,7 @@ const Register = () => {
           <p className='text-center'>o</p>
 
           <Container className='d-flex flex-column justify-content-center align-items-center pb-3 gap-2'>
-            <GoogleAuth type={"default"} useParameter={'register'} />
+            <GoogleAuth useParameter={'register'} />
           </Container>
         </>
       }

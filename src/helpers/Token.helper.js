@@ -36,6 +36,17 @@ export function getToken() {
   }
 }
 
+export const decodeToken = (token) => {
+  try {
+    // Decodifica el token JWT
+    const decodedToken = jwtDecode(token);
+    return decodedToken;
+  } catch (error) {
+    console.error("Error al decodificar el token:", error);
+    return null; // Retorna null en caso de error
+  }
+};
+
 // Guardar el token en sessionStorage con manejo de errores
 export function setToken(token) {
   try {

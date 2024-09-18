@@ -1,0 +1,39 @@
+/* PaginationComponent.css */
+.pagination-item,
+.pagination-prev,
+.pagination-next,
+.pagination-first,
+.pagination-last {
+  width: 2.5rem;
+  /* Ajusta el ancho según sea necesario */
+  height: 2.5rem;
+  /* Ajusta la altura según sea necesario */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-item.disabled {
+  cursor: default;
+}
+
+.page-item {
+
+  span,
+  a {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.page-item.disabled.btn-void {
+  span {
+    background-color: transparent;
+    border: none;
+  }
+}

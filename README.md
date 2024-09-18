@@ -2,14 +2,28 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 
 🔴🟠🟡🔵🟢🟣
 
-🔴 Tetris en NotFound
+🔴 METADATA, Titulos de paginas
+🔴 MockUp
+🔴 Paleta de colores
+🔴 Tipografía
+🔴 Trello
+🔴 Deploy
+🔴 Página de referencia
+🔴 Mails
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
 🔴 Filtros
+🔴 Clima
+🔴 Admin pacientes (Pensar)
+🔴 Admin animales (Pensar)
+🔴 Planes
+🟠 Admin turno (Pensar)
 🟠 Contacto
-🟡 Turnero (estados de turno, admin turnos)
+🟡 Animales
+🟡 Turnero (pensar lógica)
+🟡 Footer
 🟡 Sobre mi
-🟡 Completar datos de usuario
+🟡 Completar datos de usuario (repensar)
 🔵 MercadoPago
 🔵 Cerrar Sesión
 🔵 Rutas protegidas
@@ -17,11 +31,11 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔵 Favoritos
 🔵 Editar usuarios
 🔵 Editar productos
-🟢 Lógica de registro
-🟢 Lógica de registro Google
-🟢 Lógica de inicio de sesion
-🟢 Lógica de inicio de sesion Google
-🟢 Validaciones inputs productos
-🟢 Validaciones inputs usuarios
-🟢 Bloqueo de producto
-🟢 Bloqueo de usuario
+🔵 Lógica de registro
+🔵 Lógica de registro Google
+🔵 Lógica de inicio de sesion
+🔵 Lógica de inicio de sesion Google
+🔵 Validaciones inputs productos
+🔵 Validaciones inputs usuarios
+🔵 Bloqueo de producto
+🔵 Bloqueo de usuario

@@ -64,7 +64,7 @@ const Carrito = () => {
     if (carrito.length > 0 && cantidades) {
       return carrito.reduce((total, prod) => {
         const cantidad = cantidades[prod._id] || 1;
-        return total + prod.price * cantidad;
+        return total + prod.precio * cantidad;
       }, 0);
     }
   }, [carrito, cantidades]);
@@ -87,11 +87,11 @@ const Carrito = () => {
           {carrito.map((prod) => (
             <Row key={prod._id} className="align-items-center border p-3">
               <Col xs={12} md={2} className="cart-img">
-                <img src={prod.imageUrl} alt={prod.name} onClick={() => navigate(`/productDetail/${prod._id}`)} />
+                <img src={prod.imagenUrl} alt={prod.nombre} onClick={() => navigate(`/productDetail/${prod._id}`)} />
               </Col>
-              <Col xs={12} md={2}><h5>{prod.name}</h5></Col>
-              <Col xs={12} md={2}><p>Marca: {prod.brand}</p></Col>
-              <Col xs={12} md={2}><p>Modelo: {prod.model}</p></Col>
+              <Col xs={12} md={2}><h5>{prod.nombre}</h5></Col>
+              <Col xs={12} md={2}><p>Proveedor: {prod.proveedor}</p></Col>
+              <Col xs={12} md={2}><p>Garantía: {prod.garantia}</p></Col>
               <Col xs={12} md={1}>
                 <Form.Control
                   className={'text-center'}
@@ -102,7 +102,7 @@ const Carrito = () => {
                   style={{ width: "80px" }}
                 />
               </Col>
-              <Col xs={12} md={2}><p>Precio: ${prod.price}</p></Col>
+              <Col xs={12} md={2}><p>Precio: ${prod.precio}</p></Col>
               <Col xs={12} md={1}>
                 <Button className="cart-remove-btn" onClick={() => handleRemoveProduct(prod._id)}>
                   X

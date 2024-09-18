@@ -1,8 +1,8 @@
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BasicForm from '../components/BasicForm';
 import GoogleAuth from '../components/GoogleAuth';
 import { Container } from 'react-bootstrap';
-import { useEffect } from 'react';
 import { getToken } from '../helpers/Token.helper';
 
 const Login = () => {
@@ -22,16 +22,14 @@ const Login = () => {
         :
         <>
           <BasicForm type={"inicioSesion"} />
-
           <p className='text-center'>o</p>
-
           <Container className='d-flex flex-column justify-content-center align-items-center pb-3 gap-2'>
-            <GoogleAuth type={"default"} useParameter={'login'} />
+            <GoogleAuth useParameter={'login'} />
           </Container>
         </>
       }
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

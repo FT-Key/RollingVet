@@ -1,8 +1,95 @@
-.custom-row{
-    .col{
+.custom-row {
+    .col {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
+
+    .card {
+        height: 23rem;
+    }
+}
+
+/* Hero Section (Presentación) */
+.home-hero {
+    background-image: url("/Veterinaria-frente.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.home-hero .hero-content {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Carousel Section */
+.carousel-section {
+    padding: 50px 0;
+    background-color: #f9f9f9;
+}
+
+.carousel-section h2 {
+    margin-bottom: 40px;
+    color: #333;
+}
+
+/* Plans Section */
+.plans-section {
+    padding: 50px 0;
+    background-color: #eef2f7;
+
+    img {
+        width: 100%;
+        object-fit: contain;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+}
+
+.plan-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.plan-card h3 {
+    color: #0044cc;
+    margin-bottom: 15px;
+}
+
+.plan-card p {
+    color: #666;
+    margin-top: 1rem;
+}
+
+/* Products Section */
+.products-section {
+    padding: 50px 0;
+    background-color: #fff;
+}
+
+.products-section h2 {
+    color: #333;
+    margin-bottom: 40px;
+}
+
+/* Adoption Section */
+.adoption-section {
+    padding: 50px 0;
+    background-color: #f3f4f6;
+}
+
+.adoption-section h2 {
+    margin-bottom: 40px;
+    color: #333;
 }

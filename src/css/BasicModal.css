@@ -1,5 +1,6 @@
 .container-adminUsers,
-.container-adminProducts {
+.container-adminProducts,
+.container-adminAnimals {
   div {
     display: flex;
     flex-direction: column;
