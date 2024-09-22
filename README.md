@@ -14,11 +14,10 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔴 Mantener sesión iniciada
 🔴 Filtros
 🔴 Clima
-🔴 Admin pacientes (Pensar)
-🔴 Admin animales (Pensar)
 🔴 Planes
 🟠 Admin turno (Pensar)
 🟠 Contacto
+🟡 Admin animales
 🟡 Animales
 🟡 Turnero (pensar lógica)
 🟡 Footer

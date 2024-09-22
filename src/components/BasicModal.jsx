@@ -53,7 +53,6 @@ const BasicModal = ({
 
   const handleChange = (e) => {
     const { name, value, type: inputType, checked, files } = e.target;
-    console.log("LLEGA: ", name, value, inputType, checked, files)
     const updatedData = { ...editedData };
 
     if (inputType === "file") {
@@ -135,7 +134,6 @@ const BasicModal = ({
       default:
         break;
     }
-    console.log("DATOS DEL PRODUCTO: ", editedData)
 
     switch (true) {
       case type === "adminUsers":

@@ -5,10 +5,9 @@ import Row from "react-bootstrap/Row";
 import CustomButton from "../components/CustomButton";
 import BasicModal from "../components/BasicModal"; // Verifica que la ruta sea correcta
 import "../css/AdminAnimals.css";
-import { putServerData, deleteServerData } from "../helpers/ServerCalling";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { getAnimals } from "../helpers/ServerAnimals"; // Cambia esto a la función que obtiene animales
+import { deleteAnimal, getAnimals } from "../helpers/ServerAnimals"; // Cambia esto a la función que obtiene animales
 import AnimalImage from "../components/AnimalImage"; // Cambiar el componente de imagen si es necesario
 import PaginationComponent from "../components/PaginationComponent";
 
@@ -69,7 +68,7 @@ const AdminAnimals = () => {
             const apiUrl = import.meta.env.VITE_API_URL;
 
             try {
-              await deleteServerData(apiUrl, `/animales/${animalId}`);
+              await deleteAnimal(animalId);
               setAnimals(animals.filter((animal) => animal.id !== animalId));
             } catch (error) {
               console.error("Error eliminando animal:", error);
@@ -162,18 +161,18 @@ const AdminAnimals = () => {
         {/* Renderizar espacios vacíos para mantener la consistencia visual */}
         {fillEmptySpaces.map((_, index) => (
           <Row key={`empty-${index}`}>
-            <Col xs={12} md={1}>
+            <Col xs={12} md={2}>
             </Col>
             <Col xs={12} md={2}>
               <img className="void-image" src="/Espacio-transparente.png" alt="vacio" />
             </Col>
             <Col xs={12} md={2}>
             </Col>
-            <Col xs={12} md={2}>
-            </Col>
             <Col xs={12} md={1}>
             </Col>
             <Col xs={12} md={2}>
+            </Col>
+            <Col xs={12} md={1}>
             </Col>
             <Col xs={12} md={1}>
             </Col>

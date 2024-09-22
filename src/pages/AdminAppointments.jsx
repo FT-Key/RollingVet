@@ -9,7 +9,10 @@ import { getAppointments, getOneAppointment } from '../helpers/ServerAppointment
 
 const AdminAppointments = () => {
   const [turnos, setTurnos] = useState([]);
-  const [fecha, setFecha] = useState('');
+  const [fecha, setFecha] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // Convierte la fecha a 'YYYY-MM-DD'
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   // PAGINACION
@@ -108,7 +111,6 @@ const AdminAppointments = () => {
 
   // Cálculo para agregar espacios vacíos
   const fillEmptySpaces = useMemo(() => {
-    console.log("TURNOS: ", turnos.length / 2)
     return Array((limit * 5) - turnos.length).fill(null);
   }, [turnos.length, limit]);
 

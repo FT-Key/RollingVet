@@ -45,8 +45,6 @@ import {
 } from "../utils/usersConst.utils";
 
 export function validateUserFields(data) {
-  console.log("Objeto a VALIDAR: ", data)
-  console.log("Objeto DIRECCION: ", data?.direccion)
   let validationErrors = {};
 
   if (!validarNombreUsuario(data.nombreUsuario)) {
