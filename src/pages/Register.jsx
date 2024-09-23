@@ -4,7 +4,7 @@ import GoogleAuth from '../components/GoogleAuth';
 import { Container } from 'react-bootstrap'
 import { useEffect } from 'react';
 import { getToken } from '../helpers/Token.helper';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const Register = () => {
   const navigate = useNavigate();

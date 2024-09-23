@@ -10,7 +10,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { deleteAnimal, getAnimals } from "../helpers/ServerAnimals"; // Cambia esto a la función que obtiene animales
 import AnimalImage from "../components/AnimalImage"; // Cambiar el componente de imagen si es necesario
 import PaginationComponent from "../components/PaginationComponent";
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const AdminAnimals = () => {
   const [animals, setAnimals] = useState([]);

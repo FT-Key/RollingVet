@@ -10,7 +10,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { getProducts } from "../helpers/ServerProducts";
 import PaginationComponent from "../components/PaginationComponent";
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet-async';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);

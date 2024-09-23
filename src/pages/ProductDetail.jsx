@@ -14,7 +14,7 @@ import Loading from "../components/Loading";
 import { Col, Container, Row } from "react-bootstrap";
 import Zoom from '../components/Zoom'; // Importa el componente Zoom
 import { RedirectToLogin } from "../helpers/Redirects";
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet-async';
 
 const ProductDetail = () => {
   const { productId } = useParams();

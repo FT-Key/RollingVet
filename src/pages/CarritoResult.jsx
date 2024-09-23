@@ -3,7 +3,7 @@ import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa'; 
 import '../css/CarritoResult.css';
 import { useEffect } from 'react';
 import { useAuth } from "../context/AuthContext"; // Importa el contexto
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const CarritoResult = () => {
   const { result } = useParams(); // Obtiene el valor del parámetro 'result' de la URL
