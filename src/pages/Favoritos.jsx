@@ -4,7 +4,7 @@ import BasicCard from "../components/BasicCard";
 import { removeFromFavs } from "../helpers/ServerUsers";
 import '../css/Favoritos.css';
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet-async';
 
 const Favoritos = () => {
   const { favoritos, setUpdateMark, setBooleanUpdateMark } = useAuth();

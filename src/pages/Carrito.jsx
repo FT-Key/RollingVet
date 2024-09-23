@@ -7,7 +7,7 @@ import { getToken } from "../helpers/Token.helper";
 import { removeFromCart } from "../helpers/ServerUsers";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import { Link, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet-async';
 
 const Carrito = () => {
   const { carrito, setUpdateMark, setBooleanUpdateMark, cantidades, handleCantidadChange } = useAuth(); // Usa el carrito y la función para eliminar
