@@ -57,7 +57,21 @@ export async function putAnimal(animalId, body) {
         token
       );
     } catch (error) {
-      console.error("Error agregando producto al carrito:", error);
+      console.error("Error agregando animal:", error);
+    }
+  } else {
+    console.log("No se encontro token de autorización");
+  }
+}
+
+export async function deleteAnimal(animalId) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken(); // Obtén el token del almacenamiento local
+  if (token) {
+    try {
+      await deleteServerData(apiUrl, `/animales/${animalId}`, token);
+    } catch (error) {
+      console.error("Error eliminando animal:", error);
     }
   } else {
     console.log("No se encontro token de autorización");

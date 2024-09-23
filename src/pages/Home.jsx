@@ -5,6 +5,8 @@ import CarouselFade from "../components/CarouselFade";
 import "../css/Home.css";
 import { getProducts } from "../helpers/ServerProducts.js";
 import PaginationComponent from "../components/PaginationComponent.jsx";
+import PlansSection from "../components/PlansSection.jsx";
+import { Helmet } from 'react-helmet';
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -28,7 +30,7 @@ const Home = () => {
             setTotalPages(
               Math.ceil(
                 data.pagination.totalProductos /
-                  (data.pagination.limit || data.pagination.totalTurnos)
+                (data.pagination.limit || data.pagination.totalTurnos)
               )
             );
           }
@@ -65,6 +67,9 @@ const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>RollingVet</title>
+      </Helmet>
       {/* Sección de presentación */}
       <section className="home-hero">
         <div className="hero-content text-center">
@@ -84,34 +89,7 @@ const Home = () => {
       </section>
 
       {/* Sección de los 3 planes */}
-      <section className="plans-section">
-        <Container>
-          <h2 className="text-center">Nuestros Planes</h2>
-          <Row className="row-cols-sm-1 row-cols-lg-3 my-3 custom-row">
-            <Col>
-              <div className="plan-card text-center">
-                <h3>Plan Básico</h3>
-                <img src="/Plan-1-01.png" alt="plan básico" />
-                <p>Incluye vacunación y revisión anual.</p>
-              </div>
-            </Col>
-            <Col>
-              <div className="plan-card text-center">
-                <h3>Plan Completo</h3>
-                <img src="/Plan-2-01.png" alt="plan completo" />
-                <p>Vacunación, desparasitación y revisión semestral.</p>
-              </div>
-            </Col>
-            <Col>
-              <div className="plan-card text-center">
-                <h3>Plan Premium</h3>
-                <img src="/Plan-3-01.png" alt="plan premium" />
-                <p>Todos los servicios de salud y seguimiento personalizado.</p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
+      <PlansSection />
 
       {/* Sección de productos */}
       <section className="products-section">

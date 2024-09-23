@@ -1,6 +1,13 @@
+import { Helmet } from "react-helmet"
+
 const Contacto = () => {
   return (
-    <div>Contacto</div>
+    <>
+      <Helmet>
+        <title>Contacto</title>
+      </Helmet>
+      <div>Contacto</div>
+    </>
   )
 }
 

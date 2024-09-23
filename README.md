@@ -2,7 +2,6 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 
 🔴🟠🟡🔵🟢🟣
 
-🔴 METADATA, Titulos de paginas
 🔴 MockUp
 🔴 Paleta de colores
 🔴 Tipografía
@@ -13,12 +12,10 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
 🔴 Filtros
-🔴 Clima
-🔴 Admin pacientes (Pensar)
-🔴 Admin animales (Pensar)
 🔴 Planes
 🟠 Admin turno (Pensar)
 🟠 Contacto
+🟡 Admin animales
 🟡 Animales
 🟡 Turnero (pensar lógica)
 🟡 Footer
@@ -39,3 +36,5 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔵 Validaciones inputs usuarios
 🔵 Bloqueo de producto
 🔵 Bloqueo de usuario
+🟢 METADATA, Titulos de paginas
+🟢 Clima

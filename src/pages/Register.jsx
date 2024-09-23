@@ -4,6 +4,7 @@ import GoogleAuth from '../components/GoogleAuth';
 import { Container } from 'react-bootstrap'
 import { useEffect } from 'react';
 import { getToken } from '../helpers/Token.helper';
+import { Helmet } from 'react-helmet';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ const Register = () => {
   }, [token]);
   return (
     <>
+      <Helmet>
+        <title>Registrarse</title>
+      </Helmet>
       {token ?
         <h2 className='text-center m-5'>Ya se inició sesión</h2>
         :

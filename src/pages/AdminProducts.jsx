@@ -10,6 +10,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { getProducts } from "../helpers/ServerProducts";
 import PaginationComponent from "../components/PaginationComponent";
+import { Helmet } from "react-helmet";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -125,6 +126,9 @@ const AdminProducts = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Admin Productos</title>
+      </Helmet>
       <Container className="py-3 adminProducts">
         <Row className="text-center text-white header responsive">
           <Col>Productos</Col>

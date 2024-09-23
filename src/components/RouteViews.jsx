@@ -18,6 +18,7 @@ import AppointmentRequest from "../pages/AppointmentRequest";
 import AppointmentList from "../pages/AppointmentsList";
 import AdminAppointments from "../pages/AdminAppointments";
 import AdminAnimals from "../pages/AdminAnimals";
+import Planes from "../pages/Planes";
 
 const RouteViews = () => {
   return (
@@ -86,6 +87,14 @@ const RouteViews = () => {
           element={
             <ProtectedRoute requiredRole={['cliente', 'admin']}>
               <CarritoResult />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/planes"
+          element={
+            <ProtectedRoute requiredRole={['cliente', 'admin']}>
+              <Planes />
             </ProtectedRoute>
           }
         />

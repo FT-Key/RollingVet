@@ -11,6 +11,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { getUsers } from "../helpers/ServerUsers";
 import ProfileImage from "../components/ProfileImage";
 import PaginationComponent from "../components/PaginationComponent";
+import { Helmet } from "react-helmet";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -122,6 +123,9 @@ const AdminUsers = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Admin Usuarios</title>
+      </Helmet>
       <Container className="py-3 adminUsers">
         <Row className="text-center text-white header responsive">
           <Col>Usuarios</Col>

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import '../css/NavigationBar.css';
 import SVG from './SVG';
 import { RedirectToLogin, RedirectToRegister } from '../helpers/Redirects';
+import Weather from './Weather';
 
 function NavigationBar() {
   const { user, carrito, favoritos, logoutContext } = useAuth();
@@ -32,7 +33,10 @@ function NavigationBar() {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <Nav.Link className='ps-2' as={Link} to="/">Inicio</Nav.Link>
-          <NavDropdown className='ps-2' title="Basics" id="basics-nav-dropdown">
+          <NavDropdown className='ps-2' title="Clima" id="clima-nav-dropdown">
+            <Weather center={true} />
+          </NavDropdown>
+          <NavDropdown className='ps-2' title="Basicos" id="basics-nav-dropdown">
             {user && (user.rol === 'admin' || user.rol === 'cliente') && (
               <>
                 <NavDropdown.Item as={Link} to="/turnos">Solicitar turno</NavDropdown.Item>

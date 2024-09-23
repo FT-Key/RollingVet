@@ -6,10 +6,14 @@ import '../css/AdminAppointments.css';
 import AppointmentWeek from '../components/AppointmentWeek';
 import PaginationComponent from '../components/PaginationComponent';
 import { getAppointments, getOneAppointment } from '../helpers/ServerAppointments';
+import { Helmet } from 'react-helmet';
 
 const AdminAppointments = () => {
   const [turnos, setTurnos] = useState([]);
-  const [fecha, setFecha] = useState('');
+  const [fecha, setFecha] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // Convierte la fecha a 'YYYY-MM-DD'
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   // PAGINACION
@@ -108,12 +112,14 @@ const AdminAppointments = () => {
 
   // Cálculo para agregar espacios vacíos
   const fillEmptySpaces = useMemo(() => {
-    console.log("TURNOS: ", turnos.length / 2)
     return Array((limit * 5) - turnos.length).fill(null);
   }, [turnos.length, limit]);
 
   return (
     <>
+      <Helmet>
+        <title>Admin Turnos</title>
+      </Helmet>
       <Container className='adminAppointments'>
         <h1>Administrar Turnos</h1>
         <div className='d-flex justify-content-center align-items-center'>

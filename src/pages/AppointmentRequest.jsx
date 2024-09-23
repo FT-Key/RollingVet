@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { postServerData, fetchServerData } from '../helpers/ServerCalling';
 import '../css/AppointmentRequest.css';
 import { getToken } from '../helpers/Token.helper';
+import { Helmet } from 'react-helmet';
 
 const TIPOS_ATENCION = [
   'Consulta de producto',
@@ -102,82 +103,87 @@ const AppointmentRequest = () => {
   };
 
   return (
-    <div className='appointmentReq'>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="date"
-          value={fecha}
-          min={today}
-          onChange={(e) => setFecha(e.target.value)}
-          required
-        />
-        <select
-          value={tipoAtencion}
-          onChange={(e) => setTipoAtencion(e.target.value)}
-          required
-        >
-          {TIPOS_ATENCION.map((tipo, index) => (
-            <option key={index} value={tipo}>
-              {tipo}
-            </option>
-          ))}
-        </select>
-        <div className='turnosContainer'>
-          {errorMessage
-            ? <p className='text-center m-0 error-message'>{errorMessage}</p> // Mostrar el mensaje de error
-            : (turnos.length > 0
-              ? turnos.map((turno) => (
-                turno.estado != 'cancelado'
-                &&
-                (<div className='checkboxContainer' key={turno._id}>
-                  <label className='w-50' htmlFor={turno.hora}>{turno.hora}</label>
-                  {turno.usuario || turno.estado !== 'libre'
-                    ? <p className='w-50 m-0'>No disponible</p>
-                    : (<input
-                      className=' w-50'
-                      type="checkbox"
-                      id={turno.hora}
-                      value={turno.hora}
-                      checked={horaSeleccionada === turno.hora}
-                      disabled={turno.usuario}
-                      onChange={() => handleCheckboxChange(turno.hora)}
-                    />)
-                  }
-                </div>)
-              ))
-              : <p className='text-center m-0'>No hay turnos disponibles</p>
-            )}
-        </div>
-        <textarea
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-          placeholder='Descripción (opcional)'
-        />
+    <>
+      <Helmet>
+        <title>Solicitar Turno</title>
+      </Helmet>
+      <div className='appointmentReq'>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="date"
+            value={fecha}
+            min={today}
+            onChange={(e) => setFecha(e.target.value)}
+            required
+          />
+          <select
+            value={tipoAtencion}
+            onChange={(e) => setTipoAtencion(e.target.value)}
+            required
+          >
+            {TIPOS_ATENCION.map((tipo, index) => (
+              <option key={index} value={tipo}>
+                {tipo}
+              </option>
+            ))}
+          </select>
+          <div className='turnosContainer'>
+            {errorMessage
+              ? <p className='text-center m-0 error-message'>{errorMessage}</p> // Mostrar el mensaje de error
+              : (turnos.length > 0
+                ? turnos.map((turno) => (
+                  turno.estado != 'cancelado'
+                  &&
+                  (<div className='checkboxContainer' key={turno._id}>
+                    <label className='w-50' htmlFor={turno.hora}>{turno.hora}</label>
+                    {turno.usuario || turno.estado !== 'libre'
+                      ? <p className='w-50 m-0'>No disponible</p>
+                      : (<input
+                        className=' w-50'
+                        type="checkbox"
+                        id={turno.hora}
+                        value={turno.hora}
+                        checked={horaSeleccionada === turno.hora}
+                        disabled={turno.usuario}
+                        onChange={() => handleCheckboxChange(turno.hora)}
+                      />)
+                    }
+                  </div>)
+                ))
+                : <p className='text-center m-0'>No hay turnos disponibles</p>
+              )}
+          </div>
+          <textarea
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
+            placeholder='Descripción (opcional)'
+          />
 
-        <div className="modalidadContainer">
-          <label>
-            <input
-              type="radio"
-              value="online"
-              checked={modalidad === 'online'}
-              onChange={() => setModalidad('online')}
-            />
-            Online
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="presencial"
-              checked={modalidad === 'presencial'}
-              onChange={() => setModalidad('presencial')}
-            />
-            Presencial
-          </label>
-        </div>
+          <div className="modalidadContainer">
+            <label>
+              <input
+                type="radio"
+                value="online"
+                checked={modalidad === 'online'}
+                onChange={() => setModalidad('online')}
+              />
+              Online
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="presencial"
+                checked={modalidad === 'presencial'}
+                onChange={() => setModalidad('presencial')}
+              />
+              Presencial
+            </label>
+          </div>
 
-        <button type="submit">Solicitar Turno</button>
-      </form>
-    </div>
+          <button type="submit">Solicitar Turno</button>
+        </form>
+      </div>
+    </>
   );
 };
 
