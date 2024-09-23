@@ -11,7 +11,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { getUsers } from "../helpers/ServerUsers";
 import ProfileImage from "../components/ProfileImage";
 import PaginationComponent from "../components/PaginationComponent";
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet-async';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);

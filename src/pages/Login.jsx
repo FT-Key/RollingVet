@@ -4,7 +4,7 @@ import BasicForm from '../components/BasicForm';
 import GoogleAuth from '../components/GoogleAuth';
 import { Container } from 'react-bootstrap';
 import { getToken } from '../helpers/Token.helper';
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet-async';
 
 const Login = () => {
   const navigate = useNavigate();

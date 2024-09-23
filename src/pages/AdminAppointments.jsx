@@ -6,7 +6,7 @@ import '../css/AdminAppointments.css';
 import AppointmentWeek from '../components/AppointmentWeek';
 import PaginationComponent from '../components/PaginationComponent';
 import { getAppointments, getOneAppointment } from '../helpers/ServerAppointments';
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet-async';
 
 const AdminAppointments = () => {
   const [turnos, setTurnos] = useState([]);
