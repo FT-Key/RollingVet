@@ -11,7 +11,7 @@ const SobreMi = () => {
       <section className="sobre-mi">
         <div className="sobre-mi-content">
           <img
-            src="../../public/profile.png"
+            src="/profile.png"
             alt="Foto de perfil"
             className="sobre-mi-imagen"
           />
