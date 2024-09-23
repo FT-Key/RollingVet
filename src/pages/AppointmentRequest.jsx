@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { postServerData, fetchServerData } from '../helpers/ServerCalling';
 import '../css/AppointmentRequest.css';
 import { getToken } from '../helpers/Token.helper';
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 
 const TIPOS_ATENCION = [
   'Consulta de producto',

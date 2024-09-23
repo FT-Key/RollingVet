@@ -6,7 +6,7 @@ import "../css/Home.css";
 import { getProducts } from "../helpers/ServerProducts.js";
 import PaginationComponent from "../components/PaginationComponent.jsx";
 import PlansSection from "../components/PlansSection.jsx";
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);

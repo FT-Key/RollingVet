@@ -5,7 +5,7 @@ import '../css/AppointmentList.css';
 import { formatDate } from '../helpers/FormatDateHTML';
 import { Col, Container, Row } from 'react-bootstrap';
 import CustomButton from '../components/CustomButton';
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 
 const AppointmentList = () => {
   const [turnos, setTurnos] = useState([]);
