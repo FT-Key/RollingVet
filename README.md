@@ -2,7 +2,6 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 
 🔴🟠🟡🔵🟢🟣
 
-🔴 METADATA, Titulos de paginas
 🔴 MockUp
 🔴 Paleta de colores
 🔴 Tipografía
@@ -13,7 +12,6 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
 🔴 Filtros
-🔴 Clima
 🔴 Planes
 🟠 Admin turno (Pensar)
 🟠 Contacto
@@ -38,3 +36,5 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔵 Validaciones inputs usuarios
 🔵 Bloqueo de producto
 🔵 Bloqueo de usuario
+🟢 METADATA, Titulos de paginas
+🟢 Clima

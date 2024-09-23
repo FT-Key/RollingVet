@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 import { postServerData } from "../helpers/ServerCalling"; // Reutiliza el helper para llamadas al servidor
 import { getToken } from "../helpers/Token.helper"; // Para obtener el token del usuario
+import { Helmet } from 'react-helmet';
 
 const Planes = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -55,6 +56,9 @@ const Planes = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Planes</title>
+      </Helmet>
       <Container>
         <h1 className="text-center my-4">Elige un Plan</h1>
         <Row className="row-cols-1 row-cols-md-3 g-4">

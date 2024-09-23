@@ -6,6 +6,7 @@ import '../css/AdminAppointments.css';
 import AppointmentWeek from '../components/AppointmentWeek';
 import PaginationComponent from '../components/PaginationComponent';
 import { getAppointments, getOneAppointment } from '../helpers/ServerAppointments';
+import { Helmet } from 'react-helmet';
 
 const AdminAppointments = () => {
   const [turnos, setTurnos] = useState([]);
@@ -116,6 +117,9 @@ const AdminAppointments = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Admin Turnos</title>
+      </Helmet>
       <Container className='adminAppointments'>
         <h1>Administrar Turnos</h1>
         <div className='d-flex justify-content-center align-items-center'>

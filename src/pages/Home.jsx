@@ -6,6 +6,7 @@ import "../css/Home.css";
 import { getProducts } from "../helpers/ServerProducts.js";
 import PaginationComponent from "../components/PaginationComponent.jsx";
 import PlansSection from "../components/PlansSection.jsx";
+import { Helmet } from 'react-helmet';
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -66,6 +67,9 @@ const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>RollingVet</title>
+      </Helmet>
       {/* Sección de presentación */}
       <section className="home-hero">
         <div className="hero-content text-center">

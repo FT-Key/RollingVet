@@ -4,6 +4,7 @@ import BasicForm from '../components/BasicForm';
 import GoogleAuth from '../components/GoogleAuth';
 import { Container } from 'react-bootstrap';
 import { getToken } from '../helpers/Token.helper';
+import { Helmet } from 'react-helmet';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ const Login = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Iniciar Sesión</title>
+      </Helmet>
       {token ?
         <h2 className='text-center m-5'>Ya se inició sesión</h2>
         :

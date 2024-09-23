@@ -7,6 +7,7 @@ import { getToken } from "../helpers/Token.helper";
 import { removeFromCart } from "../helpers/ServerUsers";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Carrito = () => {
   const { carrito, setUpdateMark, setBooleanUpdateMark, cantidades, handleCantidadChange } = useAuth(); // Usa el carrito y la función para eliminar
@@ -71,6 +72,9 @@ const Carrito = () => {
 
   return (
     <>
+    <Helmet>
+      <title>Carrito</title>
+    </Helmet>
       <h1 className="text-center pt-4">Carrito</h1>
       {carrito.length > 0 ? (
         <Row className="carrito-row g-3 p-5 mx-2">

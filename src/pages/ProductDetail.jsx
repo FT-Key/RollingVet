@@ -14,6 +14,7 @@ import Loading from "../components/Loading";
 import { Col, Container, Row } from "react-bootstrap";
 import Zoom from '../components/Zoom'; // Importa el componente Zoom
 import { RedirectToLogin } from "../helpers/Redirects";
+import { Helmet } from "react-helmet";
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -96,67 +97,72 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="product-detail">
-      <Container fluid>
-        <Row>
+    <>
+      <Helmet>
+        <title>Detalle del producto</title>
+      </Helmet>
+      <div className="product-detail">
+        <Container fluid>
+          <Row>
 
-          <Col xs={12}>
-            <h1>{producto.nombre}</h1>
-          </Col>
+            <Col xs={12}>
+              <h1>{producto.nombre}</h1>
+            </Col>
 
-          <Col xs={12} md={6}>
-            {/* Envuelve la imagen dentro del componente Zoom */}
-            <Zoom imageUrl={producto.imagenUrl}>
-            </Zoom>
-          </Col>
+            <Col xs={12} md={6}>
+              {/* Envuelve la imagen dentro del componente Zoom */}
+              <Zoom imageUrl={producto.imagenUrl}>
+              </Zoom>
+            </Col>
 
-          <Col xs={12} md={6}>
-            <p>
-              <strong>Descripción:</strong> {producto.descripcion}
-            </p>
-            <p>
-              <strong>Categoría:</strong> {producto.categoria}
-            </p>
-            <p>
-              <strong>codigo de barras:</strong> {producto.codigoDeBarras}
-            </p>
-            <p>
-              <strong>Proveedor:</strong> {producto.proveedor}
-            </p>
-            <p className="product-price">${producto.precio}</p>
-            <p>
-              <strong>Stock:</strong> {producto.cantidadEnStock}
-            </p>
-            <p>
-              <strong>Calificaciones:</strong> {producto.calificaciones}/5
-            </p>
-            <p>
-              <strong>Garantía:</strong> {producto.garantia}
-            </p>
-            <p>
-              <strong>Fecha de publicación:</strong>{" "}
-              {new Date(producto.fechaDeIngreso).toLocaleDateString()}
-            </p>
-            {producto.descuento && (
+            <Col xs={12} md={6}>
               <p>
-                <strong>Descuento:</strong> {producto.descuento}
+                <strong>Descripción:</strong> {producto.descripcion}
               </p>
-            )}
+              <p>
+                <strong>Categoría:</strong> {producto.categoria}
+              </p>
+              <p>
+                <strong>codigo de barras:</strong> {producto.codigoDeBarras}
+              </p>
+              <p>
+                <strong>Proveedor:</strong> {producto.proveedor}
+              </p>
+              <p className="product-price">${producto.precio}</p>
+              <p>
+                <strong>Stock:</strong> {producto.cantidadEnStock}
+              </p>
+              <p>
+                <strong>Calificaciones:</strong> {producto.calificaciones}/5
+              </p>
+              <p>
+                <strong>Garantía:</strong> {producto.garantia}
+              </p>
+              <p>
+                <strong>Fecha de publicación:</strong>{" "}
+                {new Date(producto.fechaDeIngreso).toLocaleDateString()}
+              </p>
+              {producto.descuento && (
+                <p>
+                  <strong>Descuento:</strong> {producto.descuento}
+                </p>
+              )}
 
-            <div className="product-buttons">
-              <button className={"btn btn-success"} onClick={handleButtonCart}>
-                {BUTTON_CART_TEXT(cart.includes(productId))}
-              </button>
-              <button className={"btn btn-warning"} onClick={handleButtonFav}>
-                {BUTTON_FAVS_TEXT(favorites.includes(productId))}
-              </button>
-            </div>
-          </Col>
+              <div className="product-buttons">
+                <button className={"btn btn-success"} onClick={handleButtonCart}>
+                  {BUTTON_CART_TEXT(cart.includes(productId))}
+                </button>
+                <button className={"btn btn-warning"} onClick={handleButtonFav}>
+                  {BUTTON_FAVS_TEXT(favorites.includes(productId))}
+                </button>
+              </div>
+            </Col>
 
-        </Row>
-      </Container>
+          </Row>
+        </Container>
 
-    </div>
+      </div>
+    </>
   );
 };
 

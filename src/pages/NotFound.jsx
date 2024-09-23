@@ -1,15 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/NotFound.css';
+import { Helmet } from 'react-helmet';
 
 const NotFound = () => {
   return (
-    <div className={'container-NF'}>
-      <h2 className={'title-NF'}>404 - Página No Encontrada🐾</h2>
-      {/* <img className={'img-NF'} src="../../public/404NotFound.png" alt="404 Not Found" /> */}
-      <p className={'message-NF'}>Lo sentimos, la página que buscas no existe.</p>
-      <Link to="/" className={'link-NF btn btn-success'}>Volver a la página de inicio</Link>
-    </div>
+    <>
+      <Helmet>
+        <title>Error 404</title>
+      </Helmet>
+      <div className={'container-NF'}>
+        <h2 className={'title-NF'}>404 - Página No Encontrada🐾</h2>
+        {/* <img className={'img-NF'} src="../../public/404NotFound.png" alt="404 Not Found" /> */}
+        <p className={'message-NF'}>Lo sentimos, la página que buscas no existe.</p>
+        <Link to="/" className={'link-NF btn btn-success'}>Volver a la página de inicio</Link>
+      </div>
+    </>
   );
 };
 

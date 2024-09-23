@@ -4,6 +4,7 @@ import BasicCard from "../components/BasicCard";
 import { removeFromFavs } from "../helpers/ServerUsers";
 import '../css/Favoritos.css';
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Favoritos = () => {
   const { favoritos, setUpdateMark, setBooleanUpdateMark } = useAuth();
@@ -20,6 +21,9 @@ const Favoritos = () => {
 
   return (
     <>
+    <Helmet>
+      <title>Favoritos</title>
+    </Helmet>
       <h1 className="text-center pt-4">Favoritos</h1>
       {favoritos.length > 0 ? (
         <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">

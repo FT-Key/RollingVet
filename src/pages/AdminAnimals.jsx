@@ -10,6 +10,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { deleteAnimal, getAnimals } from "../helpers/ServerAnimals"; // Cambia esto a la función que obtiene animales
 import AnimalImage from "../components/AnimalImage"; // Cambiar el componente de imagen si es necesario
 import PaginationComponent from "../components/PaginationComponent";
+import { Helmet } from 'react-helmet';
 
 const AdminAnimals = () => {
   const [animals, setAnimals] = useState([]);
@@ -102,6 +103,9 @@ const AdminAnimals = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Admin Animales</title>
+      </Helmet>
       <Container className="py-3 adminAnimals">
         <Row className="text-center text-white header responsive">
           <Col>Animales</Col>

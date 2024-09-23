@@ -11,7 +11,7 @@ const PlansSection = () => {
           <Row className="row-cols-sm-1 row-cols-lg-3 my-3 custom-row">
 
             <Link to={'/planes'}>
-              <Col>
+              <Col className="h-100">
                 <div className="plan-card text-center">
                   <h3>Plan Básico</h3>
                   <img src="/Plan-1-01.png" alt="plan básico" />
@@ -21,7 +21,7 @@ const PlansSection = () => {
             </Link>
 
             <Link to={'/planes'}>
-              <Col>
+              <Col className="h-100">
                 <div className="plan-card text-center">
                   <h3>Plan Completo</h3>
                   <img src="/Plan-2-01.png" alt="plan completo" />
@@ -31,7 +31,7 @@ const PlansSection = () => {
             </Link>
 
             <Link to={'/planes'}>
-              <Col>
+              <Col className="h-100">
                 <div className="plan-card text-center">
                   <h3>Plan Premium</h3>
                   <img src="/Plan-3-01.png" alt="plan premium" />
