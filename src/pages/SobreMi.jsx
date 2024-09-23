@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/SobreMi.css';
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 
 const SobreMi = () => {
   return (
@@ -11,7 +11,7 @@ const SobreMi = () => {
       <section className="sobre-mi">
         <div className="sobre-mi-content">
           <img
-            src="../../public/profile.jpg"
+            src="../../public/profile.png"
             alt="Foto de perfil"
             className="sobre-mi-imagen"
           />

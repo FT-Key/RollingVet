@@ -1,3 +1,7 @@
+*{
+    box-sizing: border-box !important;
+}
+
 .custom-row {
     .col {
         display: flex;
