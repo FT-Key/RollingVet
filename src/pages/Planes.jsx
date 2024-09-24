@@ -1,26 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
 import { useAuth } from "../context/AuthContext";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
-import { postServerData } from "../helpers/ServerCalling"; // Reutiliza el helper para llamadas al servidor
+import { getPlanes, comprarPlan } from "../helpers/ServerPlans"; // Helper para obtener los planes y realizar la compra
 import { getToken } from "../helpers/Token.helper"; // Para obtener el token del usuario
 import { Helmet } from 'react-helmet-async';
 
 const Planes = () => {
+  const [planes, setPlanes] = useState([]); // Estado para los planes obtenidos del servidor
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedMascota, setSelectedMascota] = useState(null);
   const [idPreference, setIdPreference] = useState(null); // Estado para la preferencia de pago
   const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
   const { user } = useAuth();
 
-  const planes = [
-    { id: 1, nombre: "Plan Básico", descripcion: "Incluye vacunación y revisión anual.", precio: 100, imagen: "/Plan-1-02.png" },
-    { id: 2, nombre: "Plan Completo", descripcion: "Vacunación, desparasitación y revisión semestral.", precio: 200, imagen: "/Plan-2-02.png" },
-    { id: 3, nombre: "Plan Premium", descripcion: "Todos los servicios de salud y seguimiento personalizado.", precio: 300, imagen: "/Plan-3-02.png" },
-  ];
+  useEffect(() => {
+    // Inicializar Mercado Pago
+    initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY); // Asegúrate de que la PUBLIC_KEY esté configurada en tus variables de entorno
+
+    // Obtener los planes desde el servidor al cargar el componente
+    const fetchPlanes = async () => {
+      try {
+        const apiPlanes = await getPlanes(); // Llama al helper que obtiene los planes
+        setPlanes(apiPlanes.planes);
+      } catch (error) {
+        console.error("Error al obtener los planes:", error);
+      }
+    };
+
+    fetchPlanes();
+  }, []);
 
   const contratarPlan = (plan) => {
-    setSelectedPlan(plan.id === selectedPlan?.id ? null : plan);
+    setSelectedPlan(plan._id === selectedPlan?._id ? null : plan);
   };
 
   const contratarMascota = (mascota) => {
@@ -31,26 +43,18 @@ const Planes = () => {
     const token = getToken();
 
     if (selectedPlan && selectedMascota && token) {
-      const planSeleccionado = { idPlan: selectedPlan.id, nombre: selectedPlan.nombre, precio: selectedPlan.precio };
+      const planSeleccionado = { idPlan: selectedPlan._id, nombre: selectedPlan.nombre, precio: selectedPlan.precio };
       const mascotaSeleccionada = { idMascota: selectedMascota._id, nombre: selectedMascota.nombre };
 
       const returnUrl = `${window.location.origin}/planes/result`;
 
-      await methodMercadoPago({ planSeleccionado, mascotaSeleccionada, returnUrl }, token);
-      setShowModal(true); // Muestra el modal
-    }
-  };
-
-  const methodMercadoPago = async (data, token) => {
-    initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY);
-    const apiUrl = import.meta.env.VITE_API_URL;
-
-    const response = await postServerData(apiUrl, "/planes/comprarPlan", data, token);
-
-    if (response && typeof response === 'string') {
-      setIdPreference(response);
-    } else {
-      console.log("Error: la respuesta del servidor no es válida", response);
+      try {
+        const response = await comprarPlan(planSeleccionado, mascotaSeleccionada, returnUrl);
+        setIdPreference(response); // Setear la preferencia de MercadoPago
+        setShowModal(true); // Muestra el modal
+      } catch (error) {
+        console.error("Error al procesar el pago:", error);
+      }
     }
   };
 
@@ -63,9 +67,9 @@ const Planes = () => {
         <h1 className="text-center my-4">Elige un Plan</h1>
         <Row className="row-cols-1 row-cols-md-3 g-4">
           {planes.map((plan) => (
-            <Col key={plan.id}>
+            <Col key={plan._id}>
               <Card className="h-100">
-                <Card.Img variant="top" src={plan.imagen} alt={plan.nombre} />
+                <Card.Img variant="top" src={plan.imagenUrl} alt={plan.nombre} />
                 <Card.Body>
                   <Card.Title>{plan.nombre}</Card.Title>
                   <Card.Text>{plan.descripcion}</Card.Text>
@@ -75,11 +79,11 @@ const Planes = () => {
                   <input
                     type="radio"
                     name="plan"
-                    id={`plan-${plan.id}`}
-                    checked={selectedPlan?.id === plan.id}
+                    id={`plan-${plan._id}`}
+                    checked={selectedPlan?._id === plan._id}
                     onChange={() => contratarPlan(plan)}
                   />
-                  <label htmlFor={`plan-${plan.id}`}>{` Seleccionar ${plan.nombre}`}</label>
+                  <label htmlFor={`plan-${plan._id}`}>{` Seleccionar ${plan.nombre}`}</label>
                 </Card.Footer>
               </Card>
             </Col>
