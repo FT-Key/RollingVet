@@ -1,50 +1,44 @@
-import { Col, Container, Row } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { getPlanes } from "../helpers/ServerPlans"; // Asegúrate de que la ruta sea correcta
 
 const PlansSection = () => {
+  const [planes, setPlanes] = useState([]);
+
+  useEffect(() => {
+    const fetchPlanes = async () => {
+      try {
+        const apiPlanes = await getPlanes();
+        setPlanes(apiPlanes.planes); // Ajusta según cómo regresen los datos desde el servidor
+      } catch (error) {
+        console.error("Error al obtener los planes:", error);
+      }
+    };
+
+    fetchPlanes();
+  }, []);
+
   return (
-    <>
-      {/* Sección de los 3 planes */}
-      <section className="plans-section">
-        <Container>
-          <h2 className="text-center">Nuestros Planes</h2>
-          <Row className="row-cols-sm-1 row-cols-lg-3 my-3 custom-row">
-
-            <Link to={'/planes'}>
+    <section className="plans-section">
+      <Container>
+        <h2 className="text-center">Nuestros Planes</h2>
+        <Row className="row-cols-sm-1 row-cols-lg-3 my-3 custom-row">
+          {planes.map(plan => (
+            <Link to={'/planes'} key={plan._id}>
               <Col className="h-100">
                 <div className="plan-card text-center">
-                  <h3>Plan Básico</h3>
-                  <img src="/Plan-1-01.png" alt="plan básico" />
-                  <p>Incluye vacunación y revisión anual.</p>
+                  <h3>{plan.nombre}</h3>
+                  <img src={plan.imagenUrl} alt={plan.nombre} />
+                  <p>{plan.descripcion}</p>
                 </div>
               </Col>
             </Link>
+          ))}
+        </Row>
+      </Container>
+    </section>
+  );
+};
 
-            <Link to={'/planes'}>
-              <Col className="h-100">
-                <div className="plan-card text-center">
-                  <h3>Plan Completo</h3>
-                  <img src="/Plan-2-01.png" alt="plan completo" />
-                  <p>Vacunación, desparasitación y revisión semestral.</p>
-                </div>
-              </Col>
-            </Link>
-
-            <Link to={'/planes'}>
-              <Col className="h-100">
-                <div className="plan-card text-center">
-                  <h3>Plan Premium</h3>
-                  <img src="/Plan-3-01.png" alt="plan premium" />
-                  <p>Todos los servicios de salud y seguimiento personalizado.</p>
-                </div>
-              </Col>
-            </Link>
-
-          </Row>
-        </Container>
-      </section>
-    </>
-  )
-}
-
-export default PlansSection
+export default PlansSection;
