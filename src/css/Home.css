@@ -18,7 +18,7 @@
 /* Hero Section (Presentación) */
 .home-hero {
     background-image: url("/Veterinaria-frente.png");
-    background-size: cover;
+    background-size:auto;
     background-position: center;
     background-repeat: no-repeat;
     height: 60vh;
@@ -37,7 +37,6 @@
 /* Carousel Section */
 .carousel-section {
     padding: 50px 0;
-    background-color: #f9f9f9;
 }
 
 .carousel-section h2 {
@@ -48,7 +47,6 @@
 /* Plans Section */
 .plans-section {
     padding: 50px 0;
-    background-color: #eef2f7;
 
     img {
         width: 100%;
@@ -59,7 +57,6 @@
 }
 
 .plan-card {
-    background-color: #fff;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -79,7 +76,6 @@
 /* Products Section */
 .products-section {
     padding: 50px 0;
-    background-color: #fff;
 }
 
 .products-section h2 {
@@ -90,7 +86,6 @@
 /* Adoption Section */
 .adoption-section {
     padding: 50px 0;
-    background-color: #f3f4f6;
 }
 
 .adoption-section h2 {

@@ -2,25 +2,25 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 
 🔴🟠🟡🔵🟢🟣
 
-🔴 MockUp
 🔴 Paleta de colores
 🔴 Tipografía
-🔴 Trello
-🔴 Deploy
 🔴 Página de referencia
 🔴 Mails
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
-🔴 Filtros
-🔴 Planes
+🟠 Deploy
+🟠 Filtros
 🟠 Admin turno (Pensar)
 🟠 Contacto
+🟡 MockUp
+🟡 Trello
 🟡 Admin animales
 🟡 Animales
 🟡 Turnero (pensar lógica)
 🟡 Footer
 🟡 Sobre mi
 🟡 Completar datos de usuario (repensar)
+🔵 Planes
 🔵 MercadoPago
 🔵 Cerrar Sesión
 🔵 Rutas protegidas

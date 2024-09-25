@@ -28,7 +28,7 @@ const Carrito = () => {
 
     if (token) {
       const bodyProductos = Object.entries(cantidades).map(([idProducto, cantidad]) => ({ idProducto, cantidad }));
-      const returnUrl = `${window.location.origin}/carrito/result`;
+      const returnUrl = `${window.location.origin}/pagos/result`;
 
       console.log("BODYPRODUCTOS: ", bodyProductos)
       await methodMercadoPago(bodyProductos, returnUrl, token);
