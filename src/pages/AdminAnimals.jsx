@@ -29,7 +29,7 @@ const AdminAnimals = () => {
       while (true) {
         try {
           const data = await getAnimals(currentPage, limit); // Obtener animales desde el servidor
-
+          console.log("DATA_ ", data)
           if (isMounted) {
             setAnimals(data.animales);
             setTotalPages(
@@ -116,7 +116,7 @@ const AdminAnimals = () => {
           <Col md={2}>Descripción</Col>
           <Col md={2}>Foto</Col>
           <Col md={1}>Tipo</Col>
-          <Col md={2}>Dueño</Col>
+          <Col md={2}>Duenio</Col>
           <Col md={1}>Plan</Col>
           <Col md={1}>Editar</Col>
           <Col md={1}>Eliminar</Col>
@@ -128,17 +128,17 @@ const AdminAnimals = () => {
               {animal.nombre}
             </Col>
             <Col xs={12} md={2}>
-              {animal.descripcion}
+              {animal.descripcion || "Sin descripción"}
             </Col>
             <Col xs={12} md={2}>
               <AnimalImage source={animal.fotoUrl} width="100px" />
             </Col>
             <Col xs={12} md={1}>{animal.tipo}</Col>
             <Col xs={12} md={2}>
-              {animal.dueño ? animal.dueño.nombreUsuario : "Sin dueño"}
+              {animal.duenio ? animal.duenio.nombre : "Sin duenio"}
             </Col>
             <Col xs={12} md={1}>
-              {animal.plan}
+              {animal.plan ? animal.plan.nombre : "Sin plan"}
             </Col>
             <Col xs={12} md={1}>
               <CustomButton

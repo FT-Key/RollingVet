@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa'; // Usaremos react-icons para los íconos
-import '../css/CarritoResult.css';
+import '../css/PagosResult.css';
 import { useEffect } from 'react';
 import { useAuth } from "../context/AuthContext"; // Importa el contexto
 import { Helmet } from 'react-helmet-async';
 
-const CarritoResult = () => {
+const PagosResult = () => {
   const { result } = useParams(); // Obtiene el valor del parámetro 'result' de la URL
   const navigate = useNavigate();
   const { clearCart } = useAuth(); // Usa el carrito y la función para eliminar  
@@ -52,4 +52,4 @@ const CarritoResult = () => {
   );
 };
 
-export default CarritoResult;
+export default PagosResult;

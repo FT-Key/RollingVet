@@ -24,6 +24,7 @@ const Home = () => {
       while (true) {
         try {
           const data = await getProducts(currentPage, limit);
+          console.log("DATA: ", data)
 
           if (isMounted) {
             setProductos(data.productos);

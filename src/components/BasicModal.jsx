@@ -180,6 +180,8 @@ const BasicModal = ({
           break;
       }
 
+      console.log("Producto guardado:", updatedData);
+
       // Si hay un archivo seleccionado, realizar la subida en una llamada separada
       if (uploadedFile) {
         const fileData = new FormData();
@@ -212,7 +214,6 @@ const BasicModal = ({
 
       setFormData(editedData);
       functionUpdateData((prevMark) => !prevMark);
-      console.log("Producto guardado:", updatedData);
       onHide(); // Cerrar el modal
     } catch (error) {
       console.error("Error al guardar el producto:", error);

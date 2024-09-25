@@ -1,5 +1,20 @@
+.navStyle {
+  background: linear-gradient(180deg, var(--color-light-5) 50%, transparent) !important;
+  position: fixed;
+  z-index: 3;
+
+  * {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+}
+
+.nav-space{
+  height: var(--navbar-height);
+}
+
 .navbar {
-  width: 100vw;
+  width: 100%;
 }
 
 .navbar-nav {
@@ -8,7 +23,7 @@
 
 .contenedor-links {
   display: flex;
-  margin-left: auto;
+  flex-direction: column;
 }
 
 .abbr,
@@ -27,6 +42,7 @@ abbr[title] {
   text-decoration: none;
   color: inherit;
   height: 100%;
+  width: 4rem;
 }
 
 /* .carrito-icon,
@@ -67,10 +83,30 @@ abbr[title] {
   background-color: #ff0019;
 }
 
-.hidden-space{
+.hidden-space {
   visibility: hidden;
 }
 
-.show-space{
+.show-space {
   visibility: visible;
+}
+
+@media screen and (min-width: 768px) {
+  .navStyle {
+    * {
+      font-size: inherit;
+      text-align: inherit;
+    }
+  }
+
+  .carrito-link,
+  .favoritos-link {
+    width: 3rem;
+  }
+
+  .contenedor-links {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+  }
 }
