@@ -13,12 +13,14 @@ import Carrito from "../pages/Carrito";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SobreMi from "../pages/SobreMi";
 import Contacto from "../pages/Contacto";
-import CarritoResult from "../pages/CarritoResult";
+import PagosResult from "../pages/PagosResult";
 import AppointmentRequest from "../pages/AppointmentRequest";
 import AppointmentList from "../pages/AppointmentsList";
 import AdminAppointments from "../pages/AdminAppointments";
 import AdminAnimals from "../pages/AdminAnimals";
 import Planes from "../pages/Planes";
+import AnimalsList from "../pages/AnimalList";
+import AnimalDetail from "../pages/AnimalDetail";
 
 const RouteViews = () => {
   return (
@@ -83,10 +85,26 @@ const RouteViews = () => {
           }
         />
         <Route
-          path="/carrito/result/:result"
+          path="/pagos/result/:result"
           element={
             <ProtectedRoute requiredRole={['cliente', 'admin']}>
-              <CarritoResult />
+              <PagosResult />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/animalDetail/:animalId"
+          element={
+            <ProtectedRoute requiredRole={['cliente', 'admin']}>
+              <AnimalDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/misMascotas"
+          element={
+            <ProtectedRoute requiredRole={['cliente', 'admin']}>
+              <AnimalsList />
             </ProtectedRoute>
           }
         />

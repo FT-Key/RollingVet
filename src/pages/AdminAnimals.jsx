@@ -116,7 +116,7 @@ const AdminAnimals = () => {
           <Col md={2}>Descripción</Col>
           <Col md={2}>Foto</Col>
           <Col md={1}>Tipo</Col>
-          <Col md={2}>Dueño</Col>
+          <Col md={2}>Duenio</Col>
           <Col md={1}>Plan</Col>
           <Col md={1}>Editar</Col>
           <Col md={1}>Eliminar</Col>
@@ -135,10 +135,10 @@ const AdminAnimals = () => {
             </Col>
             <Col xs={12} md={1}>{animal.tipo}</Col>
             <Col xs={12} md={2}>
-              {animal.dueño ? animal.dueño.nombre : "Sin dueño"}
+              {animal.duenio ? animal.duenio.nombre : "Sin duenio"}
             </Col>
             <Col xs={12} md={1}>
-              {animal.plan}
+              {animal.plan ? animal.plan.nombre : "Sin plan"}
             </Col>
             <Col xs={12} md={1}>
               <CustomButton

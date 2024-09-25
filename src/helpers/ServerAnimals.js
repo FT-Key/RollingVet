@@ -2,10 +2,25 @@ import { deleteServerData, fetchServerData, postServerData, putServerData } from
 import { getToken } from "./Token.helper";
 
 // Obtener todos los animales con paginación
-export async function getAnimals(page, limit) {
+export async function getAnimals(page, limit, filters = {}) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = getToken();
-  const rawData = await fetchServerData(apiUrl, `/animales?${page ? `page=${page}&` : ''}${limit ? `limit=${limit}` : ''}`, token);
+
+  // Construir la cadena de consulta (query string) a partir de los filtros
+  const queryParams = new URLSearchParams();
+
+  // Añadir paginación
+  if (page) queryParams.append('page', page);
+  if (limit) queryParams.append('limit', limit);
+
+  // Añadir filtros dinámicos
+  for (const key in filters) {
+    if (filters[key] !== undefined && filters[key] !== null) {
+      queryParams.append(key, filters[key]);
+    }
+  }
+
+  const rawData = await fetchServerData(apiUrl, `/animales?${queryParams.toString()}`, token);
 
   // Convertir las fechas a Date si existen
   const data = rawData.animales.map((animal) => ({
@@ -88,18 +103,17 @@ export async function uploadAnimalImage(animalId, body) {
     const response = await postServerData(apiUrl, `/animales/agregarFotoAnimal/${animalId}`, body, token);
 
     // Si la respuesta no es exitosa, lanzar un error
-    if (!response.ok) {
-      const errorData = await response.json();
+    if (!response.msg) {
+      const errorData = response;
       throw new Error(errorData.msg || "Error al subir la imagen");
     }
 
     // Si la respuesta es exitosa, obtener los datos
-    const data = await response.json();
+    const data = await response.msg;
 
     return {
       success: true,
       data,  // Devuelve los datos de la respuesta
-      message: "Imagen subida exitosamente",
     };
   } catch (error) {
     // En caso de error, devolver un objeto con el mensaje de error
@@ -108,5 +122,22 @@ export async function uploadAnimalImage(animalId, body) {
       data: null,
       message: error.message || "Error desconocido al subir la imagen",
     };
+  }
+}
+
+export async function createAnimal(body) {
+
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken(); // Obtén el token del almacenamiento local
+
+  if (token) {
+    try {
+      const response = await postServerData(apiUrl, `/animales/createAnimal`, body, token);
+      return response;
+    } catch (error) {
+      console.error("Error creando mascota:", error);
+    }
+  } else {
+    console.log("No se encontro token de autorización");
   }
 }

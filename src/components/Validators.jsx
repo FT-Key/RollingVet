@@ -32,6 +32,8 @@ import {
   validarEnlacesRedesSociales,
   validarSelect,
   validarFotoPerfil,
+  //Animales
+
 } from "../helpers/Validations";
 
 import {
@@ -212,4 +214,8 @@ export function validateProductFields(data) {
   }
 
   return validationErrors;
+}
+
+export function validateAnimalFields(data) {
+
 }
