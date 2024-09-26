@@ -18,7 +18,6 @@ function NavigationBar() {
       const navbar = document.querySelector('.navStyle');
       if (navbar) {
         const navbarHeight = navbar.offsetHeight;
-        console.log("HEIGHT: ", navbarHeight)
         document.documentElement.style.setProperty('--navbar-height', `${navbarHeight}px`);
       }
     };

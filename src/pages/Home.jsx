@@ -7,15 +7,20 @@ import { getProducts } from "../helpers/ServerProducts.js";
 import PaginationComponent from "../components/PaginationComponent.jsx";
 import PlansSection from "../components/PlansSection.jsx";
 import { Helmet } from 'react-helmet-async';
+import { getAnimals } from "../helpers/ServerAnimals.js";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
-  const [productosCarrusel, setProductosCarrusel] = useState(false);
   const [animalesAdopcion, setAnimalesAdopcion] = useState(false);
-  // PAGINACION
-  const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(3);
-  const [totalPages, setTotalPages] = useState(1);
+  const [productosCarrusel, setProductosCarrusel] = useState(false);
+  // PAGINACION PRODUCTOS
+  const [currentPageProd, setCurrentPageProd] = useState(1);
+  const [limitProd, setLimitProd] = useState(3);
+  const [totalPagesProd, setTotalPagesProd] = useState(1);
+  // PAGINACION ANIMALES
+  const [currentPageAnimal, setCurrentPageAnimal] = useState(1);
+  const [limitAnimal, setLimitAnimal] = useState(3);
+  const [totalPagesAnimal, setTotalPagesAnimal] = useState(1);
 
   useEffect(() => {
     let isMounted = true;
@@ -23,16 +28,18 @@ const Home = () => {
     const cargarProductos = async () => {
       while (true) {
         try {
-          const data = await getProducts(currentPage, limit);
-          console.log("DATA: ", data)
+          const data = await getProducts(currentPageProd, limitProd);
+          const dataAdopcion = await getAnimals(currentPageAnimal, limitAnimal, { estado: "En Adopción" }); // Aquí deberías obtener productos relacionados con adopción
 
           if (isMounted) {
             setProductos(data.productos);
-            setTotalPages(
-              Math.ceil(
-                data.pagination.totalProductos /
-                (data.pagination.limit || data.pagination.totalTurnos)
-              )
+            setTotalPagesProd(
+              Math.ceil(data.pagination.totalProductos / data.pagination.limit)
+            );
+
+            setAnimalesAdopcion(dataAdopcion.animales);
+            setTotalPagesAnimal(
+              Math.ceil(dataAdopcion.pagination.totalAnimales / data.pagination.limit)
             );
           }
 
@@ -40,13 +47,6 @@ const Home = () => {
             const dataCarrusel = await getProducts();
             if (isMounted) {
               setProductosCarrusel(dataCarrusel.productos);
-            }
-          }
-
-          if (!animalesAdopcion) {
-            const dataAdopcion = await getProducts(); // Aquí deberías obtener productos relacionados con adopción
-            if (isMounted) {
-              setAnimalesAdopcion(dataAdopcion.productos);
             }
           }
 
@@ -64,7 +64,7 @@ const Home = () => {
     return () => {
       isMounted = false;
     };
-  }, [currentPage, limit]);
+  }, [currentPageProd, limitProd, currentPageAnimal, limitAnimal]);
 
   return (
     <>
@@ -104,17 +104,30 @@ const Home = () => {
             ))}
           </Row>
           <PaginationComponent
-            totalPages={totalPages}
-            currentPage={currentPage}
-            setPage={setCurrentPage}
+            totalPages={totalPagesProd}
+            currentPage={currentPageProd}
+            setPage={setCurrentPageProd}
           />
         </Container>
       </section>
 
       {/* Sección de adopción */}
       <section className="adoption-section">
-        <h2 className="text-center">Adopción de Animales</h2>
-        {animalesAdopcion && <CarouselFade data={animalesAdopcion} type={"adoptionCarousel"} />}
+        <Container>
+          <h2 className="text-center">Adopción de Animales</h2>
+          <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
+            {animalesAdopcion && animalesAdopcion.map((animal) => (
+              <Col className="p-0" key={animal._id}>
+                <BasicCard data={animal} type={"animalCard"} />
+              </Col>
+            ))}
+          </Row>
+          <PaginationComponent
+            totalPages={totalPagesAnimal}
+            currentPage={currentPageAnimal}
+            setPage={setCurrentPageAnimal}
+          />
+        </Container>
       </section>
     </>
   );

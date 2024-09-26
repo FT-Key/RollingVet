@@ -4,14 +4,24 @@ import '../css/AppointmentRequest.css';
 import { getToken } from '../helpers/Token.helper';
 import { Helmet } from 'react-helmet-async';
 
-const TIPOS_ATENCION = [
+export const TIPOS_ATENCION = [
+  'Consulta veterinaria',
+  'Vacunación',
+  'Desparasitación',
+  'Revisión general de salud',
+  'Control de peso',
+  'Castración/esterilización',
+  'Consulta sobre nutrición animal',
+  'Consulta sobre adopción',
+  'Revisión pre-adopción',
+  'Atención post-adopción',
   'Consulta de producto',
-  'Soporte técnico',
+  'Asesoría en productos exclusivos',
   'Asesoría en compras',
   'Revisión de producto',
   'Consulta sobre garantía',
   'Atención post-venta',
-  'Asesoría en productos exclusivos',
+  'Soporte técnico de productos',
 ];
 
 const AppointmentRequest = () => {
