@@ -1,19 +1,32 @@
 :root {
-  --color-dark-1: rgb(19, 27, 1);    /* #131B01 */
-  --color-dark-2: rgb(65, 117, 126);  /* #41757E */
-  --color-dark-3: rgb(112, 90, 86);   /* #705A56 */
-  --color-mid-1: rgb(130, 96, 61);    /* #82603D */
-  --color-mid-2: rgb(151, 83, 61);    /* #97533D */
-  --color-mid-3: rgb(165, 180, 98);   /* #A5B462 */
-  --color-mid-4: rgb(179, 205, 18);    /* #B3CD12 */
-  --color-light-1: rgb(197, 193, 117); /* #C5C175 */
-  --color-light-2: rgb(201, 176, 156); /* #C9B09C */
-  --color-light-3: rgb(221, 123, 24);  /* #DD7B18 */
-  --color-light-4: rgb(129, 210, 203); /* #81D2CB */
-  --color-light-5: rgb(242, 240, 238); /* #F2F0EE */
+  --color-dark-1: rgb(19, 27, 1);
+  /* #131B01 */
+  --color-dark-2: rgb(65, 117, 126);
+  /* #41757E */
+  --color-dark-3: rgb(112, 90, 86);
+  /* #705A56 */
+  --color-mid-1: rgb(130, 96, 61);
+  /* #82603D */
+  --color-mid-2: rgb(151, 83, 61);
+  /* #97533D */
+  --color-mid-3: rgb(165, 180, 98);
+  /* #A5B462 */
+  --color-mid-4: rgb(179, 205, 18);
+  /* #B3CD12 */
+  --color-light-1: rgb(197, 193, 117);
+  /* #C5C175 */
+  --color-light-2: rgb(201, 176, 156);
+  /* #C9B09C */
+  --color-light-3: rgb(221, 123, 24);
+  /* #DD7B18 */
+  --color-light-4: rgb(129, 210, 203);
+  /* #81D2CB */
+  --color-light-5: rgb(242, 240, 238);
+  /* #F2F0EE */
 }
 
 body {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   min-height: 100vh;

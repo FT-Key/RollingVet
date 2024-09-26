@@ -18,20 +18,37 @@
 /* Hero Section (Presentación) */
 .home-hero {
     background-image: url("/Veterinaria-frente.png");
-    background-size: auto;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 60vh;
+    height: 85vh;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .home-hero .hero-content {
     background-color: rgba(0, 0, 0, 0.5);
     padding: 20px;
     border-radius: 10px;
+    max-width: 75vw;
+
+    h1 {
+        font-size: 4rem;
+    }
+
+    h2 {
+        font-size: 3rem;
+        padding-bottom: 1rem;
+    }
+
+    p {
+        font-size: 1.5rem;
+        color: var(--color-light-5);
+    }
 }
 
 /* Carousel Section */
