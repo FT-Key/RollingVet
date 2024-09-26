@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import "../css/BasicCard.css";
 
-function BasicCard({ data, type, onDelete }) {
+function BasicCard({ data, type, onDelete, optionDeleteAnimal = false }) {
   const handleDelete = async () => {
     // Muestra un cuadro de confirmación antes de eliminar
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este animal?");
@@ -59,12 +59,14 @@ function BasicCard({ data, type, onDelete }) {
               >
                 Ver detalles
               </Button>
-              <Button
-                variant="danger" // Cambia el color del botón a rojo para eliminar
-                onClick={handleDelete}
-              >
-                Eliminar
-              </Button>
+              {optionDeleteAnimal &&
+                (<Button
+                  variant="danger" // Cambia el color del botón a rojo para eliminar
+                  onClick={handleDelete}
+                >
+                  Eliminar
+                </Button>)
+              }
             </div>
           </Card.Body>
         </Card>

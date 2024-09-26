@@ -157,9 +157,27 @@ const AnimalsList = () => {
 
       <h2 className='text-center py-3'>Mis mascotas</h2>
       <Container>
+
+        {animales.length > 0 ? (
+          <>
+            <Container className="animal-grid">
+              <Row>
+                {animales.map((animal) => (
+                  <Col key={animal._id} sm={12} md={4}>
+                    <BasicCard data={animal} type="animalCard" onDelete={deletePet} optionDeleteAnimal={true} />
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+            <PaginationComponent totalPages={totalPages} currentPage={page} setPage={setPage} />
+          </>
+        ) : (
+          <h2 className='text-center py-5'>No tiene mascota registradas</h2>
+        )}
+
         <div className='d-flex flex-column justify-content-center align-items-center'>
           <Form onSubmit={handleSubmit} className="w-50 mb-4 d-flex flex-column gap-3">
-            <h3>Agregar Nueva Mascota</h3>
+            <h3 className='text-center'>Agregar Nueva Mascota</h3>
             <Form.Group controlId="formNombre">
               <Form.Label>Nombre</Form.Label>
               <Form.Control
@@ -331,23 +349,6 @@ const AnimalsList = () => {
             </Button>
           </Form>
         </div>
-
-        {animales.length > 0 ? (
-          <>
-            <Container className="animal-grid">
-              <Row>
-                {animales.map((animal) => (
-                  <Col key={animal._id} sm={12} md={4}>
-                    <BasicCard data={animal} type="animalCard" onDelete={deletePet} />
-                  </Col>
-                ))}
-              </Row>
-            </Container>
-            <PaginationComponent totalPages={totalPages} currentPage={page} setPage={setPage} />
-          </>
-        ) : (
-          <h2 className='text-center py-5'>No tiene mascota registradas</h2>
-        )}
 
       </Container>
     </>

@@ -7,8 +7,10 @@ import Loading from "../components/Loading";
 import { Col, Container, Row, Button } from "react-bootstrap";
 import Zoom from '../components/Zoom'; // Componente Zoom para las imágenes
 import { Helmet } from 'react-helmet-async';
+import { useAuth } from "../context/AuthContext";
 
 const AnimalDetail = () => {
+  const { user } = useAuth();
   const { animalId } = useParams(); // Usamos animalId en lugar de productId
   const [animal, setAnimal] = useState(null);
   const navigate = useNavigate();
@@ -111,9 +113,12 @@ const AnimalDetail = () => {
                 <Button variant="secondary" onClick={handleBack}>
                   Regresar
                 </Button>
-                <Button as={Link} to={"/planes"} variant="success">
-                  Contratar plan
-                </Button>
+                {user?._id == animal.duenio?._id &&
+                  (
+                    <Button as={Link} to={"/planes"} variant="success">
+                      Contratar plan
+                    </Button>
+                  )}
               </div>
 
             </Col>
