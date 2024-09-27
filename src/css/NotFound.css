@@ -7,7 +7,6 @@
   flex: 1 1 auto;
   min-height: 50vh;
   text-align: center;
-  background-color: #f8f9fa;
   color: #333;
   background-image: url('/404NotFound.png') !important;
   background-position: center;
@@ -18,12 +17,13 @@
 .title-NF {
   font-size: 48px;
   margin: 0;
-  -webkit-text-stroke: .7px white;
+  font-weight: 600;
+  -webkit-text-stroke: 1px white;
 }
 
 .message-NF {
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
   -webkit-text-stroke: .3px white;
 }

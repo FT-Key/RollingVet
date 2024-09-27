@@ -74,7 +74,8 @@ const Home = () => {
       {/* Sección de presentación */}
       <section className="home-hero">
         <div className="hero-content text-center">
-          <h1>RollingVet</h1>
+          <h1>¡RollingVet!</h1>
+          <h2>Seguridad y bienestar para tus mascotas.</h2>
           <p>
             Veterinaria especializada en caninos y felinos. Venta de productos
             para animales, comida, estética, salud, accesorios. Adopción de

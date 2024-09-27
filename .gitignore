@@ -1,24 +1,44 @@
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencias de Node.js
+node_modules/
+dist/
+dist-ssr/
+build/   # Agregado para builds de React
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Archivos de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Directorios de cache (si usas herramientas como Next.js o similares)
+.cache/
+.next/
+
+# Archivos de servicio de terceros (si usas Firebase, etc.)
+firebase-debug.log
+
+# Archivos de configuración del editor
+.vscode/
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+*.swp
+
+# Archivos de configuración de otros editores
+*.iml
+
+# Otros archivos del sistema operativo
+Thumbs.db

@@ -112,7 +112,8 @@ const AdminAppointments = () => {
 
   // Cálculo para agregar espacios vacíos
   const fillEmptySpaces = useMemo(() => {
-    return Array((limit * 5) - turnos.length).fill(null);
+    const emptySpacesCount = (limit * 5) - turnos.length;
+    return emptySpacesCount > 0 ? Array(emptySpacesCount).fill(null) : [];
   }, [turnos.length, limit]);
 
   return (
