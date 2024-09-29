@@ -12,7 +12,6 @@ const Contacto = () => {
     mensaje: "",
   });
 
-  const [validado, setValidado] = useState(false);
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
 
@@ -25,28 +24,31 @@ const Contacto = () => {
 
   const manejarEnvio = async (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
 
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    } else {
-      try {
-        const response = await axios.post("/api/contacto", formData);
-        if (response.status === 200) {
-          setExito("¡Tu mensaje ha sido enviado exitosamente!");
-          setFormData({
-            nombre: "",
-            email: "",
-            telefono: "",
-            asunto: "",
-            mensaje: "",
-          });
-        }
-      } catch (error) {
-        setError("Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.");
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      const response = await axios.post(`${apiUrl}/contacto`, formData);
+      console.log("RESPUESTA: ", response);
+      if (response.status === 200) {
+        setExito("Tu mensaje fue enviado con éxito, pronto nos contactaremos contigo.");
+        setFormData({
+          nombre: "",
+          email: "",
+          telefono: "",
+          asunto: "",
+          mensaje: "",
+        });
+        setTimeout(() => {
+          setExito("");
+        }, 5000); // Ocultar mensaje después de 5 segundos
+
+        // Desplazar hacia arriba
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+    } catch (error) {
+      setError("Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.");
     }
-    setValidado(true);
   };
 
   return (
@@ -61,35 +63,27 @@ const Contacto = () => {
         {exito && <Alert variant="success">{exito}</Alert>}
 
         <div className='d-flex justify-content-center'>
-          <Form className='w-25 d-flex flex-column justify-content-center gap-3' noValidate validated={validado} onSubmit={manejarEnvio} style={{ minWidth: '300px' }}>
+          <Form className='w-25 d-flex flex-column justify-content-center gap-3' noValidate onSubmit={manejarEnvio} style={{ minWidth: '300px' }}>
             <Form.Group controlId="formNombre">
               <Form.Label>Nombre</Form.Label>
               <Form.Control
-                required
                 type="text"
                 placeholder="Ingresa tu nombre"
                 name="nombre"
                 value={formData.nombre}
                 onChange={manejarCambio}
               />
-              <Form.Control.Feedback type="invalid">
-                Por favor, ingresa tu nombre.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
-                required
                 type="email"
                 placeholder="Ingresa tu email"
                 name="email"
                 value={formData.email}
                 onChange={manejarCambio}
               />
-              <Form.Control.Feedback type="invalid">
-                Por favor, ingresa un email válido.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formTelefono">
@@ -106,22 +100,17 @@ const Contacto = () => {
             <Form.Group controlId="formAsunto">
               <Form.Label>Asunto</Form.Label>
               <Form.Control
-                required
                 type="text"
                 placeholder="Ingresa el asunto"
                 name="asunto"
                 value={formData.asunto}
                 onChange={manejarCambio}
               />
-              <Form.Control.Feedback type="invalid">
-                Por favor, ingresa un asunto.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formMensaje">
               <Form.Label>Mensaje</Form.Label>
               <Form.Control
-                required
                 as="textarea"
                 rows={5}
                 placeholder="Ingresa tu mensaje"
@@ -129,9 +118,6 @@ const Contacto = () => {
                 value={formData.mensaje}
                 onChange={manejarCambio}
               />
-              <Form.Control.Feedback type="invalid">
-                Por favor, ingresa un mensaje.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Button variant="primary" type="submit">
