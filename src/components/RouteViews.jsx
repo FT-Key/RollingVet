@@ -37,8 +37,8 @@ const RouteViews = () => {
         chatMessage="¡Hola, bienvenido a RollingVet! ¿En qué puedo ayudarte?" // (Opcional) Mensaje inicial en el chat
         placeholder="Escribe un mensaje..." // (Opcional) Texto del placeholder
         allowClickAway={true} // Permite cerrar la ventana al hacer clic fuera de ella
-        notification={true} // Activa notificaciones visuales
-        notificationSound={true} // Activa sonido de notificación
+        notification={false} // Activa notificaciones visuales
+        notificationSound={false} // Activa sonido de notificación
       />
         <NavigationBar />
         <FloatingButton />

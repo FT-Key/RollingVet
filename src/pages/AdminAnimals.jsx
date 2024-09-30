@@ -68,7 +68,7 @@ const AdminAnimals = () => {
         },
         {
           label: "No",
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });

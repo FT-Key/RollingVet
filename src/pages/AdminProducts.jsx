@@ -11,6 +11,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { getProducts } from "../helpers/ServerProducts";
 import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
+import ProductImage from "../components/ProductImage";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]); // Productos obtenidos del servidor
@@ -147,7 +148,7 @@ const AdminProducts = () => {
           <Row key={product.id} className="text-center" style={{ background: "white" }}>
             <Col xs={12} md={1}>{product.id}</Col>
             <Col xs={12} md={2}>
-              <img src={product.imagenUrl} alt={product.nombre} style={{ width: "100px", height: "auto" }} />
+              <ProductImage source={product.imagenUrl} alternative={product.nombre} width={'100px'} />
             </Col>
             <Col xs={12} md={2}>{product.nombre}</Col>
             <Col xs={12} md={2}>{product.categoria}</Col>

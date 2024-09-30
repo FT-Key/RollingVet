@@ -2,15 +2,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState, useEffect } from "react";
 import "../css/BasicModal.css";
-import { putServerData } from "../helpers/ServerCalling";
 import UserFormModal from "./UserFormModal";
 import ProductsFormModal from "./ProductsFormModal";
-import { validateProductFields, validateUserFields } from "./Validators";
+import { validateAnimalFields, validateProductFields, validateUserFields } from "./Validators";
 import { putProduct, uploadProductImage } from "../helpers/ServerProducts";
 import { putUser, uploadProfileImage } from "../helpers/ServerUsers";
 import AnimalsFormModal from "./AnimalsFormModal";
 import { putAnimal, uploadAnimalImage } from "../helpers/ServerAnimals";
-import { getToken } from "../helpers/Token.helper";
 
 const BasicModal = ({
   type,
@@ -28,6 +26,7 @@ const BasicModal = ({
   );
   const [editedData, setEditedData] = useState(formData);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Restablecer editedData cuando se cierra el modal
@@ -57,8 +56,6 @@ const BasicModal = ({
 
     if (inputType === "file") {
       // Solo almacenar el archivo en una variable temporal, sin modificar el editedData
-      console.log("FILES: ", files)
-      console.log("NAME: ", name)
       if (files && files.length > 0) {
 
         // Crear un enlace temporal para mostrar la imagen
@@ -66,7 +63,6 @@ const BasicModal = ({
 
         updatedData["uploadedFile"] = files[0]; // Guardar temporalmente el archivo
         updatedData[name] = fileUrl;
-        console.log("UPDATED DATA: ", updatedData)
       }
     } else if (inputType === "date") {
       // Convertir la fecha del input (HTML) al formato de fecha de JavaScript
@@ -102,11 +98,12 @@ const BasicModal = ({
         updatedData[name] = inputType === "checkbox" ? checked : value;
       }
     }
-    console.log("UPDATED DATA: ", updatedData)
+
     setEditedData(updatedData);
   };
 
   const handleSaveChanges = async () => {
+    setIsLoading(true); // Inicia el estado de carga
     let validationErrors;
 
     switch (true) {
@@ -144,6 +141,10 @@ const BasicModal = ({
         validationErrors = validateProductFields(editedData);
         break;
 
+      case type === "adminAnimals":
+        validationErrors = validateAnimalFields(editedData);
+        break;
+
       default:
         break;
     }
@@ -160,8 +161,6 @@ const BasicModal = ({
 
       // Hacer la petición PUT para actualizar el producto, excluyendo el archivo
       let updatedData;
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const token = getToken();
 
       switch (true) {
         case type === "adminUsers":
@@ -179,8 +178,6 @@ const BasicModal = ({
         default:
           break;
       }
-
-      console.log("Producto guardado:", updatedData);
 
       // Si hay un archivo seleccionado, realizar la subida en una llamada separada
       if (uploadedFile) {
@@ -208,8 +205,6 @@ const BasicModal = ({
         if (!uploadResponse) {
           throw new Error(uploadResponse.message);
         }
-
-        console.log("Archivo subido:", uploadResponse.message, uploadResponse.data);
       }
 
       setFormData(editedData);
@@ -217,6 +212,8 @@ const BasicModal = ({
       onHide(); // Cerrar el modal
     } catch (error) {
       console.error("Error al guardar el producto:", error);
+    } finally {
+      setIsLoading(false); // Finaliza el estado de carga
     }
   };
 
@@ -301,8 +298,6 @@ const BasicModal = ({
         break;
     }
 
-    console.log("UPDATED DATA: ", updatedData)
-
     // Actualizamos el estado con los datos modificados
     setEditedData(updatedData);
   };
@@ -347,7 +342,9 @@ const BasicModal = ({
           Close
         </Button>
         {(type === "adminUsers" || type === "adminProducts" || type === "adminAnimals") && (
-          <Button onClick={handleSaveChanges}>Guardar cambios</Button>
+          <Button onClick={handleSaveChanges} disabled={isLoading}>
+            {isLoading ? "Guardando..." : "Guardar cambios"}
+          </Button>
         )}
       </Modal.Footer>
     </Modal>

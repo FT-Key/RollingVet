@@ -167,10 +167,15 @@ export function validarProveedor(cadena) {
   return regex.test(cadena);
 }
 
-const validarCodigoDeBarras = (codigo) => {
+export const validarCodigoDeBarras = (codigo, strict = false) => {
   // Verificar que tenga exactamente 13 caracteres
   if (!/^\d{13}$/.test(codigo)) {
-    return { valido: false, mensaje: "El código de barras debe tener exactamente 13 dígitos numéricos." };
+    return false;
+  }
+
+  // Si strict es false, solo verificamos la cantidad de dígitos
+  if (!strict) {
+    return true;
   }
 
   // Convertir el código en un array de dígitos
@@ -188,11 +193,7 @@ const validarCodigoDeBarras = (codigo) => {
   const digitoControlCalculado = (10 - (suma % 10)) % 10;
 
   // Verificar si el dígito de control coincide con el último dígito del código
-  if (digitoControlCalculado !== digitos[12]) {
-    return false;
-  }
-
-  return true;
+  return digitoControlCalculado === digitos[12];
 };
 
 export function validarImagenURL(cadena) {
@@ -215,8 +216,6 @@ export function validarCalificaciones(cadena) {
 }
 
 export function validarGarantia(cadena) {
-  console.log("ingresa: ", cadena);
-
   // Acepta garantía en años (e.g., "2 años"), en meses (e.g., "6 meses"), o 'Sin garantía'
   const regex = /^\d{1,2}\s*(mes|meses|año|años)$/;
 
