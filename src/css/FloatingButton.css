@@ -1,14 +1,14 @@
 /* FloatingButton.css */
 .floating-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 2rem;
+  left: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 75px; 
   height: 75px; 
-  background-color: var(--color-light-5); 
+  background-color: var(--bs-success); 
   border-radius: 50%;
   transition: background-color 0.3s ease; 
   text-decoration: none;
@@ -37,6 +37,7 @@
   left: auto;
   right: auto;
   color: black;
+  font-weight: 600;
   padding: 5px;
   border-radius: 5px;
   font-size: 12px;
