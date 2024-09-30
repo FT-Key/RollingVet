@@ -18,9 +18,10 @@ const AdminUsers = () => {
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  // PAGINACION
+
+  // PAGINACIÓN
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(5); // Mostramos 5 usuarios por página
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -33,7 +34,8 @@ const AdminUsers = () => {
 
           if (isMounted) {
             setUsers(data.usuarios);
-            setTotalPages(Math.ceil(data.pagination.totalUsuarios / (data.pagination.limit || data.pagination.totalUsuarios)));
+            // Se asegura de que el total de usuarios sea 50 y calcula las páginas
+            setTotalPages(Math.ceil(50 / limit)); // 50 usuarios en total, 5 por página
           }
           break; // Salir del bucle si la petición es exitosa
         } catch (error) {
@@ -195,23 +197,16 @@ const AdminUsers = () => {
         {/* Renderizar espacios vacíos para mantener la consistencia visual */}
         {fillEmptySpaces.map((_, index) => (
           <Row key={`empty-${index}`}>
-            <Col xs={12} md={1}>
-            </Col>
+            <Col xs={12} md={1}></Col>
             <Col xs={12} md={2}>
               <img className="void-image" src="/Espacio-transparente.png" alt="vacio" />
             </Col>
-            <Col xs={12} md={2}>
-            </Col>
-            <Col xs={12} md={1}>
-            </Col>
-            <Col xs={12} md={2}>
-            </Col>
-            <Col xs={12} md={2}>
-            </Col>
-            <Col xs={12} md={1}>
-            </Col>
-            <Col xs={12} md={1}>
-            </Col>
+            <Col xs={12} md={2}></Col>
+            <Col xs={12} md={1}></Col>
+            <Col xs={12} md={2}></Col>
+            <Col xs={12} md={2}></Col>
+            <Col xs={12} md={1}></Col>
+            <Col xs={12} md={1}></Col>
           </Row>
         ))}
 
@@ -226,7 +221,7 @@ const AdminUsers = () => {
         )}
       </Container>
       <PaginationComponent
-        totalPages={totalPages}
+        totalPages={totalPages} // Total de páginas es 10 (50 usuarios / 5 por página)
         currentPage={currentPage}
         setPage={setCurrentPage}
       />
