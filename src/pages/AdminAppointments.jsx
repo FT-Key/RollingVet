@@ -9,7 +9,8 @@ import { getAppointments, getOneAppointment } from '../helpers/ServerAppointment
 import { Helmet } from 'react-helmet-async';
 
 const AdminAppointments = () => {
-  const [turnos, setTurnos] = useState([]);
+  const [turnos, setTurnos] = useState([]); // Turnos aplanados para la página actual
+  const [fechaTurnos, setFechaTurnos] = useState([]); // Guardar las 20 fechas con turnos
   const [fecha, setFecha] = useState(() => {
     const today = new Date();
     return today.toISOString().split('T')[0]; // Convierte la fecha a 'YYYY-MM-DD'
@@ -18,10 +19,10 @@ const AdminAppointments = () => {
   const [error, setError] = useState('');
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(1); // Cambia esto al límite que prefieras para cada página
   const [totalPages, setTotalPages] = useState(1);
 
-  // Función para obtener turnos por fecha o todos los turnos
+  // Función para obtener turnos de 20 fechas
   const obtenerTurnos = async (fecha = '') => {
     setLoading(true);
     setError('');
@@ -29,9 +30,14 @@ const AdminAppointments = () => {
     try {
       let response;
       if (!fecha) {
-        response = await getAppointments(currentPage, limit);
+        response = await getAppointments(1, 20); // Traemos 20 fechas con turnos de una sola vez
       } else {
         response = await getOneAppointment(fecha);
+      }
+
+      // Asegurarse de que response exista y tenga la estructura esperada
+      if (!response) {
+        throw new Error('No se recibió respuesta del servidor.');
       }
 
       // Asegurarse de que response sea siempre un array
@@ -40,29 +46,48 @@ const AdminAppointments = () => {
         setCurrentPage(1);
         setTotalPages(1);
       } else if (response.fechaTurnos) {
-        setTotalPages(Math.ceil(response.pagination.totalTurnos / (response.pagination.limit || response.pagination.totalTurnos)));
+        setFechaTurnos(response.fechaTurnos); // Guardamos las fechas con turnos
+        setTotalPages(response.pagination.totalTurnos);
       }
 
-      // Aplanar el array de turnos
-      const turnosAplanados = response.fechaTurnos.flatMap(item =>
-        item.turnos.map(turno => ({
-          fecha: item.fecha,
-          ...turno
-        }))
-      );
-
-      setTurnos(turnosAplanados);
+      // Aplanar los turnos de la página actual
+      aplanarTurnos(response.fechaTurnos, currentPage);
     } catch (err) {
-      setError('Error al obtener los turnos.');
+      console.log(err); // Log del error para depuración
+      if (err.message === "No se recibió respuesta del servidor.") {
+        setError('La fecha no tiene turnos habilitados.');
+        setTurnos([]);
+      } else {
+        setError('Error al obtener los turnos.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  const aplanarTurnos = (fechas, pagina) => {
+    const turnosPorPagina = limit;
+    const inicio = (pagina - 1) * turnosPorPagina;
+    const fin = inicio + turnosPorPagina;
+
+    // Aplanar solo los turnos de las fechas correspondientes a la página actual
+    const turnosAplanados = fechas.slice(inicio, fin).flatMap(item =>
+      Array.isArray(item.turnos) ? item.turnos.map(turno => ({
+        fecha: item.fecha,
+        ...turno
+      })) : [] // Si no es un array, devuelve un array vacío
+    );
+
+    setTurnos(turnosAplanados);
+  };
 
   useEffect(() => {
-    obtenerTurnos();
-  }, [currentPage, limit]);
+    if (fechaTurnos.length > 0) {
+      aplanarTurnos(fechaTurnos, currentPage);
+    } else {
+      obtenerTurnos();
+    }
+  }, [currentPage, limit, fechaTurnos]);
 
   const handleFechaChange = (e) => {
     setFecha(e.target.value);
@@ -109,12 +134,6 @@ const AdminAppointments = () => {
       setError('Error al liberar el turno.');
     }
   };
-
-  // Cálculo para agregar espacios vacíos
-  const fillEmptySpaces = useMemo(() => {
-    const emptySpacesCount = (limit * 5) - turnos.length;
-    return emptySpacesCount > 0 ? Array(emptySpacesCount).fill(null) : [];
-  }, [turnos.length, limit]);
 
   return (
     <>
@@ -201,19 +220,6 @@ const AdminAppointments = () => {
                     </td>
                   </tr>
                 ))}
-
-                {/* Renderizar espacios vacíos para completar las filas si es necesario */}
-                {fillEmptySpaces.map((_, index) => (
-                  <tr key={`empty-${index}`}>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                ))}
               </>
             ) : (
               <tr>
@@ -237,9 +243,7 @@ const ESTADOS_TURNO_COLOR = {
   pendiente: 'turnoPendiente',
   completado: 'turnoCompletado',
   cancelado: 'turnoCancelado',
-  'no asistido': 'turnoNoAsistido',
   confirmado: 'turnoConfirmado',
-  caducado: 'turnoCaducado',
 };
 
 export default AdminAppointments;
