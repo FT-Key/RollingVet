@@ -18,7 +18,7 @@ const SobreMi = () => {
           <div className="sobre-mi-texto">
             <h2>Sobre mí</h2>
             <p>
-              ¡Hola! Soy un desarrollador apasionado por la tecnología y la programación. Me
+              ¡Hola! Soy Franco Toledo, un desarrollador apasionado por la tecnología y la programación. Me
               encanta aprender cosas nuevas, enfrentar retos y mejorar mis habilidades día a día.
             </p>
             <p>

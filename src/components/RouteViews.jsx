@@ -23,11 +23,23 @@ import AnimalsList from "../pages/AnimalList";
 import AnimalDetail from "../pages/AnimalDetail";
 import FloatingButton from "./FloatingButton";
 import ScrollToTop from "./ScrollToTop";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
 
 const RouteViews = () => {
   return (
     <>
       <ScrollToTop>
+        <FloatingWhatsApp
+        phoneNumber="5493816152377" // Reemplaza con tu número de teléfono de WhatsApp
+        accountName="RollingVet"  // Nombre que aparecerá en el chat
+        avatar="https://res.cloudinary.com/duic1bovf/image/upload/v1727723002/logo.svg_kburai.svg" // (Opcional) URL de tu imagen o logo
+        statusMessage="Normalmente responde en pocos minutos" // (Opcional) Mensaje de estado
+        chatMessage="¡Hola, bienvenido a RollingVet! ¿En qué puedo ayudarte?" // (Opcional) Mensaje inicial en el chat
+        placeholder="Escribe un mensaje..." // (Opcional) Texto del placeholder
+        allowClickAway={true} // Permite cerrar la ventana al hacer clic fuera de ella
+        notification={true} // Activa notificaciones visuales
+        notificationSound={true} // Activa sonido de notificación
+      />
         <NavigationBar />
         <FloatingButton />
         <Routes>

@@ -8,7 +8,6 @@ import {
   validarCategoria,
   validarImagenURL,
   validarProveedor,
-  validarModelo,
   validarCalificaciones,
   validarGarantia,
   validarDescuento,
