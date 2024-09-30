@@ -1,4 +1,5 @@
 import { fetchServerData, postServerData, putServerData } from "./ServerCalling";
+import { getToken } from "./Token.helper";
 
 export async function getProducts(page, limit) {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -49,6 +50,7 @@ export async function getOneProduct(productId) {
 export async function putProduct(productId, body) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = getToken(); // Obtén el token del almacenamiento local
+
   if (token) {
     try {
       await putServerData(
@@ -67,10 +69,11 @@ export async function putProduct(productId, body) {
 
 export async function uploadProductImage(productId, body) {
   const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken(); // Obtén el token del almacenamiento local
 
   try {
     // Llamar a postServerData para subir la imagen
-    const response = await postServerData(apiUrl, `/productos/agregarImagen/${productId}`, body);
+    const response = await postServerData(apiUrl, `/productos/agregarImagen/${productId}`, body, token);
 
     // Si la respuesta no es exitosa, lanzar un error
     if (!response.ok) {

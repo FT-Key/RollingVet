@@ -9,7 +9,7 @@
   }
 }
 
-.nav-space{
+.nav-space {
   height: var(--navbar-height);
 }
 
@@ -67,10 +67,15 @@ abbr[title] {
 .cart-item-count,
 .favs-item-count {
   /* Ajusta el color según el diseño */
+  aspect-ratio: 1/1;
   border-radius: 50%;
   margin-bottom: auto;
   padding: 0 5px;
   font-size: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: solid .5px black;
 }
 
 .cart-item-count {
@@ -96,6 +101,11 @@ abbr[title] {
     * {
       font-size: inherit;
       text-align: inherit;
+    }
+
+    .cart-item-count,
+    .favs-item-count {
+      font-size: .75rem;
     }
   }
 

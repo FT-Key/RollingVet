@@ -29,7 +29,7 @@ const AdminAnimals = () => {
       while (true) {
         try {
           const data = await getAnimals(currentPage, limit); // Obtener animales desde el servidor
-          console.log("DATA_ ", data)
+          
           if (isMounted) {
             setAnimals(data.animales);
             setTotalPages(
