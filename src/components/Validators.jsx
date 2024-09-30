@@ -7,7 +7,7 @@ import {
   validarFecha,
   validarCategoria,
   validarImagenURL,
-  validarMarca,
+  validarProveedor,
   validarModelo,
   validarCalificaciones,
   validarGarantia,
@@ -32,6 +32,19 @@ import {
   validarEnlacesRedesSociales,
   validarSelect,
   validarFotoPerfil,
+  validarNombreContacto,
+  validarEmailContacto,
+  validarTelefonoContacto,
+  validarAsuntoContacto,
+  validarMensajeContacto,
+  validarNombreAnimal,
+  validarTipoAnimal,
+  validarRazaAnimal,
+  validarEdadAnimal,
+  validarDescripcionAnimal,
+  validarPesoAnimal,
+  validarGeneroAnimal,
+  validarImagenAnimal,
   //Animales
 
 } from "../helpers/Validations";
@@ -185,13 +198,13 @@ export function validateProductFields(data) {
     validationErrors.cantidadEnStock = "Stock inválido";
   }
 
-  if (!validarMarca(data.proveedor)) {
-    validationErrors.proveedor = "Marca inválida";
+  if (!validarProveedor(data.proveedor)) {
+    validationErrors.proveedor = "Proveedor inválida";
   }
 
-  /* if (!validarModelo(data.model)) {
-    validationErrors.model = "Modelo inválido";
-  } */
+  if (!validarCodigoDeBarras(data.codigoDeBarras)) {
+    validationErrors.codigoDeBarras = "codigo de barras inválido";
+  }
 
   if (data.imagenUrl && !validarImagenURL(data.imagenUrl)) {
     validationErrors.imagenUrl = "URL de la imagen inválida";
@@ -217,5 +230,74 @@ export function validateProductFields(data) {
 }
 
 export function validateAnimalFields(data) {
+  const errors = {};
 
+  // Valida el nombre
+  if (!validarNombreAnimal(data.nombre)) {
+    errors.nombre = "El nombre debe contener al menos 2 caracteres y solo letras.";
+  }
+
+  // Valida el tipo (por ejemplo, perro, gato, etc.)
+  if (!validarTipoAnimal(data.tipo)) {
+    errors.tipo = "El tipo de animal es obligatorio y debe ser válido (e.g., perro, gato).";
+  }
+
+  // Valida la raza
+  if (!validarRazaAnimal(data.raza)) {
+    errors.raza = "La raza debe contener al menos 3 caracteres y solo letras.";
+  }
+
+  // Valida la edad (debe ser un número positivo)
+  if (!validarEdadAnimal(data.edad)) {
+    errors.edad = "La edad debe ser un número positivo.";
+  }
+
+  // Valida la descripción (opcional, pero si existe debe ser válida)
+  if (data.descripcion && !validarDescripcionAnimal(data.descripcion)) {
+    errors.descripcion = "La descripción debe tener entre 10 y 200 caracteres.";
+  }
+
+  // Valida el peso (debe ser un número positivo)
+  if (!validarPesoAnimal(data.peso)) {
+    errors.peso = "El peso debe ser un número positivo.";
+  }
+
+  // Valida el género (debe ser 'Macho' o 'Hembra')
+  if (!validarGeneroAnimal(data.genero)) {
+    errors.genero = "El género debe ser 'Macho' o 'Hembra'.";
+  }
+
+  // Valida la imagen (opcional, pero si existe debe ser una URL válida)
+  if (data.imagen && !validarImagenAnimal(data.imagen)) {
+    errors.imagen = "La URL de la imagen no es válida.";
+  }
+
+  // Retorna los errores, si el objeto está vacío, no hay errores
+  return errors;
+}
+
+export function validateContactFields(data) {
+  let erroresValidacion = {};
+
+  if (!validarNombreContacto(data.nombre)) {
+    erroresValidacion.nombre = "Nombre inválido. Debe contener solo letras y al menos 4 caracteres.";
+  }
+
+  if (!validarEmailContacto(data.email)) {
+    erroresValidacion.email = "Email inválido.";
+  }
+
+  if (!validarTelefonoContacto(data.telefono)) {
+    erroresValidacion.telefono = "Teléfono inválido. Debe contener solo números.";
+  }
+
+  if (!validarAsuntoContacto(data.asunto)) {
+    erroresValidacion.asunto = "El asunto debe tener al menos 3 caracteres.";
+  }
+
+  if (!validarMensajeContacto(data.mensaje)) {
+    erroresValidacion.mensaje = "El mensaje debe tener al menos 10 caracteres.";
+  }
+
+  return erroresValidacion;
 }

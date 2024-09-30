@@ -9,6 +9,7 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
 🟠 Deploy
+🟠 Validaciones (Animales, Usuarios)
 🟠 Filtros
 🟠 Admin turno (Pensar)
 🟠 Contacto
@@ -32,9 +33,11 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔵 Lógica de registro Google
 🔵 Lógica de inicio de sesion
 🔵 Lógica de inicio de sesion Google
-🔵 Validaciones inputs productos
+🔵 Validaciones inputs productos (Código de barras)
 🔵 Validaciones inputs usuarios
+🔵 Validaciones Mascotas
 🔵 Bloqueo de producto
 🔵 Bloqueo de usuario
+🟢 Validaciones Contacto
 🟢 METADATA, Titulos de paginas
 🟢 Clima
