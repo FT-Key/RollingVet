@@ -5,6 +5,7 @@ import { Col, Container, Row, Form, Button } from 'react-bootstrap';
 import PaginationComponent from '../components/PaginationComponent.jsx';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from "../context/AuthContext";
+import { validateAnimalFields } from '../components/Validators.jsx';
 
 const AnimalsList = () => {
   const { user } = useAuth();
@@ -101,8 +102,16 @@ const AnimalsList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Desactivar el botón y cambiar el texto a "Generando..."
+    const errores = validateAnimalFields(formData);
 
+    if (Object.keys(errores).length > 0) {
+      // Manejar los errores (mostrar en el formulario, etc.)
+      return { success: false, errors: errores };
+    }
+
+    // Si no hay errores, procede a enviar los datos
+
+    setIsSubmitting(true); // Desactivar el botón y cambiar el texto a "Generando..."
     try {
       const newAnimal = { ...formData, duenio: user._id, estado: "Mascota" };
 
@@ -345,7 +354,7 @@ const AnimalsList = () => {
               type="submit"
               disabled={isSubmitting} // Deshabilitar el botón durante el envío
             >
-              {isSubmitting ? "Generando..." : "Agregar Mascota"} {/* Cambiar el texto */}
+              {isSubmitting ? "Cargando..." : "Agregar Mascota"}
             </Button>
           </Form>
         </div>

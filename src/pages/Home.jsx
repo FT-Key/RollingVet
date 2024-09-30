@@ -11,12 +11,14 @@ import { getAnimals } from "../helpers/ServerAnimals.js";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
-  const [animalesAdopcion, setAnimalesAdopcion] = useState(false);
-  const [productosCarrusel, setProductosCarrusel] = useState(false);
+  const [animalesAdopcion, setAnimalesAdopcion] = useState([]);
+  const [productosCarrusel, setProductosCarrusel] = useState([]);
+
   // PAGINACION PRODUCTOS
   const [currentPageProd, setCurrentPageProd] = useState(1);
   const [limitProd, setLimitProd] = useState(3);
   const [totalPagesProd, setTotalPagesProd] = useState(1);
+
   // PAGINACION ANIMALES
   const [currentPageAnimal, setCurrentPageAnimal] = useState(1);
   const [limitAnimal, setLimitAnimal] = useState(3);
@@ -25,46 +27,36 @@ const Home = () => {
   useEffect(() => {
     let isMounted = true;
 
-    const cargarProductos = async () => {
-      while (true) {
-        try {
-          const data = await getProducts(currentPageProd, limitProd);
-          const dataAdopcion = await getAnimals(currentPageAnimal, limitAnimal, { estado: "En Adopción" }); // Aquí deberías obtener productos relacionados con adopción
+    const cargarDatos = async () => {
+      try {
+        // Llamada para obtener todos los productos y animales en una sola vez
+        const dataProductos = await getProducts(); // Aquí podrías ajustar para obtener 30 productos
+        const dataAdopcion = await getAnimals(1, 30, { estado: "En Adopción" }); // Aquí podrías ajustar para obtener 30 animales
 
-          if (isMounted) {
-            setProductos(data.productos);
-            setTotalPagesProd(
-              Math.ceil(data.pagination.totalProductos / data.pagination.limit)
-            );
+        if (isMounted) {
+          setProductos(dataProductos.productos);
+          setAnimalesAdopcion(dataAdopcion.animales);
 
-            setAnimalesAdopcion(dataAdopcion.animales);
-            setTotalPagesAnimal(
-              Math.ceil(dataAdopcion.pagination.totalAnimales / data.pagination.limit)
-            );
-          }
-
-          if (!productosCarrusel) {
-            const dataCarrusel = await getProducts();
-            if (isMounted) {
-              setProductosCarrusel(dataCarrusel.productos);
-            }
-          }
-
-          break;
-        } catch (error) {
-          console.error("Error cargando productos:", error);
-          if (!isMounted) return;
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          // Calcular el total de páginas
+          setTotalPagesProd(Math.ceil(dataProductos.productos.length / limitProd));
+          setTotalPagesAnimal(Math.ceil(dataAdopcion.animales.length / limitAnimal));
         }
+
+      } catch (error) {
+        console.error("Error cargando datos:", error);
       }
     };
 
-    cargarProductos();
+    cargarDatos();
 
     return () => {
       isMounted = false;
     };
-  }, [currentPageProd, limitProd, currentPageAnimal, limitAnimal]);
+  }, [limitProd, limitAnimal]);
+
+  // Obtener los productos y animales a mostrar según la página actual
+  const productosActuales = productos.slice((currentPageProd - 1) * limitProd, currentPageProd * limitProd);
+  const animalesActuales = animalesAdopcion.slice((currentPageAnimal - 1) * limitAnimal, currentPageAnimal * limitAnimal);
 
   return (
     <>
@@ -98,7 +90,7 @@ const Home = () => {
         <Container>
           <h2 className="text-center">Nuestros Productos</h2>
           <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
-            {productos.map((prod) => (
+            {productosActuales.map((prod) => (
               <Col className="p-0" key={prod.id}>
                 <BasicCard data={prod} type={"productCard"} />
               </Col>
@@ -117,7 +109,7 @@ const Home = () => {
         <Container>
           <h2 className="text-center">Adopción de Animales</h2>
           <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
-            {animalesAdopcion && animalesAdopcion.map((animal) => (
+            {animalesActuales.map((animal) => (
               <Col className="p-0" key={animal._id}>
                 <BasicCard data={animal} type={"animalCard"} />
               </Col>

@@ -13,11 +13,13 @@
   }
 
   h3 {
-    -webkit-text-stroke: .3px black;
+    -webkit-text-stroke: .4px black;
+    font-weight: 600;
   }
 
   p {
-    -webkit-text-stroke: .3px black;
+    -webkit-text-stroke: .4px black;
+    font-weight: 600;
   }
 }
 

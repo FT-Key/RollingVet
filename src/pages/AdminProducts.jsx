@@ -11,15 +11,18 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { getProducts } from "../helpers/ServerProducts";
 import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
+import ProductImage from "../components/ProductImage";
 
 const AdminProducts = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]); // Productos obtenidos del servidor
+  const [displayedProducts, setDisplayedProducts] = useState([]); // Productos a mostrar en la página actual
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(5); // Límite de productos por página
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -28,15 +31,12 @@ const AdminProducts = () => {
     const fetchProducts = async () => {
       while (true) {
         try {
-          const data = await getProducts(currentPage, limit);
+          // Cambiar el límite a 50 para traer 50 productos en una sola solicitud
+          const data = await getProducts(1, 50);
           if (isMounted) {
-            setProducts(data.productos);
-            setTotalPages(
-              Math.ceil(
-                data.pagination.totalProductos /
-                (data.pagination.limit || data.pagination.totalProductos)
-              )
-            );
+            setProducts(data.productos); // Guardar los 50 productos
+            setTotalPages(Math.ceil(data.productos.length / limit)); // Calcular total de páginas
+            setDisplayedProducts(data.productos.slice(0, limit)); // Mostrar primeros 5 productos
           }
           break; // Salir del bucle si la petición es exitosa
         } catch (error) {
@@ -52,7 +52,14 @@ const AdminProducts = () => {
     return () => {
       isMounted = false; // Marcar como desmontado al limpiar el efecto
     };
-  }, [updateMark, currentPage, limit]);
+  }, [updateMark]);
+
+  // Actualiza los productos mostrados cada vez que cambia la página o el límite
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * limit;
+    const endIndex = startIndex + limit;
+    setDisplayedProducts(products.slice(startIndex, endIndex));
+  }, [currentPage, limit, products]);
 
   const BLOCKED_CONFIG = {
     true: { text: "Habilitar", color: "success" },
@@ -87,17 +94,12 @@ const AdminProducts = () => {
 
             try {
               await deleteServerData(apiUrl, `/productos/${productId}`);
-              setProducts(
-                products.filter((product) => product.id !== productId)
-              );
+              setProducts(products.filter((product) => product.id !== productId));
             } catch (error) {
               console.error("Error eliminando producto:", error);
             }
 
-            // Elimina el contenedor del alert del DOM después de cerrar el alert
-            const alertContainer = document.querySelector(
-              ".react-confirm-alert"
-            );
+            const alertContainer = document.querySelector(".react-confirm-alert");
             if (alertContainer) {
               alertContainer.remove();
             }
@@ -106,10 +108,7 @@ const AdminProducts = () => {
         {
           label: "No",
           onClick: () => {
-            // Elimina el contenedor del alert del DOM después de cerrar el alert
-            const alertContainer = document.querySelector(
-              ".react-confirm-alert"
-            );
+            const alertContainer = document.querySelector(".react-confirm-alert");
             if (alertContainer) {
               alertContainer.remove();
             }
@@ -119,10 +118,9 @@ const AdminProducts = () => {
     });
   };
 
-  // Cálculo para agregar espacios vacíos
   const fillEmptySpaces = useMemo(() => {
-    return Array(limit - products.length).fill(null);
-  }, [products.length, limit]);
+    return Array(limit - displayedProducts.length).fill(null);
+  }, [displayedProducts.length, limit]);
 
   return (
     <>
@@ -145,16 +143,12 @@ const AdminProducts = () => {
           <Col xs={12} md={1}>Eliminar</Col>
         </Row>
 
-        {/* Renderizar los productos */}
-        {products.map((product) => (
+        {/* Renderizar los productos de la página actual */}
+        {displayedProducts.map((product) => (
           <Row key={product.id} className="text-center" style={{ background: "white" }}>
             <Col xs={12} md={1}>{product.id}</Col>
             <Col xs={12} md={2}>
-              <img
-                src={product.imagenUrl}
-                alt={product.nombre}
-                style={{ width: "100px", height: "auto" }}
-              />
+              <ProductImage source={product.imagenUrl} alternative={product.nombre} width={'100px'} />
             </Col>
             <Col xs={12} md={2}>{product.nombre}</Col>
             <Col xs={12} md={2}>{product.categoria}</Col>
@@ -193,23 +187,16 @@ const AdminProducts = () => {
         {/* Renderizar espacios vacíos para mantener la consistencia visual */}
         {fillEmptySpaces.map((_, index) => (
           <Row key={`empty-${index}`}>
-            <Col xs={12} md={1}>
-            </Col>
+            <Col xs={12} md={1}></Col>
             <Col xs={12} md={2}>
               <img className="void-image" src="/Espacio-transparente.png" alt="vacio" />
             </Col>
-            <Col xs={12} md={2}>
-            </Col>
-            <Col xs={12} md={2}>
-            </Col>
-            <Col xs={12} md={1}>
-            </Col>
-            <Col xs={12} md={2}>
-            </Col>
-            <Col xs={12} md={1}>
-            </Col>
-            <Col xs={12} md={1}>
-            </Col>
+            <Col xs={12} md={2}></Col>
+            <Col xs={12} md={2}></Col>
+            <Col xs={12} md={1}></Col>
+            <Col xs={12} md={2}></Col>
+            <Col xs={12} md={1}></Col>
+            <Col xs={12} md={1}></Col>
           </Row>
         ))}
 
