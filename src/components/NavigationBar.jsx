@@ -95,29 +95,33 @@ function NavigationBar() {
             {user
               ? (user.rol === 'admin' || user.rol === 'cliente') && (
                 <div className='contenedor-links'>
-                  <abbr title="Carrito" className='abbr'>
-                    <Link to="/carrito" className='carrito-link' onClick={() => setExpanded(false)}>
-                      <SVG
-                        name={carrito.length > 0 ? 'cart-go-fill' : 'cart-normal-fill'}
-                        width="42px"
-                        height="42px"
-                        color={carrito.length > 0 ? 'green' : 'transparent'}
-                      />
-                      <span className={`cart-item-count${carrito.length > 0 ? ' show-space' : ' hidden-space'}`}>{carrito.length}</span>
-                    </Link>
-                  </abbr>
+                  <div className='position-relative'>
+                    <abbr title="Carrito" className='abbr'>
+                      <Link to="/carrito" className='carrito-link' onClick={() => setExpanded(false)}>
+                        <SVG
+                          name={carrito.length > 0 ? 'cart-go-fill' : 'cart-normal-fill'}
+                          width="42px"
+                          height="42px"
+                          color={carrito.length > 0 ? 'green' : 'transparent'}
+                        />
+                        <span className={`cart-item-count${carrito.length > 0 ? ' show-space' : ' hidden-space'}`}>{carrito.length}</span>
+                      </Link>
+                    </abbr>
+                  </div>
 
-                  <abbr title="Favoritos" className='abbr'>
-                    <Link to="/favoritos" className='favoritos-link' onClick={() => setExpanded(false)}>
-                      <SVG
-                        name={'favs-heart-fill'}
-                        width="42px"
-                        height="42px"
-                        color={favoritos.length > 0 ? '#ff0019' : 'transparent'}
-                      />
-                      <span className={`favs-item-count${favoritos.length > 0 ? ' show-space' : ' hidden-space'}`}>{favoritos.length}</span>
-                    </Link>
-                  </abbr>
+                  <div className='position-relative'>
+                    <abbr title="Favoritos" className='abbr'>
+                      <Link to="/favoritos" className='favoritos-link' onClick={() => setExpanded(false)}>
+                        <SVG
+                          name={'favs-heart-fill'}
+                          width="42px"
+                          height="42px"
+                          color={favoritos.length > 0 ? '#ff0019' : 'transparent'}
+                        />
+                        <span className={`favs-item-count${favoritos.length > 0 ? ' show-space' : ' hidden-space'}`}>{favoritos.length}</span>
+                      </Link>
+                    </abbr>
+                  </div>
                   <Nav.Link className='ps-2 text-danger' onClick={handleLogout}>Cerrar Sesión</Nav.Link>
                 </div>
               )

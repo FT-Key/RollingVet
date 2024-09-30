@@ -4,20 +4,11 @@ import { Link } from 'react-router-dom';
 import '../css/FloatingButton.css'; // Asegúrate de importar el archivo CSS
 
 const FloatingButton = () => {
-
-  // Tu número de WhatsApp (con código de país y sin símbolos especiales)
-  const phoneNumber = '5493816152377';
-  // Mensaje predeterminado
-  const message = 'Bienvenido a RollingVet';
-  // Codifica el mensaje para que se envíe correctamente en la URL
-  const encodedMessage = encodeURIComponent(message);
-
-  // Enlace de WhatsApp
-  const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
   return (
     <Link to="/contacto" className="floating-button" >
-      <img src="/Gato.png" alt="Contáctanos" />
+      <div className='img-container-floating'>
+      <img src="https://res.cloudinary.com/duic1bovf/image/upload/v1727727284/floating-button-gif_xty2r1.gif" alt="Contáctanos" />
+      </div>
       <span className="tool">Contáctanos</span>
     </Link>
   );

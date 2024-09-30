@@ -103,6 +103,20 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
         />
       </div>
 
+      {/* Campo para el género */}
+      <div>
+        <label>Género</label>
+        <select
+          name="genero"
+          value={editedData.genero || ""}
+          onChange={handleChange}
+        >
+          <option value="">Seleccionar</option>
+          <option value="Macho">Macho</option>
+          <option value="Hembra">Hembra</option>
+        </select>
+      </div>
+
       <div>
         <label>Descripción</label>
         <textarea
