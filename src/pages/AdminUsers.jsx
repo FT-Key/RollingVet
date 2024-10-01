@@ -14,15 +14,17 @@ import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
 
 const AdminUsers = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Todos los usuarios cargados
+  const [loadedUsers, setLoadedUsers] = useState([]); // Usuarios cargados en bloques
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-
-  // PAGINACIÓN
+  // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(5); // Mostramos 5 usuarios por página
+  const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
+
+  const USERS_BATCH_SIZE = 50; // Cantidad de usuarios que se cargan por llamada al servidor
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
@@ -30,12 +32,14 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
       while (true) {
         try {
-          const data = await getUsers(currentPage, limit);
+          const data = await getUsers(currentPage, USERS_BATCH_SIZE); // Obtener usuarios en lotes de 50
 
           if (isMounted) {
-            setUsers(data.usuarios);
-            // Se asegura de que el total de usuarios sea 50 y calcula las páginas
-            setTotalPages(Math.ceil(50 / limit)); // 50 usuarios en total, 5 por página
+            // Agregar usuarios nuevos al estado, sin duplicar
+            setLoadedUsers((prevUsers) => [...prevUsers, ...data.usuarios]);
+
+            // Calcular el total de páginas basadas en los usuarios cargados
+            setTotalPages(Math.ceil(data.pagination.totalUsuarios / limit));
           }
           break; // Salir del bucle si la petición es exitosa
         } catch (error) {
@@ -46,12 +50,15 @@ const AdminUsers = () => {
       }
     };
 
-    fetchUsers();
+    // Llamar a la función solo si no se han cargado suficientes usuarios para paginar
+    if (loadedUsers.length < currentPage * limit) {
+      fetchUsers();
+    }
 
     return () => {
       isMounted = false; // Marcar como desmontado al limpiar el efecto
     };
-  }, [updateMark, currentPage, limit]);
+  }, [updateMark, currentPage]);
 
   const BLOQUEADO_CONFIG = {
     true: { text: "Desbloquear", color: "success" },
@@ -118,10 +125,17 @@ const AdminUsers = () => {
     });
   };
 
+  // Obtener usuarios paginados basados en el estado actual
+  const paginatedUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * limit;
+    const endIndex = startIndex + limit;
+    return loadedUsers.slice(startIndex, endIndex);
+  }, [loadedUsers, currentPage, limit]);
+
   // Cálculo para agregar espacios vacíos
   const fillEmptySpaces = useMemo(() => {
-    return Array(limit - users.length).fill(null);
-  }, [users.length, limit]);
+    return Array(limit - paginatedUsers.length).fill(null);
+  }, [paginatedUsers.length, limit]);
 
   return (
     <>
@@ -144,7 +158,7 @@ const AdminUsers = () => {
           <Col md={1}>Eliminar</Col>
         </Row>
 
-        {users.map((user) => (
+        {paginatedUsers.map((user) => (
           <Row
             key={user.id}
             className="text-center"
@@ -196,17 +210,39 @@ const AdminUsers = () => {
 
         {/* Renderizar espacios vacíos para mantener la consistencia visual */}
         {fillEmptySpaces.map((_, index) => (
-          <Row key={`empty-${index}`}>
-            <Col xs={12} md={1}></Col>
+          <Row className="empty" key={`empty-${index}`}>
+            <Col xs={12} md={1}>void</Col>
+            <Col xs={12} md={2}>void</Col>
             <Col xs={12} md={2}>
               <img className="void-image" src="/Espacio-transparente.png" alt="vacio" />
             </Col>
-            <Col xs={12} md={2}></Col>
-            <Col xs={12} md={1}></Col>
-            <Col xs={12} md={2}></Col>
-            <Col xs={12} md={2}></Col>
-            <Col xs={12} md={1}></Col>
-            <Col xs={12} md={1}></Col>
+            <Col xs={12} md={1}>void</Col>
+            <Col xs={12} md={2}>void</Col>
+            <Col xs={12} md={2}>
+              <CustomButton
+                paddingB={false}
+                className={"my-1"}
+                variant={BLOQUEADO_CONFIG[true].color}
+                buttonText={BLOQUEADO_CONFIG[true].text}
+              />
+            </Col>
+            <Col xs={12} md={1}>
+              <CustomButton
+                paddingB={false}
+                className={"my-1"}
+                variant={"warning"}
+                buttonText={"Editar"}
+              />
+            </Col>
+            <Col xs={12} md={1}>
+              <CustomButton
+                paddingB={false}
+                className={"my-1"}
+                btnClassName="btn-delete"
+                variant={"danger"}
+                buttonText={"X"}
+              />
+            </Col>
           </Row>
         ))}
 
@@ -221,7 +257,7 @@ const AdminUsers = () => {
         )}
       </Container>
       <PaginationComponent
-        totalPages={totalPages} // Total de páginas es 10 (50 usuarios / 5 por página)
+        totalPages={totalPages}
         currentPage={currentPage}
         setPage={setCurrentPage}
       />

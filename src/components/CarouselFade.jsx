@@ -10,7 +10,7 @@ function CarouselFade({ data, type }) {
   return (
     <>
       {type === 'productCarousel' &&
-        <Carousel fade data-bs-theme="light">
+        <Carousel fade data-bs-theme="light" className="custom-carousel">
           {randomItems.map((prod, index) => (
             <Carousel.Item interval={2000} key={prod.id || index}>
               <Imagen

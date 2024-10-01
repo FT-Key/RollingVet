@@ -38,11 +38,13 @@ const GoogleAuth = ({ useParameter }) => {
   };
 
   const handleLogin = async () => {
+    const provident = new GoogleAuthProvider(); // Utilice 'GoogleAuthProvider' directamente
+    provident.setCustomParameters({ prompt: 'select_account' });
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, provident); // Utilice 'provider' directamente aquí
       handleSuccess(result);
     } catch (error) {
-      handleError(error);
+      alert(error.message);
     }
   };
 

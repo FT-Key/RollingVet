@@ -17,11 +17,12 @@
 
 /* Hero Section (Presentación) */
 .home-hero {
+    padding: 1rem 0;
     background-image: url("/Veterinaria-frente.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 85vh;
+    min-height: 85vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,16 +38,16 @@
     max-width: 75vw;
 
     h1 {
-        font-size: 4rem;
+        font-size: 2.5rem;
     }
 
     h2 {
-        font-size: 3rem;
+        font-size: 1.5rem;
         padding-bottom: 1rem;
     }
 
     p {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         color: var(--color-light-5);
     }
 }
@@ -79,4 +80,21 @@
 .adoption-section h2 {
     margin-bottom: 40px;
     color: #333;
+}
+
+@media screen and (min-width: 768px) {
+    .home-hero .hero-content {
+
+        h1 {
+            font-size: 4rem;
+        }
+
+        h2 {
+            font-size: 3rem;
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+    }
 }

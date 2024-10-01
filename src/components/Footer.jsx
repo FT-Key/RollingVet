@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import '../css/Footer.css';
 import { Col, Container, Row } from 'react-bootstrap';
+import Weather from './Weather';
 
 const Footer = () => {
   return (
     <footer className='mt-auto footer'>
       <Container>
-        <Row>
+        <Row className='gy-3'>
           <Col sm={12} md={4}>
             <h6>Tel: +098 7 654-321</h6>
             <h6>Dir: Arg, calle Inventada 321, Piso 0, Dpto. 0</h6>
@@ -28,7 +29,7 @@ const Footer = () => {
           </Col>
 
           <Col sm={12} md={4}>
-
+            <Weather center={true} vertical={false} />
           </Col>
         </Row>
       </Container>

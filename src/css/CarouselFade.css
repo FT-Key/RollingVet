@@ -1,3 +1,7 @@
+.custom-carousel{
+  background: var(--color-mid-3);
+}
+
 .carousel-inner {
   height: 400px;
 
@@ -8,17 +12,21 @@
   img {
     object-fit: contain;
     overflow: hidden;
-    aspect-ratio: 2000/500;
-    width: auto;
+    aspect-ratio: 1;
+    width: 100%;
   }
 
   h3 {
-    -webkit-text-stroke: .4px black;
+    color: black;
+    font-size: 2.25rem;
+    -webkit-text-stroke: .75px white;
     font-weight: 600;
   }
 
   p {
-    -webkit-text-stroke: .4px black;
+    color: black;
+    font-size: 1.25rem;
+    -webkit-text-stroke: .75px white;
     font-weight: 600;
   }
 }
@@ -28,7 +36,7 @@
     height: auto;
 
     img {
-      width: 100%;
+      aspect-ratio: 4/1;
     }
   }
 }

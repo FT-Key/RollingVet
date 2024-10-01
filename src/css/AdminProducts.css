@@ -91,3 +91,14 @@
   width: 100px;
   height: 100px;
 }
+
+.empty {
+  color: transparent;
+
+  [class*="col"] {
+    * {
+      opacity: 0;
+      cursor: default;
+    }
+  }
+}
