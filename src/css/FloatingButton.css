@@ -1,5 +1,6 @@
 /* FloatingButton.css */
 .floating-button {
+  z-index: 5;
   position: fixed;
   bottom: 2rem;
   left: 2rem;

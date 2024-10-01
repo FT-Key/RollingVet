@@ -3,7 +3,8 @@
   width: clamp(18rem, 15vw, 24rem);
   margin: 0;
   height: 100%;
-  background-color: rgba(197, 193, 117, 0.75);
+  background: radial-gradient(circle at top center, var(--color-light-5) 0%, var(--color-light-5) 25%, var(--color-mid-2) 50%, var(--color-mid-2) 100%);
+  color: white;
 
   .card-img-top {
     aspect-ratio: 15/8;

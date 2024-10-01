@@ -50,7 +50,7 @@ const ProductsComponent = () => {
         <title>RollingVet</title>
       </Helmet>
       <section className="products-section">
-        <Container>
+        <Container fluid className="m-0 p-0">
           <h1 className="text-center fw-bold">Nuestros Productos</h1>
 
           {/* Carrusel de productos destacados */}
