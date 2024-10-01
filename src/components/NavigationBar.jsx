@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Modal, Button } from 'react-bootstrap'; // Importa Modal y Button
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { useAuth } from '../context/AuthContext';
 import '../css/NavigationBar.css';
 import SVG from './SVG';
 import { RedirectToLogin, RedirectToRegister } from '../helpers/Redirects';
-import Weather from './Weather';
+/* import Weather from './Weather'; */
+import DonationForm from '../components/DonationsForm'; // Importa el componente DonationForm
 
 function NavigationBar() {
   const { user, carrito, favoritos, logoutContext } = useAuth();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false); // Estado para controlar el colapso del menú
+  const [expanded, setExpanded] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
 
   useEffect(() => {
     const setNavbarHeight = () => {
@@ -22,13 +24,8 @@ function NavigationBar() {
       }
     };
 
-    // Establecer altura inicial
     setNavbarHeight();
-
-    // Actualizar altura en redimensionamiento de ventana
     window.addEventListener('resize', setNavbarHeight);
-
-    // Limpiar el event listener al desmontar
     return () => {
       window.removeEventListener('resize', setNavbarHeight);
     };
@@ -36,24 +33,24 @@ function NavigationBar() {
 
   const handleLoginRedirect = () => {
     RedirectToLogin({ navigate });
-    setExpanded(false); // Cerrar el menú al hacer clic
+    setExpanded(false);
   };
 
   const handleRegisterRedirect = () => {
     RedirectToRegister({ navigate });
-    setExpanded(false); // Cerrar el menú al hacer clic
+    setExpanded(false);
   };
 
   const handleLogout = () => {
     logoutContext();
-    setExpanded(false); // Cerrar el menú al hacer clic
+    setExpanded(false);
   };
 
   return (
     <>
       <div className='nav-space'></div>
       <Navbar bg="light" expand="lg" expanded={expanded} onToggle={() => setExpanded(!expanded)} className='navStyle'>
-        <Link className='nav-brand ps-2' to="/" onClick={() => setExpanded(false)}>
+        <Link className='nav-brand px-2' to="/" onClick={() => setExpanded(false)}>
           <img src={logo} alt="logo" />
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
@@ -61,11 +58,15 @@ function NavigationBar() {
           <Nav className="mr-auto">
             <Nav.Link className='ps-2' as={Link} to="/" onClick={() => setExpanded(false)}>Inicio</Nav.Link>
 
-            <NavDropdown className='ps-2' title="Clima" id="clima-nav-dropdown">
+            {/* <NavDropdown className='ps-2' title="Clima" id="clima-nav-dropdown">
               <Weather center={true} />
-            </NavDropdown>
+            </NavDropdown> */}
+
+            {/* Aquí agregas el botón para abrir el modal de donación */}
+            <Nav.Link className='ps-2' onClick={() => setShowModal(true)}>Donar</Nav.Link>
 
             <NavDropdown className='ps-2' title="Basicos" id="basics-nav-dropdown">
+              <NavDropdown.Item as={Link} to="/productos" onClick={() => setExpanded(false)}>Nuestros Productos</NavDropdown.Item>
               {user && (user.rol === 'admin' || user.rol === 'cliente') && (
                 <>
                   <NavDropdown.Item as={Link} to="/turnos" onClick={() => setExpanded(false)}>Solicitar turno</NavDropdown.Item>
@@ -76,6 +77,13 @@ function NavigationBar() {
               <NavDropdown.Item as={Link} to="/NotFound" onClick={() => setExpanded(false)}>404 Not Found</NavDropdown.Item>
             </NavDropdown>
 
+            {user && (user.rol === 'admin' || user.rol === 'cliente') && (
+              <>
+                <Nav.Link className='ps-2' as={Link} to="/planes" onClick={() => setExpanded(false)}>Nuestros planes</Nav.Link>
+                <Nav.Link className='ps-2' as={Link} to="/misMascotas" onClick={() => setExpanded(false)}>Mis mascotas</Nav.Link>
+              </>
+            )}
+
             {user && user.rol === 'admin' && (
               <NavDropdown className='ps-2' title="Admin" id="admin-nav-dropdown">
                 <NavDropdown.Item as={Link} to="/adminUsers" onClick={() => setExpanded(false)}>Admin Usuarios</NavDropdown.Item>
@@ -83,13 +91,6 @@ function NavigationBar() {
                 <NavDropdown.Item as={Link} to="/adminAppointments" onClick={() => setExpanded(false)}>Admin Turnos</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/adminAnimals" onClick={() => setExpanded(false)}>Admin Animales</NavDropdown.Item>
               </NavDropdown>
-            )}
-
-            {user && (user.rol === 'admin' || user.rol === 'cliente') && (
-              <>
-                <Nav.Link className='ps-2' as={Link} to="/planes" onClick={() => setExpanded(false)}>Nuestros planes</Nav.Link>
-                <Nav.Link className='ps-2' as={Link} to="/misMascotas" onClick={() => setExpanded(false)}>Mis mascotas</Nav.Link>
-              </>
             )}
 
             {user
@@ -135,6 +136,21 @@ function NavigationBar() {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+
+      {/* Modal para Donaciones */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Hacer una Donación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <DonationForm />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

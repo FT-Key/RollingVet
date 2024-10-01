@@ -91,7 +91,7 @@ const Planes = () => {
         <Row className="row-cols-1 row-cols-md-3 g-4">
           {planes.map((plan) => (
             <Col key={plan._id}>
-              <Card className="h-100">
+              <Card className="h-100 w-100">
                 <Card.Img variant="top" src={plan.imagenUrl} alt={plan.nombre} />
                 <Card.Body>
                   <Card.Title>{plan.nombre}</Card.Title>
@@ -121,7 +121,7 @@ const Planes = () => {
             <Row className="row-cols-1 row-cols-md-3 g-4">
               {mascotas.map((mascota) => (
                 <Col key={mascota._id}>
-                  <Card className="h-100">
+                  <Card className="h-100 w-100">
                     <Card.Img variant="top" src={mascota.fotoUrl} alt={mascota.nombre} />
                     <Card.Body>
                       <Card.Title>{mascota.nombre}</Card.Title>

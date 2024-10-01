@@ -322,3 +322,11 @@ export function validarImagenAnimal(imagenUrl) {
   const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i;
   return urlRegex.test(imagenUrl);
 }
+
+// Donaciones
+
+export function validarDonacion(cadena) {
+  // La expresión regular acepta números enteros mayores o iguales a 100
+  const regex = /^[1-9]\d{2,}$/;
+  return regex.test(cadena);
+}

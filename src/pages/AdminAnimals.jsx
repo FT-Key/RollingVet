@@ -13,36 +13,59 @@ import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
 
 const AdminAnimals = () => {
-  const [animals, setAnimals] = useState([]);
+  const [allAnimals, setAllAnimals] = useState([]); // Animales traídos del servidor
+  const [currentAnimals, setCurrentAnimals] = useState([]); // Animales mostrados en la página actual
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
-  // PAGINACION
+
+  // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const limit = 5; // Número de animales por página
   const [totalPages, setTotalPages] = useState(1);
+  const [totalAnimalesServidor, setTotalAnimalesServidor] = useState(0); // Total de animales disponibles en el servidor
+  const [fetchedAnimalsCount, setFetchedAnimalsCount] = useState(0); // Cantidad de animales cargados
+
+  const ANIMAL_BATCH_SIZE = 50;
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchAnimals = async () => {
+    const fetchInitialAnimals = async () => {
       try {
-        const data = await getAnimals(1, 50); // Cargar todos los animales
-        if (isMounted) {
-          setAnimals(data.animales);
-          setTotalPages(Math.ceil(data.pagination.totalAnimales / data.pagination.limit));
-        }
+        const data = await getAnimals(1, ANIMAL_BATCH_SIZE); // Trae los primeros 50 animales
+        setAllAnimals(data.animales);
+        setTotalAnimalesServidor(data.pagination.totalAnimales);
+        setFetchedAnimalsCount(data.animales.length);
+        setTotalPages(Math.ceil(data.pagination.totalAnimales / limit)); // Calcula el total de páginas en base a los animales en el servidor
       } catch (error) {
         console.error("Error trayendo animales:", error);
       }
     };
 
-    fetchAnimals();
-
-    return () => {
-      isMounted = false;
-    };
+    fetchInitialAnimals();
   }, [updateMark]);
+
+  useEffect(() => {
+    const start = (currentPage - 1) * limit;
+    const end = start + limit;
+
+    // Verifica si se necesitan más animales del servidor
+    if (end > fetchedAnimalsCount && fetchedAnimalsCount < totalAnimalesServidor) {
+      // Llamar al servidor para obtener más animales
+      const fetchMoreAnimals = async () => {
+        try {
+          const data = await getAnimals(fetchedAnimalsCount / limit + 1, ANIMAL_BATCH_SIZE); // Solicitar los próximos 50 animales
+          setAllAnimals((prevAnimals) => [...prevAnimals, ...data.animales]); // Agregar los nuevos animales
+          setFetchedAnimalsCount(fetchedAnimalsCount + data.animales.length);
+        } catch (error) {
+          console.error("Error trayendo más animales:", error);
+        }
+      };
+
+      fetchMoreAnimals();
+    } else {
+      setCurrentAnimals(allAnimals.slice(start, end)); // Animales a mostrar en la página actual
+    }
+  }, [currentPage, allAnimals, fetchedAnimalsCount, totalAnimalesServidor]);
 
   const handleEditClick = (animal) => {
     setSelectedAnimal(animal);
@@ -58,24 +81,23 @@ const AdminAnimals = () => {
           onClick: async () => {
             try {
               await deleteAnimal(animalId);
-              setAnimals(animals.filter((animal) => animal._id !== animalId));
+              setAllAnimals(allAnimals.filter((animal) => animal.id !== animalId));
+              setUpdateMark((prevMark) => !prevMark);
             } catch (error) {
               console.error("Error eliminando animal:", error);
             }
-
-            setUpdateMark((prevMark) => !prevMark);
           },
         },
         {
           label: "No",
-          onClick: () => { },
         },
       ],
     });
   };
 
-  // Filtra los animales para la página actual
-  const paginatedAnimals = animals.slice((currentPage - 1) * limit, currentPage * limit);
+  const fillEmptySpaces = useMemo(() => {
+    return Array(limit - currentAnimals.length).fill(null);
+  }, [currentAnimals.length, limit]);
 
   return (
     <>
@@ -94,47 +116,96 @@ const AdminAnimals = () => {
           <Col md={1}>Tipo</Col>
           <Col md={2}>Duenio</Col>
           <Col md={1}>Plan</Col>
-          <Col md={1}></Col>
+          <Col md={1}>Editar</Col>
+          <Col md={1}>Eliminar</Col>
         </Row>
 
-        {paginatedAnimals.map((animal) => (
-          <Row className="text-center" key={animal._id}>
-            <Col md={2}>{animal.nombre}</Col>
-            <Col md={2}>{animal.descripcion}</Col>
-            <Col md={2}>
-              <AnimalImage animal={animal} />
+        {currentAnimals.map((animal) => (
+          <Row key={animal._id} className="text-center" style={{ background: "white" }}>
+            <Col xs={12} md={2}>
+              {animal.nombre}
             </Col>
-            <Col md={1}>{animal.tipo}</Col>
-            <Col md={2}>{animal.dueno}</Col>
-            <Col md={1}>{animal.plan}</Col>
-            <Col md={1}>
+            <Col xs={12} md={2}>
+              {animal.descripcion || "Sin descripción"}
+            </Col>
+            <Col xs={12} md={2}>
+              <AnimalImage source={animal.fotoUrl} alternative={animal.nombre} width="100px" />
+            </Col>
+            <Col xs={12} md={1}>{animal.tipo}</Col>
+            <Col xs={12} md={2}>
+              {animal.duenio ? animal.duenio.nombre : "Sin duenio"}
+            </Col>
+            <Col xs={12} md={1}>
+              {animal.plan ? animal.plan.nombre : "Sin plan"}
+            </Col>
+            <Col xs={12} md={1}>
               <CustomButton
-                title={"Modificar"}
+                paddingB={false}
+                className={"my-1"}
+                variant={"warning"}
+                buttonText={"Editar"}
                 onClick={() => handleEditClick(animal)}
-                customClass={"edit-button"}
               />
+            </Col>
+            <Col xs={12} md={1}>
               <CustomButton
-                title={"Eliminar"}
+                paddingB={false}
+                className={"my-1"}
+                btnClassName="btn-delete"
+                variant={"danger"}
+                buttonText={"X"}
                 onClick={() => handleDeleteClick(animal._id)}
-                customClass={"delete-button"}
               />
             </Col>
           </Row>
         ))}
 
-        <PaginationComponent
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setPage={setCurrentPage}
-        />
+        {fillEmptySpaces.map((_, index) => (
+          <Row className="empty" key={`empty-${index}`}>
+            <Col xs={12} md={2}>void</Col>
+            <Col xs={12} md={2}>void</Col>
+            <Col xs={12} md={2}>
+              <img className="void-image" src="/Espacio-transparente.png" alt="vacio" />
+            </Col>
+            <Col xs={12} md={1}>void</Col>
+            <Col xs={12} md={2}>void</Col>
+            <Col xs={12} md={1}>void</Col>
+            <Col xs={12} md={1}>
+              <CustomButton
+                paddingB={false}
+                className={"my-1"}
+                variant={"warning"}
+                buttonText={"Editar"}
+              />
+            </Col>
+            <Col xs={12} md={1}>
+              <CustomButton
+                paddingB={false}
+                className={"my-1"}
+                btnClassName="btn-delete"
+                variant={"danger"}
+                buttonText={"X"}
+              />
+            </Col>
+          </Row>
+        ))}
 
-        <BasicModal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          animal={selectedAnimal}
-          setUpdateMark={setUpdateMark}
-        />
+        {selectedAnimal && (
+          <BasicModal
+            type="adminAnimals"
+            show={modalShow}
+            functionUpdateData={setUpdateMark}
+            onHide={() => setModalShow(false)}
+            animalData={selectedAnimal}
+          />
+        )}
       </Container>
+
+      <PaginationComponent
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setPage={setCurrentPage}
+      />
     </>
   );
 };

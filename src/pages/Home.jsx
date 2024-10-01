@@ -28,22 +28,32 @@ const Home = () => {
     let isMounted = true;
 
     const cargarDatos = async () => {
-      try {
-        // Llamada para obtener todos los productos y animales en una sola vez
-        const dataProductos = await getProducts(); // Aquí podrías ajustar para obtener 30 productos
-        const dataAdopcion = await getAnimals(1, 30, { estado: "En Adopción" }); // Aquí podrías ajustar para obtener 30 animales
+      while (true) {
+        try {
+          // Llamada para obtener todos los productos y animales en una sola vez
+          const dataProductos = await getProducts(); // Aquí podrías ajustar para obtener 30 productos
+          const dataAdopcion = await getAnimals(1, 30, { estado: "En Adopción" }); // Aquí podrías ajustar para obtener 30 animales
 
-        if (isMounted) {
-          setProductos(dataProductos.productos);
-          setAnimalesAdopcion(dataAdopcion.animales);
+          if (isMounted) {
+            setProductos(dataProductos.productos);
+            setAnimalesAdopcion(dataAdopcion.animales);
 
-          // Calcular el total de páginas
-          setTotalPagesProd(Math.ceil(dataProductos.productos.length / limitProd));
-          setTotalPagesAnimal(Math.ceil(dataAdopcion.animales.length / limitAnimal));
+            // Calcular el total de páginas
+            setTotalPagesProd(Math.ceil(dataProductos.productos.length / limitProd));
+            setTotalPagesAnimal(Math.ceil(dataAdopcion.animales.length / limitAnimal));
+          }
+
+          if (productosCarrusel.length == 0) {
+            const dataCarrusel = await getProducts(1, 50);
+            if (isMounted) {
+              setProductosCarrusel(dataCarrusel.productos);
+            }
+          }
+
+          break;
+        } catch (error) {
+          console.error("Error cargando datos:", error);
         }
-
-      } catch (error) {
-        console.error("Error cargando datos:", error);
       }
     };
 
@@ -66,8 +76,8 @@ const Home = () => {
       {/* Sección de presentación */}
       <section className="home-hero">
         <div className="hero-content text-center">
-          <h1>¡RollingVet!</h1>
-          <h2>Seguridad y bienestar para tus mascotas.</h2>
+          <h1 className="fw-bold">¡RollingVet!</h1>
+          <h2 className="text-white">Seguridad y bienestar para tus mascotas.</h2>
           <p>
             Veterinaria especializada en caninos y felinos. Venta de productos
             para animales, comida, estética, salud, accesorios. Adopción de
@@ -78,17 +88,19 @@ const Home = () => {
 
       {/* Sección del carrusel de productos destacados */}
       <section className="carousel-section">
-        <h2 className="text-center">Productos Destacados</h2>
+        <h2 className="text-center fw-bold">Productos Destacados</h2>
         {productosCarrusel && <CarouselFade data={productosCarrusel} type={"productCarousel"} />}
       </section>
 
       {/* Sección de los 3 planes */}
-      <PlansSection />
+      <section>
+        <PlansSection />
+      </section>
 
       {/* Sección de productos */}
       <section className="products-section">
         <Container>
-          <h2 className="text-center">Nuestros Productos</h2>
+          <h2 className="text-center fw-bold">Nuestros Productos</h2>
           <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
             {productosActuales.map((prod) => (
               <Col className="p-0" key={prod.id}>
@@ -107,7 +119,7 @@ const Home = () => {
       {/* Sección de adopción */}
       <section className="adoption-section">
         <Container>
-          <h2 className="text-center">Adopción de Animales</h2>
+          <h2 className="text-center fw-bold">Adopta una mascota</h2>
           <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
             {animalesActuales.map((animal) => (
               <Col className="p-0" key={animal._id}>

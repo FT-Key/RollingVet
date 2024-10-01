@@ -1,7 +1,8 @@
 .navStyle {
-  background: linear-gradient(180deg, var(--color-light-5) 50%, transparent) !important;
+  background: var(--color-light-5);
+  border-bottom: solid 1px black;
   position: fixed;
-  z-index: 3;
+  z-index: 10;
 
   * {
     font-size: 1.5rem;

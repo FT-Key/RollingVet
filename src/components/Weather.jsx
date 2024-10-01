@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Weather = ({ center = false, city = "Argentina" }) => {
+const Weather = ({ center = false, city = "Argentina", vertical = true }) => {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,12 +30,16 @@ const Weather = ({ center = false, city = "Argentina" }) => {
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
   return (
-    <div className={`${center && 'text-center'}`}>
-      <h6>{weather.name}</h6>
-      <h6>{Math.round(weather.main.temp)}°C</h6>
-      <h6>{weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h6>
-      <img src={iconUrl} alt={weather.weather[0].description} />
-      <p>Humedad: {weather.main.humidity}%</p>
+    <div className={`d-flex justify-content-center align-items-start ${center && 'text-center '}${vertical && ' flex-column'}`}>
+      <div>
+        <p className="m-0">{weather.name}</p>
+        <p className="m-0">{Math.round(weather.main.temp)}°C</p>
+        <p className="m-0">{weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</p>
+        <p className="m-0">Humedad: {weather.main.humidity}%</p>
+      </div>
+      <div>
+        <img src={iconUrl} alt={weather.weather[0].description} />
+      </div>
     </div>
   );
 };

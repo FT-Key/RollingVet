@@ -45,6 +45,16 @@
     .row.header.responsive {
       display: none !important;
     }
+
+    .btn-delete {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: .7rem;
+      width: 1rem;
+      height: 1rem;
+      padding: 5px;
+    }
   }
 
   .row.header.normal {
@@ -81,4 +91,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.empty {
+  color: transparent;
+
+  [class*="col"] {
+    * {
+      opacity: 0;
+      cursor: default;
+    }
+  }
 }
