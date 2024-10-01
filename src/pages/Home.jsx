@@ -8,6 +8,7 @@ import PaginationComponent from "../components/PaginationComponent.jsx";
 import PlansSection from "../components/PlansSection.jsx";
 import { Helmet } from 'react-helmet-async';
 import { getAnimals } from "../helpers/ServerAnimals.js";
+import TradeMarkSlider from "../components/TradeMarkSlider.jsx";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -86,6 +87,10 @@ const Home = () => {
         </div>
       </section>
 
+      <section className="my-4">
+        <TradeMarkSlider time={"20s"} />
+      </section>
+
       {/* Sección del carrusel de productos destacados */}
       <section className="carousel-section">
         <h2 className="text-center fw-bold">Productos Destacados</h2>
@@ -127,11 +132,14 @@ const Home = () => {
               </Col>
             ))}
           </Row>
-          <PaginationComponent
-            totalPages={totalPagesAnimal}
-            currentPage={currentPageAnimal}
-            setPage={setCurrentPageAnimal}
-          />
+          {totalPagesAnimal > 1 &&
+            (<PaginationComponent
+              totalPages={totalPagesAnimal}
+              currentPage={currentPageAnimal}
+              setPage={setCurrentPageAnimal}
+            />
+            )}
+
         </Container>
       </section>
     </>

@@ -2,33 +2,35 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 
 🔴🟠🟡🔵🟢🟣
 
-🔴 Paleta de colores
 🔴 Tipografía
 🔴 Página de referencia
-🔴 Mails
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
+🔴 Comentarios
+🔴 Profesionales
 🟠 Deploy
-🟠 Validaciones (Animales, Usuarios)
+🟠 Validaciones (Animales, Usuarios, turnos)
 🟠 Filtros
-🟠 Admin turno (Pensar)
-🟠 Contacto
+🟠 Admin turno
 🟡 MockUp
-🟡 Trello
-🟡 Admin animales
 🟡 Animales
 🟡 Turnero (pensar lógica)
 🟡 Footer
-🟡 Sobre mi
 🟡 Completar datos de usuario (repensar)
+🟡 Contacto
+🔵 Trello
+🔵 Sobre mi
+🔵 Paleta de colores
+🔵 Mails
 🔵 Planes
 🔵 MercadoPago
 🔵 Cerrar Sesión
 🔵 Rutas protegidas
 🔵 Carrito
 🔵 Favoritos
-🔵 Editar usuarios
-🔵 Editar productos
+🔵 Admin animales
+🔵 Admin usuarios
+🔵 Admin productos
 🔵 Lógica de registro
 🔵 Lógica de registro Google
 🔵 Lógica de inicio de sesion
@@ -41,3 +43,4 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🟢 Validaciones Contacto
 🟢 METADATA, Titulos de paginas
 🟢 Clima
+🟢 Marcas
