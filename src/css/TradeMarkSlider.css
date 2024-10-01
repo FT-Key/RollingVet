@@ -30,7 +30,7 @@ main{
     position: absolute;
     left: 100%;
     animation: autoRun var(--time) linear infinite;
-    transition: filter 0.5s;
+    transition: filter 0.4s;
     animation-delay: calc( (var(--time) / var(--quantity)) * (var(--position) - 1) - var(--time));
     display: flex;
     justify-content: center;

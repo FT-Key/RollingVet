@@ -6,7 +6,6 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔴 Página de referencia
 🔴 ¿Olvidaste tu contraseña?
 🔴 Mantener sesión iniciada
-🔴 Marcas
 🔴 Comentarios
 🔴 Profesionales
 🟠 Deploy
@@ -44,3 +43,4 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🟢 Validaciones Contacto
 🟢 METADATA, Titulos de paginas
 🟢 Clima
+🟢 Marcas

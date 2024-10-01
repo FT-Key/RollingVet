@@ -132,11 +132,14 @@ const Home = () => {
               </Col>
             ))}
           </Row>
-          <PaginationComponent
-            totalPages={totalPagesAnimal}
-            currentPage={currentPageAnimal}
-            setPage={setCurrentPageAnimal}
-          />
+          {totalPagesAnimal > 1 &&
+            (<PaginationComponent
+              totalPages={totalPagesAnimal}
+              currentPage={currentPageAnimal}
+              setPage={setCurrentPageAnimal}
+            />
+            )}
+
         </Container>
       </section>
     </>
