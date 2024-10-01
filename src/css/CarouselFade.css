@@ -1,5 +1,10 @@
-.custom-carousel{
-  background: var(--color-mid-3);
+.custom-carousel {
+  background: radial-gradient(circle at top left, var(--color-light-3) 0%, var(--color-light-3) 5%, transparent 20%, transparent 100%),
+    radial-gradient(circle at top right, var(--color-light-3) 0%, var(--color-light-3) 5%, transparent 20%, transparent 100%),
+    radial-gradient(circle at bottom left, var(--color-light-3) 0%, var(--color-light-3) 5%, transparent 20%, transparent 100%),
+    radial-gradient(circle at bottom right, var(--color-light-3) 0%, var(--color-light-3) 5%, transparent 20%, transparent 100%),
+    var(--color-light-5);
+
 }
 
 .carousel-inner {
