@@ -115,7 +115,7 @@ const PaginationComponent = ({ totalPages, currentPage, setPage }) => {
   };
 
   return (
-    <Pagination className="justify-content-center mt-3">
+    <Pagination className="justify-content-center mt-3 pagination-custom">
       {getPageItems()}
     </Pagination>
   );

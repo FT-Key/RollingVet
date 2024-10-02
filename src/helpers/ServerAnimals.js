@@ -4,7 +4,6 @@ import { getToken } from "./Token.helper";
 // Obtener todos los animales con paginación
 export async function getAnimals(page, limit, filters = {}) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken();
 
   // Construir la cadena de consulta (query string) a partir de los filtros
   const queryParams = new URLSearchParams();
@@ -20,7 +19,7 @@ export async function getAnimals(page, limit, filters = {}) {
     }
   }
 
-  const rawData = await fetchServerData(apiUrl, `/animales?${queryParams.toString()}`, token);
+  const rawData = await fetchServerData(apiUrl, `/animales?${queryParams.toString()}`);
 
   // Convertir las fechas a Date si existen
   const data = rawData.animales.map((animal) => ({
@@ -46,8 +45,8 @@ export async function getAnimals(page, limit, filters = {}) {
 // Obtener un solo animal por ID
 export async function getOneAnimal(animalId) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken();
-  const rawData = await fetchServerData(apiUrl, `/animales/${animalId}`, token);
+  
+  const rawData = await fetchServerData(apiUrl, `/animales/${animalId}`);
 
   // Convertir las fechas a Date si existen
   const data = {

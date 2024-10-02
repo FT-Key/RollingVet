@@ -47,7 +47,7 @@ const ProductsComponent = () => {
   return (
     <>
       <Helmet>
-        <title>RollingVet</title>
+        <title>Productos</title>
       </Helmet>
       <section className="products-section">
         <Container fluid className="m-0 p-0">

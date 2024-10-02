@@ -37,3 +37,9 @@
     border: none;
   }
 }
+
+.pagination-custom {
+  --bs-pagination-active-bg: rgb(65, 117, 126);
+  --bs-pagination-active-border-color: rgb(78, 139, 150);
+  --bs-pagination-color: rgb(65, 117, 126);
+}

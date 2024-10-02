@@ -3,6 +3,7 @@ import '../css/Footer.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import Weather from './Weather';
 import MapComponent from './MapComponent';
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'; // Importar íconos
 
 const Footer = () => {
   return (
@@ -17,15 +18,15 @@ const Footer = () => {
 
           <Col sm={12} md={4} className='d-flex flex-column justify-content-center'>
             <div className={'container-footer'}>
-              <p className={'text-footer'}>© {new Date().getFullYear()} RollingVet. Todos los derechos reservados.</p>
+              <h3 className={'text-footer'}>© {new Date().getFullYear()} RollingVet. Todos los derechos reservados.</h3>
               <div className={'socialLinks-footer'}>
                 <Link to="/SobreMi" className={'link-footer'}>Sobre mí</Link>
                 <Link to="/Contacto" className={'link-footer'}>Contacto</Link>
               </div>
               <div className={'socialLinks-footer'}>
-                <Link to={'/NotFound'} className={'link-footer'}>Facebook</Link>
-                <Link to={'/NotFound'} className={'link-footer'}>Twitter</Link>
-                <Link to={'/NotFound'} className={'link-footer'}>Instagram</Link>
+                <Link to={'/NotFound'} className={'link-footer'}><FaFacebook size={24} /></Link> {/* Icono Facebook */}
+                <Link to={'/NotFound'} className={'link-footer'}><FaTwitter size={24} /></Link>  {/* Icono Twitter */}
+                <Link to={'/NotFound'} className={'link-footer'}><FaInstagram size={24} /></Link> {/* Icono Instagram */}
               </div>
             </div>
           </Col>
