@@ -12,8 +12,11 @@ import { getUsers } from "../helpers/ServerUsers";
 import ProfileImage from "../components/ProfileImage";
 import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
+import { useAuth } from '../context/AuthContext';
+import { getToken } from "../helpers/Token.helper";
 
 const AdminUsers = () => {
+  const { user } = useAuth();
   const [users, setUsers] = useState([]); // Todos los usuarios cargados
   const [loadedUsers, setLoadedUsers] = useState([]); // Usuarios cargados en bloques
   const [updateMark, setUpdateMark] = useState(false);
@@ -29,13 +32,19 @@ const AdminUsers = () => {
 
   useEffect(() => {
     if (updatedUser && updatedUser._id) {
-
       setLoadedUsers((prevUsers) => {
-        // Buscar coincidencia por _id y reemplazar el usuario
-        const updatedList = prevUsers.map((user) =>
-          user._id === updatedUser._id ? updatedUser : user
-        );
-        return updatedList;
+        // Comprobar si updatedUser solo tiene el atributo _id
+        const hasOnlyId = Object.keys(updatedUser).length === 1 && updatedUser._id;
+
+        if (hasOnlyId) {
+          // Eliminar el usuario con el _id especificado
+          return prevUsers.filter((user) => user._id !== updatedUser._id);
+        } else {
+          // Buscar coincidencia por _id y reemplazar el usuario
+          return prevUsers.map((user) =>
+            user._id === updatedUser._id ? updatedUser : user
+          );
+        }
       });
 
       // Reiniciar el estado de updatedUser a un objeto vacío
@@ -92,8 +101,10 @@ const AdminUsers = () => {
 
     try {
       const updatedUser = { ...user, bloqueado: !user.bloqueado };
-      await putServerData(apiUrl, `/usuarios/${user._id}`, updatedUser);
+      const response = await putServerData(apiUrl, `/usuarios/${user._id}`, updatedUser);
+
       setUpdateMark((prevMark) => !prevMark);
+      setUpdatedUser(response.usuario);
     } catch (error) {
       console.error("Error actualizando estado bloqueado del usuario:", error);
     }
@@ -107,10 +118,12 @@ const AdminUsers = () => {
           label: "Sí",
           onClick: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
+            const token = getToken();
 
             try {
-              await deleteServerData(apiUrl, `/usuarios/${userId}`);
-              setUsers(users.filter((user) => user.id !== userId));
+              await deleteServerData(apiUrl, `/usuarios/${userId}`, token);
+              setUsers(users.filter((user) => user._id !== userId));
+              setUpdatedUser({ _id: userId });
             } catch (error) {
               console.error("Error eliminando usuario:", error);
             }
@@ -175,33 +188,36 @@ const AdminUsers = () => {
           <Col md={1}>Eliminar</Col>
         </Row>
 
-        {paginatedUsers.map((user) => (
+        {paginatedUsers.map((userListed) => (
           <Row
-            key={user.id}
+            key={userListed.id}
             className="text-center"
             style={{ background: "white" }}
           >
             <Col xs={12} md={1}>
-              {user.id}
+              {userListed.id}
             </Col>
             <Col xs={12} md={2}>
-              {user.nombreUsuario}
+              {userListed.nombreUsuario}
             </Col>
             <Col xs={12} md={2}>
-              <ProfileImage source={user.fotoPerfil} width="100px" />
+              <ProfileImage source={userListed.fotoPerfil} width="100px" />
             </Col>
-            <Col xs={12} md={1}>{`${user.nombre} ${user.apellido}`}</Col>
+            <Col xs={12} md={1}>{`${userListed.nombre} ${userListed.apellido}`}</Col>
             <Col xs={12} md={2}>
-              {user.email}
+              {userListed.email}
             </Col>
             <Col xs={12} md={2}>
-              <CustomButton
-                paddingB={false}
-                className={"my-1"}
-                variant={BLOQUEADO_CONFIG[user.bloqueado].color}
-                buttonText={BLOQUEADO_CONFIG[user.bloqueado].text}
-                onClick={() => handleToggleLockClick(user)}
-              />
+              {user._id != userListed._id &&
+                (
+                  <CustomButton
+                    paddingB={false}
+                    className={"my-1"}
+                    variant={BLOQUEADO_CONFIG[userListed.bloqueado].color}
+                    buttonText={BLOQUEADO_CONFIG[userListed.bloqueado].text}
+                    onClick={() => handleToggleLockClick(userListed)}
+                  />
+                )}
             </Col>
             <Col xs={12} md={1}>
               <CustomButton
@@ -209,18 +225,21 @@ const AdminUsers = () => {
                 className={"my-1"}
                 variant={"warning"}
                 buttonText={"Editar"}
-                onClick={() => handleEditClick(user)}
+                onClick={() => handleEditClick(userListed)}
               />
             </Col>
             <Col xs={12} md={1}>
-              <CustomButton
-                paddingB={false}
-                className={"my-1"}
-                btnClassName="btn-delete"
-                variant={"danger"}
-                buttonText={"X"}
-                onClick={() => handleDeleteClick(user._id)}
-              />
+              {user._id != userListed._id &&
+                (
+                  <CustomButton
+                    paddingB={false}
+                    className={"my-1"}
+                    btnClassName="btn-delete"
+                    variant={"danger"}
+                    buttonText={"X"}
+                    onClick={() => handleDeleteClick(userListed._id)}
+                  />
+                )}
             </Col>
           </Row>
         ))}

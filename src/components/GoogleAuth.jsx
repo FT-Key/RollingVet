@@ -13,15 +13,17 @@ const GoogleAuth = ({ useParameter }) => {
   const handleSuccess = async (result) => {
     try {
       const credential = GoogleAuthProvider.credentialFromResult(result);
-      const idToken = credential.idToken; // Obtén el id_token en lugar del access_token
 
-      // Envía el id_token al servidor para su verificación
+      // Obtén el access_token
+      const accessToken = credential.accessToken; // Asegúrate de que accessToken esté disponible
+      const idToken = credential.idToken; // Aún puedes usar el id_token si lo necesitas
+
+      // Envía el access_token al servidor para su verificación
       const apiUrl = import.meta.env.VITE_API_URL;
       const ruta = useParameter === "login" ? "/login" : "/register";
 
-      const serverData = await postServerData(apiUrl, ruta, { token: idToken });
+      const serverData = await postServerData(apiUrl, ruta, { token: accessToken });
 
-      console.log(serverData.msg);
       const { token: jwtToken } = serverData;
 
       // Llama al login del contexto global

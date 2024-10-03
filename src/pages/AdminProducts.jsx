@@ -10,6 +10,7 @@ import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
 import ProductImage from "../components/ProductImage";
 import { Col, Container, Row, Button } from "react-bootstrap";
+import { getToken } from "../helpers/Token.helper";
 
 const AdminProducts = () => {
   const emptyProduct = {
@@ -43,13 +44,19 @@ const AdminProducts = () => {
 
   useEffect(() => {
     if (updatedProduct && updatedProduct._id) {
-
       setLoadedProducts((prevProducts) => {
-        // Buscar coincidencia por _id y reemplazar el producto
-        const updatedList = prevProducts.map((product) =>
-          product._id === updatedProduct._id ? updatedProduct : product
-        );
-        return updatedList;
+        // Comprobar si updatedProduct solo tiene el atributo _id
+        const hasOnlyId = Object.keys(updatedProduct).length === 1 && updatedProduct._id;
+
+        if (hasOnlyId) {
+          // Eliminar el producto con el _id especificado
+          return prevProducts.filter((product) => product._id !== updatedProduct._id);
+        } else {
+          // Buscar coincidencia por _id y reemplazar el producto
+          return prevProducts.map((product) =>
+            product._id === updatedProduct._id ? updatedProduct : product
+          );
+        }
       });
 
       // Reiniciar el estado de updatedProduct a un objeto vacío
@@ -104,11 +111,14 @@ const AdminProducts = () => {
 
   const handleToggleLockClick = async (product) => {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const token = getToken();
 
     try {
       const updatedProduct = { ...product, bloqueado: !product.bloqueado };
-      await putServerData(apiUrl, `/productos/${product._id}`, updatedProduct);
+      const response = await putServerData(apiUrl, `/productos/${product._id}`, updatedProduct, token);
+
       setUpdateMark((prevMark) => !prevMark);
+      setUpdatedProduct(response.producto);
     } catch (error) {
       console.error("Error actualizando estado bloqueado del producto:", error);
     }
@@ -122,12 +132,14 @@ const AdminProducts = () => {
           label: "Sí",
           onClick: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
+            const token = getToken();
 
             try {
-              await deleteServerData(apiUrl, `/productos/${productId}`);
+              await deleteServerData(apiUrl, `/productos/${productId}`, token);
               setLoadedProducts(
-                loadedProducts.filter((product) => product.id !== productId)
+                loadedProducts.filter((product) => product._id !== productId)
               );
+              setUpdatedProduct({ _id: productId });
             } catch (error) {
               console.error("Error eliminando producto:", error);
             }
