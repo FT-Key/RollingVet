@@ -1,7 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import CustomButton from "../components/CustomButton";
 import BasicModal from "../components/BasicModal";
 import "../css/AdminAnimals.css";
@@ -11,13 +8,34 @@ import { deleteAnimal, getAnimals } from "../helpers/ServerAnimals";
 import AnimalImage from "../components/AnimalImage";
 import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
+import { Col, Container, Row, Button } from "react-bootstrap";
 
 const AdminAnimals = () => {
+  const emptyAnimal = {
+    nombre: "",
+    fotoUrl: "",
+    tipo: "Perro",
+    raza: "",
+    edad: 0.5, // Usualmente números deben inicializarse con null
+    genero: "Macho",
+    descripcion: "",
+    estado: "En Adopción",
+    esterilizado: false,
+    peso: 0.5, // Para números, null es adecuado si no hay valor
+    plan: null,
+    historialMedico: [], // Array vacío para el historial médico
+    nuevoEventoHistorial: "",
+    vacunas: [], // Array vacío para las vacunas
+    ultimaVisitaVeterinaria: new Date(), // Usamos new Date() para fechas
+    creadoEn: new Date(), // Fecha de creación en el momento actual
+    actualizadoEn: new Date(), // Fecha de actualización en el momento actual
+  };
   const [allAnimals, setAllAnimals] = useState([]); // Animales traídos del servidor
   const [currentAnimals, setCurrentAnimals] = useState([]); // Animales mostrados en la página actual
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
+  const [isNew, setIsNew] = useState(false)
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,6 +86,11 @@ const AdminAnimals = () => {
   }, [currentPage, allAnimals, fetchedAnimalsCount, totalAnimalesServidor]);
 
   const handleEditClick = (animal) => {
+    if (animal == emptyAnimal) {
+      setIsNew(true)
+    } else {
+      setIsNew(false)
+    }
     setSelectedAnimal(animal);
     setModalShow(true);
   };
@@ -105,6 +128,17 @@ const AdminAnimals = () => {
         <title>Admin Animales</title>
       </Helmet>
       <Container className="py-3 adminAnimals">
+
+        <div className="d-flex justify-content-end  my-2">
+          <Button
+            className={""}
+            variant={"primary"}
+            onClick={() => handleEditClick(emptyAnimal)}
+          >
+            Nuevo
+          </Button>
+        </div>
+
         <Row className="text-center text-white header responsive">
           <Col>Animales</Col>
         </Row>
@@ -197,6 +231,7 @@ const AdminAnimals = () => {
             functionUpdateData={setUpdateMark}
             onHide={() => setModalShow(false)}
             animalData={selectedAnimal}
+            isNew
           />
         )}
       </Container>

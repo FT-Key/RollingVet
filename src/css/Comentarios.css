@@ -1,0 +1,86 @@
+.comentariosPage {
+  /* Comentarios.css */
+
+  .container {
+    max-width: 600px;
+    /* Ancho máximo del contenedor */
+    margin: 0 auto;
+    /* Centrar el contenedor */
+  }
+
+  h2 {
+    font-family: 'Arial', sans-serif;
+    /* Tipo de fuente para el título */
+    color: #333;
+    /* Color del texto */
+    margin-bottom: 20px;
+    /* Espaciado inferior */
+    text-align: center;
+    /* Centrar el texto */
+  }
+
+  .list-unstyled {
+    padding: 0;
+    /* Sin padding en la lista */
+  }
+
+  .list-unstyled li {
+    background-color: #f8f9fa;
+    /* Fondo claro para los comentarios */
+    border: 1px solid #dee2e6;
+    /* Borde gris claro */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    padding: 10px;
+    /* Espaciado interno */
+    margin-bottom: 10px;
+    /* Espaciado entre comentarios */
+    transition: background-color 0.3s;
+    /* Transición suave para el fondo */
+  }
+
+  .list-unstyled li:hover {
+    background-color: #e9ecef;
+    /* Fondo más oscuro al pasar el mouse */
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    /* Color más oscuro al pasar el mouse */
+  }
+
+  .modal-header {
+    background-color: #007bff;
+    /* Fondo del encabezado del modal */
+    color: white;
+    /* Color del texto del encabezado */
+  }
+
+  .modal-footer {
+    display: flex;
+    /* Usar flexbox para alinear botones */
+    justify-content: space-between;
+    /* Espacio entre botones */
+  }
+
+  textarea {
+    resize: none;
+    /* Sin opción de redimensionar */
+  }
+
+  .btn-delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: .7rem;
+    width: 1rem;
+    height: 1rem;
+    padding: 5px;
+  }
+
+  .comentarioVacio {
+    * {
+      opacity: 0;
+    }
+  }
+}

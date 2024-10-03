@@ -23,7 +23,7 @@ const PlansSection = () => {
   return (
     <section className="plans-section">
       <Container>
-        <h2 className="text-center fw-bold">Nuestros Planes</h2>
+        <h2 className="text-center fw-bold">¡Dale el mejor cuidado a tus mascotas con nuestros servicios!</h2>
         <Row className="row-cols-sm-1 row-cols-lg-3 my-3 custom-row">
           {planes.map(plan => (
             <Link to={'/planes'} key={plan._id}>

@@ -45,7 +45,7 @@ export async function getAnimals(page, limit, filters = {}) {
 // Obtener un solo animal por ID
 export async function getOneAnimal(animalId) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  
+
   const rawData = await fetchServerData(apiUrl, `/animales/${animalId}`);
 
   // Convertir las fechas a Date si existen
@@ -57,6 +57,25 @@ export async function getOneAnimal(animalId) {
     actualizadoEn: rawData.actualizadoEn ? new Date(rawData.actualizadoEn) : null,
   };
   return data;
+}
+
+export async function postAnimal(body) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken(); // Obtén el token del almacenamiento local
+  if (token) {
+    try {
+      await postServerData(
+        apiUrl, // Tu dominio
+        `/animales`,
+        body, // No necesitas un body para agregar al carrito
+        token
+      );
+    } catch (error) {
+      console.error("Error creando animal:", error);
+    }
+  } else {
+    console.log("No se encontro token de autorización");
+  }
 }
 
 export async function putAnimal(animalId, body) {
@@ -71,7 +90,7 @@ export async function putAnimal(animalId, body) {
         token
       );
     } catch (error) {
-      console.error("Error agregando animal:", error);
+      console.error("Error editando animal:", error);
     }
   } else {
     console.log("No se encontro token de autorización");

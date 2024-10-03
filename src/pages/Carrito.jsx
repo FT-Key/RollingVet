@@ -30,7 +30,6 @@ const Carrito = () => {
       const bodyProductos = Object.entries(cantidades).map(([idProducto, cantidad]) => ({ idProducto, cantidad }));
       const returnUrl = `${window.location.origin}/pagos/result`;
 
-      console.log("BODYPRODUCTOS: ", bodyProductos)
       await methodMercadoPago(bodyProductos, returnUrl, token);
       setShowModal(true); // Abre el modal cuando se obtiene el ID de preferencia
     }

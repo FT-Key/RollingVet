@@ -5,7 +5,7 @@ import { formatDate } from "../helpers/FormatDateHTML"; // Formatear fechas
 import { PLANES, ESTADOS_ANIMAL, ESPECIES, VACUNAS } from "../utils/animalsConst.utils"; // Importar constantes
 
 const AnimalsFormModal = ({ handleChange, editedData }) => {
-  const [imageOption, setImageOption] = useState("Agregar URL");
+  const [imageOption, setImageOption] = useState("");
 
   const handleImageOptionChange = (e) => {
     setImageOption(e.target.value);
@@ -100,6 +100,8 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
           value={editedData.edad || ""}
           onChange={handleChange}
           placeholder="Edad"
+          min={.5}
+          step={.5}
         />
       </div>
 
@@ -160,6 +162,8 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
           value={editedData.peso || ""}
           onChange={handleChange}
           placeholder="Peso"
+          min={.5}
+          step={.5}
         />
       </div>
 

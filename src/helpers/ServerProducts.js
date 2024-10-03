@@ -47,6 +47,26 @@ export async function getOneProduct(productId) {
   }
 }
 
+export async function postProduct(body) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken(); // Obtén el token del almacenamiento local
+
+  if (token) {
+    try {
+      await postServerData(
+        apiUrl, // Tu dominio
+        `/productos`,
+        body,
+        token
+      );
+    } catch (error) {
+      console.error("Error creando producto:", error);
+    }
+  } else {
+    console.log("No se encontro token de autorización");
+  }
+}
+
 export async function putProduct(productId, body) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = getToken(); // Obtén el token del almacenamiento local
@@ -56,11 +76,11 @@ export async function putProduct(productId, body) {
       await putServerData(
         apiUrl, // Tu dominio
         `/productos/${productId}`,
-        body, // No necesitas un body para agregar al carrito
+        body,
         token
       );
     } catch (error) {
-      console.error("Error agregando producto al carrito:", error);
+      console.error("Error editando producto:", error);
     }
   } else {
     console.log("No se encontro token de autorización");

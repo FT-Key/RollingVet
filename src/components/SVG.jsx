@@ -118,32 +118,32 @@ const SVG = ({ width, height = '', color = '#currentColor', name }) => {
 
       {name === 'cart-go-fill' && (
         <svg
-        width={width}
-        height={height || width}
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <mask id="mask-car">
-            <rect x="0" y="0" width="8" height="24" fill="black" />
-            <rect x="6" y="0" width="16" height="24" fill="white" />
-          </mask>
-        </defs>
-        <path
-          d="M7.2998 5H22L20 12H8.37675L7 8H4M4 8H2M5 11H2M6 14H2L6 3H4L6 5H22L20 12H8.37675L7 5H4M4 8H2M5 11H2M6 14H2"
-          fill={color}
-          mask="url(#mask-car)"
-        />
-        <path
-          d="M7.2998 5H22L20 12H8.37675M21 16H9L7 3H4M4 8H2M5 11H2M6 14H2M10 20C10 20.5523 9.55228 21 9 21C8.44772 21 8 20.5523 8 20C8 19.4477 8.44772 19 9 19C9.55228 19 10 19.4477 10 20ZM21 20C21 20.5523 20.5523 21 20 21C19.4477 21 19 20.5523 19 20C19 19.4477 19.4477 19 20 19C20.5523 19 21 19.4477 21 20Z"
-          stroke={'black'}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-      </svg>
-      
+          width={width}
+          height={height || width}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <mask id="mask-car">
+              <rect x="0" y="0" width="8" height="24" fill="black" />
+              <rect x="6" y="0" width="16" height="24" fill="white" />
+            </mask>
+          </defs>
+          <path
+            d="M7.2998 5H22L20 12H8.37675L7 8H4M4 8H2M5 11H2M6 14H2L6 3H4L6 5H22L20 12H8.37675L7 5H4M4 8H2M5 11H2M6 14H2"
+            fill={color}
+            mask="url(#mask-car)"
+          />
+          <path
+            d="M7.2998 5H22L20 12H8.37675M21 16H9L7 3H4M4 8H2M5 11H2M6 14H2M10 20C10 20.5523 9.55228 21 9 21C8.44772 21 8 20.5523 8 20C8 19.4477 8.44772 19 9 19C9.55228 19 10 19.4477 10 20ZM21 20C21 20.5523 20.5523 21 20 21C19.4477 21 19 20.5523 19 20C19 19.4477 19.4477 19 20 19C20.5523 19 21 19.4477 21 20Z"
+            stroke={'black'}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        </svg>
+
 
       )}
 
@@ -174,6 +174,23 @@ const SVG = ({ width, height = '', color = '#currentColor', name }) => {
           height={height || width}
           viewBox="0 0 24 24" >
           <path d="M21 5L19 12H7.37671M20 16H8L6 3H3M11.5 7L13.5 9M13.5 9L15.5 7M13.5 9V3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+
+      {name === 'star' && (
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={width || "24"}
+          height={height || width}
+          viewBox="0 0 24 24"
+          fill={color || 'transparent'}
+          stroke="black"
+          strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.76 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z" />
         </svg>
       )}
     </>

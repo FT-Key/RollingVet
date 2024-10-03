@@ -25,6 +25,7 @@ import FloatingButton from "./FloatingButton";
 import ScrollToTop from "./ScrollToTop";
 import { FloatingWhatsApp } from "react-floating-whatsapp";
 import ProductsComponent from "../pages/ProductsComponent";
+import Comentarios from "../pages/Comentarios";
 
 const RouteViews = () => {
   return (
@@ -50,6 +51,7 @@ const RouteViews = () => {
           <Route path="/sobreMi" element={<SobreMi />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/productos" element={<ProductsComponent />} />
+          <Route path="/comentarios" element={<Comentarios />} />
 
           {/* Rutas protegidas para roles específicos */}
           <Route

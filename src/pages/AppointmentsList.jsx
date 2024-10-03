@@ -19,7 +19,6 @@ const AppointmentList = () => {
       try {
         // Cambiar la ruta para obtener los turnos del usuario específico
         const response = await fetchServerData(apiUrl, '/turnos/listaTurnos', token);
-        console.log("Respuesta del servidor: ", response.message)
 
         if (Array.isArray(response) && response.length > 0) {
           // Transforma las fechas antes de actualizar el estado
@@ -44,7 +43,6 @@ const AppointmentList = () => {
     try {
       // Cambiar la ruta para obtener los turnos del usuario específico
       const response = await putServerData(apiUrl, '/turnos/cancelarTurno', { turnoId }, token);
-      console.log("RESPUESTA: ", response)
 
       setUpdateMark(prev => !prev);
     } catch (error) {

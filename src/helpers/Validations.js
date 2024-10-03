@@ -9,7 +9,7 @@ export function validarNombreUsuario(nombreUsuario) {
   return regex.test(nombreUsuario);
 }
 
-/* export function validarContraseniaUsuario(contraseniaUsuario) {
+export function validarContraseniaUsuario(contraseniaUsuario) {
   // Expresión regular
   const regex =
     /^(?=.*[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ])(?=.*\d)[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\d_]{6,30}$/;
@@ -18,7 +18,7 @@ export function validarNombreUsuario(nombreUsuario) {
   return regex.test(contraseniaUsuario);
 }
 
-export function validarContraseniaUsuarioGoogle(contraseniaUsuarioGoogle) {
+/* export function validarContraseniaUsuarioGoogle(contraseniaUsuarioGoogle) {
   // Expresión regular
   const regex = /^\d+$/;
 
@@ -298,7 +298,7 @@ export function validarRazaAnimal(raza) {
 
 // Ejemplo de validación de edad (debe ser un número positivo)
 export function validarEdadAnimal(edad) {
-  return Number.isInteger(edad) && edad > 0;
+  return typeof Number(edad) === "number" && edad > 0;
 }
 
 // Ejemplo de validación de descripción (entre 10 y 200 caracteres)
@@ -308,7 +308,7 @@ export function validarDescripcionAnimal(descripcion) {
 
 // Ejemplo de validación de peso (debe ser un número positivo)
 export function validarPesoAnimal(peso) {
-  return typeof peso === "number" && peso > 0;
+  return typeof Number(peso) === "number" && peso > 0;
 }
 
 // Ejemplo de validación de género (solo 'Macho' o 'Hembra')
@@ -330,3 +330,17 @@ export function validarDonacion(cadena) {
   const regex = /^[1-9]\d{2,}$/;
   return regex.test(cadena);
 }
+
+//Comentarios
+
+export const esComentarioValido = (comentario) => {
+  // Validar que el comentario no esté vacío y tenga al menos 10 caracteres
+  // y que no exceda los 300 caracteres
+  return comentario.trim().length >= 10 && comentario.trim().length <= 300;
+};
+
+
+export const esCalificacionValida = (calificacion) => {
+  // Validar que la calificación esté entre 0 y 5
+  return calificacion >= 0 && calificacion <= 5;
+};

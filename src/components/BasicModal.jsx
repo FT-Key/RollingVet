@@ -5,10 +5,10 @@ import "../css/BasicModal.css";
 import UserFormModal from "./UserFormModal";
 import ProductsFormModal from "./ProductsFormModal";
 import { validateAnimalFields, validateProductFields, validateUserFields } from "./Validators";
-import { putProduct, uploadProductImage } from "../helpers/ServerProducts";
+import { postProduct, putProduct, uploadProductImage } from "../helpers/ServerProducts";
 import { putUser, uploadProfileImage } from "../helpers/ServerUsers";
 import AnimalsFormModal from "./AnimalsFormModal";
-import { putAnimal, uploadAnimalImage } from "../helpers/ServerAnimals";
+import { postAnimal, putAnimal, uploadAnimalImage } from "../helpers/ServerAnimals";
 
 const BasicModal = ({
   type,
@@ -18,6 +18,7 @@ const BasicModal = ({
   functionUpdateData,
   productData,
   animalData,
+  isNew = false
 }) => {
   const [formData, setFormData] = useState(
     (type === "adminUsers" && userData) ||
@@ -153,6 +154,7 @@ const BasicModal = ({
     if (validationErrors && Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       console.log("Errores: ", validationErrors);
+      setIsLoading(false);
       return;
     }
 
@@ -190,6 +192,103 @@ const BasicModal = ({
             uploadResponse = await uploadProfileImage(editedData._id, fileData);
             break;
 
+          case type === "adminProducts":
+            uploadResponse = await uploadProductImage(editedData._id, fileData);
+            break;
+
+          case type === "adminAnimals":
+            uploadResponse = await uploadAnimalImage(editedData._id, fileData);
+            break;
+
+          default:
+            break;
+        }
+
+        if (!uploadResponse) {
+          throw new Error(uploadResponse.message);
+        }
+      }
+
+      setFormData(editedData);
+      functionUpdateData((prevMark) => !prevMark);
+      onHide(); // Cerrar el modal
+    } catch (error) {
+      console.error("Error al guardar el producto:", error);
+    } finally {
+      setIsLoading(false); // Finaliza el estado de carga
+    }
+  };
+
+  const handleCreate = async () => {
+    setIsLoading(true); // Inicia el estado de carga
+    let validationErrors;
+
+    switch (true) {
+      case type === "adminProducts":
+        if (typeof editedData.imagenUrl === "string" && editedData.imagenUrl.startsWith("blob:")) {
+          // Elimina el campo imageUrl si comienza con 'blob:'
+          delete editedData.imagenUrl;
+        }
+        break;
+
+      case type === "adminAnimals":
+        if (typeof editedData.fotoUrl === "string" && editedData.fotoUrl.startsWith("blob:")) {
+          // Elimina el campo imageUrl si comienza con 'blob:'
+          delete editedData.fotoUrl;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    switch (true) {
+      case type === "adminProducts":
+        validationErrors = validateProductFields(editedData);
+        break;
+
+      case type === "adminAnimals":
+        validationErrors = validateAnimalFields(editedData);
+        break;
+
+      default:
+        break;
+    }
+
+    //console.log("ValidationErrors.Length: ", Object.keys(validationErrors).length)
+    if (validationErrors && Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      console.log("Errores: ", validationErrors);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { uploadedFile, ...productDataWithoutFile } = editedData;
+
+      // Hacer la petición PUT para actualizar el producto, excluyendo el archivo
+      let updatedData;
+
+      switch (true) {
+        case type === "adminProducts":
+          updatedData = await postProduct(productDataWithoutFile);
+          break;
+
+        case type === "adminAnimals":
+          updatedData = await postAnimal(productDataWithoutFile);
+          break;
+
+        default:
+          break;
+      }
+
+      // Si hay un archivo seleccionado, realizar la subida en una llamada separada
+      if (uploadedFile) {
+        const fileData = new FormData();
+        fileData.append("image", uploadedFile);  // Importante que sea 'image'
+
+        let uploadResponse;
+        switch (true) {
           case type === "adminProducts":
             uploadResponse = await uploadProductImage(editedData._id, fileData);
             break;
@@ -341,11 +440,18 @@ const BasicModal = ({
         <Button variant="secondary" onClick={onHide}>
           Close
         </Button>
-        {(type === "adminUsers" || type === "adminProducts" || type === "adminAnimals") && (
-          <Button onClick={handleSaveChanges} disabled={isLoading}>
-            {isLoading ? "Guardando..." : "Guardar cambios"}
-          </Button>
-        )}
+        {(type === "adminUsers" || type === "adminProducts" || type === "adminAnimals") && !isNew
+          ? (
+            <Button onClick={handleSaveChanges} disabled={isLoading}>
+              {isLoading ? "Guardando..." : "Guardar cambios"}
+            </Button>
+          )
+          : (type === "adminProducts" || type === "adminAnimals") && isNew
+          && (
+            <Button onClick={handleCreate} disabled={isLoading}>
+              {isLoading ? "Creando..." : "Crear"}
+            </Button>
+          )}
       </Modal.Footer>
     </Modal>
   );

@@ -1,0 +1,17 @@
+.register-login-form {
+  * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 20rem;
+    max-width: 20rem;
+  }
+}

@@ -20,8 +20,8 @@ const Footer = () => {
             <div className={'container-footer'}>
               <h3 className={'text-footer'}>© {new Date().getFullYear()} RollingVet. Todos los derechos reservados.</h3>
               <div className={'socialLinks-footer'}>
-                <Link to="/SobreMi" className={'link-footer'}>Sobre mí</Link>
-                <Link to="/Contacto" className={'link-footer'}>Contacto</Link>
+                <Link to="/sobreMi" className={'link-footer'}>Sobre mí</Link>
+                <Link to="/comentarios" className={'link-footer'}>Califícanos</Link>
               </div>
               <div className={'socialLinks-footer'}>
                 <Link to={'/NotFound'} className={'link-footer'}><FaFacebook size={24} /></Link> {/* Icono Facebook */}
