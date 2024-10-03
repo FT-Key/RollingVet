@@ -13,6 +13,7 @@ import ProfileImage from "../components/ProfileImage";
 import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
+import { getToken } from "../helpers/Token.helper";
 
 const AdminUsers = () => {
   const { user } = useAuth();
@@ -31,13 +32,19 @@ const AdminUsers = () => {
 
   useEffect(() => {
     if (updatedUser && updatedUser._id) {
-
       setLoadedUsers((prevUsers) => {
-        // Buscar coincidencia por _id y reemplazar el usuario
-        const updatedList = prevUsers.map((user) =>
-          user._id === updatedUser._id ? updatedUser : user
-        );
-        return updatedList;
+        // Comprobar si updatedUser solo tiene el atributo _id
+        const hasOnlyId = Object.keys(updatedUser).length === 1 && updatedUser._id;
+
+        if (hasOnlyId) {
+          // Eliminar el usuario con el _id especificado
+          return prevUsers.filter((user) => user._id !== updatedUser._id);
+        } else {
+          // Buscar coincidencia por _id y reemplazar el usuario
+          return prevUsers.map((user) =>
+            user._id === updatedUser._id ? updatedUser : user
+          );
+        }
       });
 
       // Reiniciar el estado de updatedUser a un objeto vacío
@@ -94,8 +101,10 @@ const AdminUsers = () => {
 
     try {
       const updatedUser = { ...user, bloqueado: !user.bloqueado };
-      await putServerData(apiUrl, `/usuarios/${user._id}`, updatedUser);
+      const response = await putServerData(apiUrl, `/usuarios/${user._id}`, updatedUser);
+
       setUpdateMark((prevMark) => !prevMark);
+      setUpdatedUser(response.usuario);
     } catch (error) {
       console.error("Error actualizando estado bloqueado del usuario:", error);
     }
@@ -109,10 +118,12 @@ const AdminUsers = () => {
           label: "Sí",
           onClick: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
+            const token = getToken();
 
             try {
-              await deleteServerData(apiUrl, `/usuarios/${userId}`);
-              setUsers(users.filter((user) => user.id !== userId));
+              await deleteServerData(apiUrl, `/usuarios/${userId}`, token);
+              setUsers(users.filter((user) => user._id !== userId));
+              setUpdatedUser({ _id: userId });
             } catch (error) {
               console.error("Error eliminando usuario:", error);
             }

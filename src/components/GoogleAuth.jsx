@@ -24,7 +24,6 @@ const GoogleAuth = ({ useParameter }) => {
 
       const serverData = await postServerData(apiUrl, ruta, { token: accessToken });
 
-      console.log(serverData.msg);
       const { token: jwtToken } = serverData;
 
       // Llama al login del contexto global
