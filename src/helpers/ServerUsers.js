@@ -47,12 +47,14 @@ export async function putUser(userId, body) {
   const token = getToken(); // Obtén el token del almacenamiento local
   if (token) {
     try {
-      await putServerData(
+      const response = await putServerData(
         apiUrl, // Tu dominio
         `/usuarios/${userId}`,
         body, // No necesitas un body para agregar al carrito
         token
       );
+
+      return response;
     } catch (error) {
       console.error("Error agregando producto al carrito:", error);
     }
@@ -165,8 +167,6 @@ export async function removeFromFavs(idProducto) {
   }
 }
 
-
-
 export async function uploadProfileImage(userId, body) {
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -175,13 +175,13 @@ export async function uploadProfileImage(userId, body) {
     const response = await postServerData(apiUrl, `/usuarios/agregarFotoPerfil/${userId}`, body);
 
     // Si la respuesta no es exitosa, lanzar un error
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.msg || "Error al subir la imagen");
+    if (!response.usuario) {
+      const errorData = await response.msg;
+      throw new Error(errorData || "Error al subir la imagen");
     }
 
     // Si la respuesta es exitosa, obtener los datos
-    const data = await response.json();
+    const data = await response.usuario;
 
     return {
       success: true,

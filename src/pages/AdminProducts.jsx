@@ -33,12 +33,29 @@ const AdminProducts = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isNew, setIsNew] = useState(false)
+  const [updatedProduct, setUpdatedProduct] = useState({});
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
   const PRODUCTS_BATCH_SIZE = 50; // Cantidad de productos que se cargan por llamada al servidor
+
+  useEffect(() => {
+    if (updatedProduct && updatedProduct._id) {
+
+      setLoadedProducts((prevProducts) => {
+        // Buscar coincidencia por _id y reemplazar el producto
+        const updatedList = prevProducts.map((product) =>
+          product._id === updatedProduct._id ? updatedProduct : product
+        );
+        return updatedList;
+      });
+
+      // Reiniciar el estado de updatedProduct a un objeto vacío
+      setUpdatedProduct({});
+    }
+  }, [updatedProduct]);
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
@@ -80,11 +97,7 @@ const AdminProducts = () => {
   };
 
   const handleEditClick = (product) => {
-    if (product == emptyProduct) {
-      setIsNew(true)
-    } else {
-      setIsNew(false)
-    }
+    setIsNew(product == emptyProduct)
     setSelectedProduct(product);
     setModalShow(true);
   };
@@ -273,9 +286,10 @@ const AdminProducts = () => {
             type="adminProducts"
             show={modalShow}
             functionUpdateData={setUpdateMark}
+            functionNewUpdatedData={setUpdatedProduct}
             onHide={() => setModalShow(false)}
             productData={selectedProduct}
-            isNew
+            isNew={isNew}
           />
         )}
       </Container>
