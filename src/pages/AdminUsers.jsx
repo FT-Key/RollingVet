@@ -12,8 +12,10 @@ import { getUsers } from "../helpers/ServerUsers";
 import ProfileImage from "../components/ProfileImage";
 import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
+import { useAuth } from '../context/AuthContext';
 
 const AdminUsers = () => {
+  const { user } = useAuth();
   const [users, setUsers] = useState([]); // Todos los usuarios cargados
   const [loadedUsers, setLoadedUsers] = useState([]); // Usuarios cargados en bloques
   const [updateMark, setUpdateMark] = useState(false);
@@ -175,33 +177,36 @@ const AdminUsers = () => {
           <Col md={1}>Eliminar</Col>
         </Row>
 
-        {paginatedUsers.map((user) => (
+        {paginatedUsers.map((userListed) => (
           <Row
-            key={user.id}
+            key={userListed.id}
             className="text-center"
             style={{ background: "white" }}
           >
             <Col xs={12} md={1}>
-              {user.id}
+              {userListed.id}
             </Col>
             <Col xs={12} md={2}>
-              {user.nombreUsuario}
+              {userListed.nombreUsuario}
             </Col>
             <Col xs={12} md={2}>
-              <ProfileImage source={user.fotoPerfil} width="100px" />
+              <ProfileImage source={userListed.fotoPerfil} width="100px" />
             </Col>
-            <Col xs={12} md={1}>{`${user.nombre} ${user.apellido}`}</Col>
+            <Col xs={12} md={1}>{`${userListed.nombre} ${userListed.apellido}`}</Col>
             <Col xs={12} md={2}>
-              {user.email}
+              {userListed.email}
             </Col>
             <Col xs={12} md={2}>
-              <CustomButton
-                paddingB={false}
-                className={"my-1"}
-                variant={BLOQUEADO_CONFIG[user.bloqueado].color}
-                buttonText={BLOQUEADO_CONFIG[user.bloqueado].text}
-                onClick={() => handleToggleLockClick(user)}
-              />
+              {user._id != userListed._id &&
+                (
+                  <CustomButton
+                    paddingB={false}
+                    className={"my-1"}
+                    variant={BLOQUEADO_CONFIG[userListed.bloqueado].color}
+                    buttonText={BLOQUEADO_CONFIG[userListed.bloqueado].text}
+                    onClick={() => handleToggleLockClick(userListed)}
+                  />
+                )}
             </Col>
             <Col xs={12} md={1}>
               <CustomButton
@@ -209,18 +214,21 @@ const AdminUsers = () => {
                 className={"my-1"}
                 variant={"warning"}
                 buttonText={"Editar"}
-                onClick={() => handleEditClick(user)}
+                onClick={() => handleEditClick(userListed)}
               />
             </Col>
             <Col xs={12} md={1}>
-              <CustomButton
-                paddingB={false}
-                className={"my-1"}
-                btnClassName="btn-delete"
-                variant={"danger"}
-                buttonText={"X"}
-                onClick={() => handleDeleteClick(user._id)}
-              />
+              {user._id != userListed._id &&
+                (
+                  <CustomButton
+                    paddingB={false}
+                    className={"my-1"}
+                    btnClassName="btn-delete"
+                    variant={"danger"}
+                    buttonText={"X"}
+                    onClick={() => handleDeleteClick(userListed._id)}
+                  />
+                )}
             </Col>
           </Row>
         ))}
