@@ -4,11 +4,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { postServerData } from '../helpers/ServerCalling';
 import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
 import { redirectAfterLogin } from '../helpers/Redirects';
+import { validateRegisterFields } from './Validators';
+import '../css/BasicForm.css';
 
 function BasicForm({ type }) {
 
   const navigate = useNavigate();
   const { loginContext } = useAuth(); // Usar loginContext para manejar el login
+  const [errors, setErrors] = useState({});
 
   // Estados
   const [formLogin, setFormLogin] = useState({
@@ -73,24 +76,46 @@ function BasicForm({ type }) {
       return console.log("Error al cargar página de registro.");
     }
 
-    if (formRegister.userPass !== formRegister.userPassConf) {
-      return console.log("Las contraseñas no coinciden");
+    const validationErrors = validateRegisterFields(formRegister);
+
+    if (validationErrors && Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      console.log("Errores: ", validationErrors);
+      return;
     }
 
-    const apiUrl = import.meta.env.VITE_API_URL;
+    if (formRegister.userPass !== formRegister.userPassConf) {
+      setErrors({ userPassConf: "Las contraseñas no coinciden" });
+      return;
+    }
 
-    const serverResponse = await postServerData(apiUrl, '/reg', formRegister);
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
 
-    if (serverResponse.ok) {
-      const serverData = await serverResponse.json(); // Lee los datos del servidor
-      const { token: jwtToken } = serverData; // Desestructura el token del JSON
+      const serverResponse = await postServerData(apiUrl, '/register', formRegister);
 
-      loginContext(jwtToken);
-      redirectAfterLogin(navigate);
-      console.log("Registro exitoso")
+      if (serverResponse.nuevoUsuario && serverResponse.token) {
 
-    } else if (!serverResponse.ok) {
-      throw new Error('Error en el servidor al registrarse');
+        const { token: jwtToken } = serverResponse; // Desestructura el token del JSON
+
+        loginContext(jwtToken);
+        redirectAfterLogin(navigate);
+        console.log("Registro exitoso")
+
+      } else if (!serverResponse.nuevoUsuario) {
+        throw new Error('Error en el servidor al registrarse');
+      }
+    } catch (error) {
+      // Revisar si el error tiene un mensaje de error retornado por el servidor
+      if (error instanceof Error && error.response) {
+        // Si el servidor devuelve un mensaje personalizado, lo mostramos
+        const serverMessage = error.response.data.msg || 'Error desconocido en el servidor';
+        setErrors({ incorrectRegister: serverMessage });
+        throw new Error(serverMessage);
+      } else {
+        // Lanzar un mensaje de error genérico si no hay mensaje en la respuesta
+        throw new Error('Error en el servidor al registrarse');
+      }
     }
   }
 
@@ -101,19 +126,24 @@ function BasicForm({ type }) {
       return console.log("Error al cargar página de inicio de sesión.");
     }
 
-    const apiUrl = import.meta.env.VITE_API_URL;
+    try {
 
-    const serverResponse = await postServerData(apiUrl, '/login', formLogin);
-    console.log("RESPONSE: ", serverResponse)
+      const apiUrl = import.meta.env.VITE_API_URL;
 
-    if (serverResponse.token) {
-      const { token: jwtToken } = serverResponse; // Desestructura el token del JSON
+      const serverResponse = await postServerData(apiUrl, '/login', formLogin);
 
-      loginContext(jwtToken);
-      redirectAfterLogin(navigate);
-      console.log("Sesión iniciada con éxito")
+      if (serverResponse.token) {
+        const { token: jwtToken } = serverResponse; // Desestructura el token del JSON
 
-    } else if (!serverResponse.token) {
+        loginContext(jwtToken);
+        redirectAfterLogin(navigate);
+        console.log("Sesión iniciada con éxito")
+
+      } else if (!serverResponse.token) {
+        throw new Error('Error en el servidor al iniciar sesión');
+      }
+    } catch (error) {
+      setErrors({ incorrectLogin: "Usuario o contraseña incorrecta" });
       throw new Error('Error en el servidor al iniciar sesión');
     }
   }
@@ -144,7 +174,7 @@ function BasicForm({ type }) {
     <>
       <h2 className='pt-4 text-center'>{TEXT_TYPE[type]}</h2>
 
-      <Form className='w-100 h-100 d-flex flex-column justify-content-center align-items-center pt-3 pb-2'>
+      <Form className='w-100 h-100 d-flex flex-column justify-content-center align-items-center pt-3 pb-2 register-login-form'>
 
         <Form.Group controlId="formUserName">
           <Form.Label>Nombre de usuario</Form.Label>
@@ -154,8 +184,10 @@ function BasicForm({ type }) {
             placeholder="Nombre de usuario"
             value={type === 'registro' ? formRegister.userName : formLogin.userName}
             onChange={CHANGE_TYPE[type]}
+            isInvalid={!!errors.userName} // Agrega esto
             autoComplete="username"
           />
+          <Form.Control.Feedback type="invalid">{errors.userName}</Form.Control.Feedback>
         </Form.Group>
 
         {type === "registro" &&
@@ -167,7 +199,9 @@ function BasicForm({ type }) {
               placeholder="Email"
               value={formRegister.userEmail}
               onChange={CHANGE_TYPE[type]}
+              isInvalid={!!errors.userEmail} // Agrega esto
             />
+            <Form.Control.Feedback type="invalid">{errors.userEmail}</Form.Control.Feedback>
           </Form.Group>
         }
 
@@ -179,8 +213,18 @@ function BasicForm({ type }) {
             placeholder="Contraseña"
             value={type === 'registro' ? formRegister.userPass : formLogin.userPass}
             onChange={CHANGE_TYPE[type]}
+            isInvalid={!!errors.userPass} // Agrega esto
           />
+          <Form.Control.Feedback type="invalid">{errors.userPass}</Form.Control.Feedback>
         </Form.Group>
+
+        {errors && errors.incorrectLogin &&
+          (
+            <>
+              <div className="text-danger">{errors.incorrectLogin}</div>
+            </>
+          )
+        }
 
         {type === "registro" &&
           <Form.Group controlId="formPasswordRepeat">
@@ -191,8 +235,18 @@ function BasicForm({ type }) {
               placeholder="Repetir contraseña"
               value={formRegister.userPassConf}
               onChange={CHANGE_TYPE[type]}
+              isInvalid={!!errors.userPassConf} // Agrega esto
             />
+            <Form.Control.Feedback type="invalid">{errors.userPassConf}</Form.Control.Feedback>
           </Form.Group>
+        }
+
+        {errors && errors.incorrectRegister &&
+          (
+            <>
+              <div className="text-danger">{errors.incorrectRegister}</div>
+            </>
+          )
         }
 
         {type === "inicioSesion" &&

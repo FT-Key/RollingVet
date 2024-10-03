@@ -90,7 +90,6 @@ const AppointmentRequest = () => {
         descripcion,
         modalidad // Enviar la modalidad seleccionada
       }, token);
-      console.log("RESPONSE: ", response)
 
       if (response && response.turno) {
         alert('Turno solicitado con éxito');

@@ -3,24 +3,25 @@ import BasicForm from '../components/BasicForm'
 import GoogleAuth from '../components/GoogleAuth';
 import { Container } from 'react-bootstrap'
 import { useEffect } from 'react';
-import { getToken } from '../helpers/Token.helper';
 import { Helmet } from 'react-helmet-async';
+import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
   const navigate = useNavigate();
-  const token = getToken();
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (token) {
+    if (user) {
       navigate('/');
     }
-  }, [token]);
+  }, [user]);
+
   return (
     <>
       <Helmet>
         <title>Registrarse</title>
       </Helmet>
-      {token ?
+      {user ?
         <h2 className='text-center m-5'>Ya se inició sesión</h2>
         :
         <>

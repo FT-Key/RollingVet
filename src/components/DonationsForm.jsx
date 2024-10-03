@@ -70,6 +70,7 @@ const DonationForm = () => {
                 <label>
                     Monto de la donación:
                     <input
+                        id='donatio-input'
                         type="number"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}

@@ -144,7 +144,6 @@ const BasicModal = ({ type, show, onHide, userData, functionUpdateData, productD
 
       setFormData(editedData);
       functionUpdateData(prevMark => !prevMark);
-      console.log('Producto guardado:', updatedData);
       onHide(); // Cerrar el modal
     } catch (error) {
       console.error('Error al guardar el producto:', error);

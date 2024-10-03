@@ -1,7 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import CustomButton from "../components/CustomButton";
 import BasicModal from "../components/BasicModal"; // Verifica que la ruta sea correcta
 import "../css/AdminProducts.css";
@@ -12,12 +9,30 @@ import { getProducts } from "../helpers/ServerProducts";
 import PaginationComponent from "../components/PaginationComponent";
 import { Helmet } from 'react-helmet-async';
 import ProductImage from "../components/ProductImage";
+import { Col, Container, Row, Button } from "react-bootstrap";
 
 const AdminProducts = () => {
+  const emptyProduct = {
+    id: "",
+    imagenUrl: "",
+    imagenesUrls: [], // Para la opción de seleccionar imagen existente
+    nombre: "",
+    precio: "",
+    descripcion: "",
+    categoria: "",
+    cantidadEnStock: "",
+    proveedor: "",
+    codigoDeBarras: "",
+    calificaciones: 0, // Comienza en 0
+    garantia: "",
+    fechaDeIngreso: new Date(), // Este formato depende de cómo estés manejando las fechas
+    descuento: ""
+  };
   const [loadedProducts, setLoadedProducts] = useState([]); // Productos cargados en bloques
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isNew, setIsNew] = useState(false)
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -65,6 +80,11 @@ const AdminProducts = () => {
   };
 
   const handleEditClick = (product) => {
+    if (product == emptyProduct) {
+      setIsNew(true)
+    } else {
+      setIsNew(false)
+    }
     setSelectedProduct(product);
     setModalShow(true);
   };
@@ -142,6 +162,17 @@ const AdminProducts = () => {
         <title>Admin Productos</title>
       </Helmet>
       <Container className="py-3 adminProducts">
+
+        <div className="d-flex justify-content-end  my-2">
+          <Button
+            className={""}
+            variant={"primary"}
+            onClick={() => handleEditClick(emptyProduct)}
+          >
+            Nuevo
+          </Button>
+        </div>
+
         <Row className="text-center text-white header responsive">
           <Col>Productos</Col>
         </Row>
@@ -244,6 +275,7 @@ const AdminProducts = () => {
             functionUpdateData={setUpdateMark}
             onHide={() => setModalShow(false)}
             productData={selectedProduct}
+            isNew
           />
         )}
       </Container>

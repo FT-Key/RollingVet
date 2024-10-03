@@ -9,6 +9,7 @@ import PlansSection from "../components/PlansSection.jsx";
 import { Helmet } from 'react-helmet-async';
 import { getAnimals } from "../helpers/ServerAnimals.js";
 import TradeMarkSlider from "../components/TradeMarkSlider.jsx";
+import { PROFESIONALES } from "../utils/profesionales.utils.js";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -91,15 +92,21 @@ const Home = () => {
         <TradeMarkSlider time={"20s"} />
       </section>
 
-      {/* Sección del carrusel de productos destacados */}
+      {/* Sección del carrusel de profesionales */}
       <section className="carousel-section">
-        <h2 className="text-center fw-bold">Productos Destacados</h2>
-        {productosCarrusel && <CarouselFade data={productosCarrusel} type={"productCarousel"} />}
-      </section>
+        <h2 className="text-center fw-bold">Te presentamos a nuestros especialistas</h2>
+        <CarouselFade data={PROFESIONALES} type="profesionales" />
+      </section>      
 
       {/* Sección de los 3 planes */}
       <section>
         <PlansSection />
+      </section>
+
+      {/* Sección del carrusel de productos destacados */}
+      <section className="carousel-section">
+        <h2 className="text-center fw-bold">Echa un vistazo a nuestros productos Destacados</h2>
+        {productosCarrusel && <CarouselFade data={productosCarrusel} type={"productCarousel"} />}
       </section>
 
       {/* Sección de productos */}
@@ -124,7 +131,7 @@ const Home = () => {
       {/* Sección de adopción */}
       <section className="adoption-section">
         <Container>
-          <h2 className="text-center fw-bold">Adopta una mascota</h2>
+          <h2 className="text-center fw-bold">Salva una vida, adopta una mascota</h2>
           <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
             {animalesActuales.map((animal) => (
               <Col className="p-0" key={animal._id}>

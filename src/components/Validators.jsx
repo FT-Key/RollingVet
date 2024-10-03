@@ -45,6 +45,9 @@ import {
   validarPesoAnimal,
   validarGeneroAnimal,
   validarImagenAnimal,
+  esComentarioValido,
+  esCalificacionValida,
+  validarContraseniaUsuario,
   //Animales
 
 } from "../helpers/Validations";
@@ -93,7 +96,6 @@ export function validateUserFields(data) {
   }
 
   if (data.direccion && validarDireccion(data.direccion)) {
-    console.log("Entra Aqui check")
     if (!validarCalle(data.direccion.calle)) {
       validationErrors.calle = "Calle inválida";
     }
@@ -175,7 +177,6 @@ export function validateUserFields(data) {
 }
 
 export function validateProductFields(data) {
-  console.log("ENTRA: ", data)
   let validationErrors = {};
 
   if (!validarNombreProducto(data.nombre)) {
@@ -243,7 +244,7 @@ export function validateAnimalFields(data) {
   }
 
   // Valida la raza
-  if (!validarRazaAnimal(data.raza)) {
+  if (data.raza && !validarRazaAnimal(data.raza)) {
     errors.raza = "La raza debe contener al menos 3 caracteres y solo letras.";
   }
 
@@ -300,4 +301,36 @@ export function validateContactFields(data) {
   }
 
   return erroresValidacion;
+}
+
+export function validateCommentsFields(data) {
+  const errors = {};
+
+  if (!esComentarioValido(data.texto)) {
+    errors.texto = "El texto debe contener un mínimo de 10 carácteres y máximo de 300.";
+  }
+
+  if (!esCalificacionValida(data.calificacion)) {
+    errors.calificacion = "La calificación debe ser un número del 0 al 5.";
+  }
+
+  return errors;
+}
+
+export function validateRegisterFields(data) {
+  const errors = {};
+
+  if (!validarNombreUsuario(data.userName)) {
+    errors.userName = "El nombre de usuario debe tener entre 3 y 30 caracteres y puede incluir letras, números, guiones, puntos y guiones bajos.";
+  }
+
+  if (!validarCorreoElectronico(data.userEmail)) {
+    errors.userEmail = "El email debe tener un formato válido (ejemplo@dominio.com) y contener entre 3 y 40 caracteres antes del símbolo '@'.";
+  }
+
+  if (!validarContraseniaUsuario(data.userPass)) {
+    errors.userPass = "La contraseña debe tener entre 6 y 30 caracteres, incluir al menos una letra y un número.";
+  }
+
+  return errors;
 }

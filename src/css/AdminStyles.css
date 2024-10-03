@@ -1,0 +1,120 @@
+:root {
+  --border-radius-table: 5px;
+  --border-weight: 1.5px;
+}
+
+[class*="container"].adminProducts .row,
+[class*="container"].adminAnimals .row,
+[class*="container"].adminUsers .row {
+  border-top: var(--border-weight) solid black;
+  border-left: var(--border-weight) solid black;
+  border-right: var(--border-weight) solid black;
+  overflow: hidden;
+}
+
+[class*="container"].adminProducts .row [class*="col"],
+[class*="container"].adminAnimals .row [class*="col"],
+[class*="container"].adminUsers .row [class*="col"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: none;
+  overflow: hidden;
+  padding: 3px;
+  background-color: white;
+}
+
+[class*="container"].adminProducts .row [class*="col"]:last-child,
+[class*="container"].adminAnimals .row [class*="col"]:last-child,
+[class*="container"].adminUsers .row [class*="col"]:last-child {
+  border-bottom: none;
+}
+
+@media screen and (min-width: 768px) {
+  [class*="container"].adminProducts .row [class*="col"],
+  [class*="container"].adminAnimals .row [class*="col"],
+  [class*="container"].adminUsers .row [class*="col"] {
+    border-bottom: none;
+    border-right: var(--border-weight) solid black;
+  }
+
+  [class*="container"].adminProducts .row [class*="col"]:last-child,
+  [class*="container"].adminAnimals .row [class*="col"]:last-child,
+  [class*="container"].adminUsers .row [class*="col"]:last-child {
+    border-right: none;
+  }
+
+  .row.header.normal {
+    display: flex !important;
+  }
+
+  .row.header.responsive {
+    display: none !important;
+  }
+}
+
+.row.header.normal {
+  display: none;
+}
+
+.row.header.responsive {
+  display: flex;
+}
+
+.row.header [class*="col"] {
+  background: linear-gradient(to bottom, var(--color-mid-2) 15%, var(--color-mid-1) 50%);
+}
+
+[class*="container"].adminProducts .row:first-child,
+[class*="container"].adminAnimals .row:first-child,
+[class*="container"].adminUsers .row:first-child,
+[class*="container"].adminProducts .row:nth-child(2),
+[class*="container"].adminAnimals .row:nth-child(2),
+[class*="container"].adminUsers .row:nth-child(2) {
+  border-top-left-radius: var(--border-radius-table);
+  border-top-right-radius: var(--border-radius-table);
+}
+
+[class*="container"].adminProducts .row:last-child,
+[class*="container"].adminAnimals .row:last-child,
+[class*="container"].adminUsers .row:last-child {
+  border-bottom: var(--border-weight) solid black;
+  border-bottom-left-radius: var(--border-radius-table);
+  border-bottom-right-radius: var(--border-radius-table);
+}
+
+.btn-delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .7rem;
+  width: 1rem;
+  height: 1rem;
+  padding: 5px;
+}
+
+.empty {
+  color: transparent;
+
+  [class*="col"] {
+    * {
+      opacity: 0;
+      cursor: default;
+    }
+  }
+}
+
+.void-image {
+  aspect-ratio: 1 / 1;
+  width: 100px;
+  height: 100px;
+}
+
+.container-adminUsers,
+.container-adminProducts,
+.container-adminAnimals {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
