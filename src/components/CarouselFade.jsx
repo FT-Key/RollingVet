@@ -28,7 +28,7 @@ function CarouselFade({ data, type }) {
       }
 
       {type === 'profesionales' &&
-        <Carousel fade data-bs-theme="light" className="custom-carousel profesional">
+        <Carousel fade data-bs-theme="dark" className="custom-carousel profesional">
           {randomItems.map((prof, index) => (
             <Carousel.Item interval={2000} key={`profesional-${index}`}>
               <Imagen

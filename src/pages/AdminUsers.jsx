@@ -19,12 +19,29 @@ const AdminUsers = () => {
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [updatedUser, setUpdatedUser] = useState({});
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
   const USERS_BATCH_SIZE = 50; // Cantidad de usuarios que se cargan por llamada al servidor
+
+  useEffect(() => {
+    if (updatedUser && updatedUser._id) {
+
+      setLoadedUsers((prevUsers) => {
+        // Buscar coincidencia por _id y reemplazar el usuario
+        const updatedList = prevUsers.map((user) =>
+          user._id === updatedUser._id ? updatedUser : user
+        );
+        return updatedList;
+      });
+
+      // Reiniciar el estado de updatedUser a un objeto vacío
+      setUpdatedUser({});
+    }
+  }, [updatedUser]);
 
   useEffect(() => {
     let isMounted = true; // Variable para saber si el componente está montado
@@ -251,6 +268,7 @@ const AdminUsers = () => {
             type="adminUsers"
             show={modalShow}
             functionUpdateData={setUpdateMark}
+            functionNewUpdatedData={setUpdatedUser}
             onHide={() => setModalShow(false)}
             userData={selectedUser}
           />

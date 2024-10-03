@@ -75,8 +75,10 @@ const Home = () => {
       <Helmet>
         <title>RollingVet</title>
       </Helmet>
+      
       {/* Sección de presentación */}
       <section className="home-hero">
+        <img src="/Veterinaria-frente.png" alt="Veterinaria" className="hero-background" />
         <div className="hero-content text-center">
           <h1 className="fw-bold">¡RollingVet!</h1>
           <h2 className="text-white">Seguridad y bienestar para tus mascotas.</h2>
@@ -88,6 +90,7 @@ const Home = () => {
         </div>
       </section>
 
+
       <section className="my-4">
         <TradeMarkSlider time={"20s"} />
       </section>
@@ -96,7 +99,7 @@ const Home = () => {
       <section className="carousel-section">
         <h2 className="text-center fw-bold">Te presentamos a nuestros especialistas</h2>
         <CarouselFade data={PROFESIONALES} type="profesionales" />
-      </section>      
+      </section>
 
       {/* Sección de los 3 planes */}
       <section>

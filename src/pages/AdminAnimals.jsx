@@ -36,8 +36,7 @@ const AdminAnimals = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [isNew, setIsNew] = useState(false)
-
-  // Paginación
+  // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 5; // Número de animales por página
   const [totalPages, setTotalPages] = useState(1);
@@ -231,7 +230,7 @@ const AdminAnimals = () => {
             functionUpdateData={setUpdateMark}
             onHide={() => setModalShow(false)}
             animalData={selectedAnimal}
-            isNew
+            isNew={isNew}
           />
         )}
       </Container>

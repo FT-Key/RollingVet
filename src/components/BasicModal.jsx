@@ -16,6 +16,7 @@ const BasicModal = ({
   onHide,
   userData,
   functionUpdateData,
+  functionNewUpdatedData,
   productData,
   animalData,
   isNew = false
@@ -159,6 +160,7 @@ const BasicModal = ({
     }
 
     try {
+      let newObjectData;
       const { uploadedFile, ...productDataWithoutFile } = editedData;
 
       // Hacer la petición PUT para actualizar el producto, excluyendo el archivo
@@ -167,10 +169,12 @@ const BasicModal = ({
       switch (true) {
         case type === "adminUsers":
           updatedData = await putUser(editedData._id, productDataWithoutFile);
+          newObjectData = updatedData.usuario;
           break;
 
         case type === "adminProducts":
           updatedData = await putProduct(editedData._id, productDataWithoutFile);
+          newObjectData = updatedData.producto;
           break;
 
         case type === "adminAnimals":
@@ -206,11 +210,16 @@ const BasicModal = ({
 
         if (!uploadResponse) {
           throw new Error(uploadResponse.message);
+        } else {
+          newObjectData = uploadResponse.data;
         }
       }
 
       setFormData(editedData);
       functionUpdateData((prevMark) => !prevMark);
+      if (typeof functionNewUpdatedData === 'function') {
+        functionNewUpdatedData(newObjectData);
+      }
       onHide(); // Cerrar el modal
     } catch (error) {
       console.error("Error al guardar el producto:", error);

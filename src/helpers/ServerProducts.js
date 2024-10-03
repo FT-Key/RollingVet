@@ -73,12 +73,14 @@ export async function putProduct(productId, body) {
 
   if (token) {
     try {
-      await putServerData(
+      const response = await putServerData(
         apiUrl, // Tu dominio
         `/productos/${productId}`,
         body,
         token
       );
+
+      return response;
     } catch (error) {
       console.error("Error editando producto:", error);
     }
@@ -96,13 +98,13 @@ export async function uploadProductImage(productId, body) {
     const response = await postServerData(apiUrl, `/productos/agregarImagen/${productId}`, body, token);
 
     // Si la respuesta no es exitosa, lanzar un error
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.msg || "Error al subir la imagen");
+    if (!response.producto) {
+      const errorData = await response.msg;
+      throw new Error(errorData || "Error al subir la imagen");
     }
 
     // Si la respuesta es exitosa, obtener los datos
-    const data = await response.json();
+    const data = await response.producto;
 
     return {
       success: true,

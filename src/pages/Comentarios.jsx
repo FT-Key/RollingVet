@@ -112,7 +112,7 @@ const Comentarios = () => {
                     name={'star'}
                     width="24px"
                     height="24px"
-                    color={'yellow'}
+                    color={'gold'}
                     key={`${comentario._id + index}`}
                   />
                 ))}

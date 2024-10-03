@@ -65,16 +65,15 @@ function NavigationBar() {
             {/* Aquí agregas el botón para abrir el modal de donación */}
             <Nav.Link className='ps-2' onClick={() => setShowModal(true)}>Donar</Nav.Link>
 
-            <NavDropdown className='ps-2' title="Basicos" id="basics-nav-dropdown">
+            <NavDropdown className='ps-2' title="Servicios" id="basics-nav-dropdown">
               <NavDropdown.Item as={Link} to="/productos" onClick={() => setExpanded(false)}>Nuestros Productos</NavDropdown.Item>
               {user && (user.rol === 'admin' || user.rol === 'cliente') && (
                 <>
+                  <NavDropdown.Divider />
                   <NavDropdown.Item as={Link} to="/turnos" onClick={() => setExpanded(false)}>Solicitar turno</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/turnos/lista" onClick={() => setExpanded(false)}>Mis turnos</NavDropdown.Item>
                 </>
               )}
-              <NavDropdown.Divider />
-              <NavDropdown.Item as={Link} to="/NotFound" onClick={() => setExpanded(false)}>404 Not Found</NavDropdown.Item>
             </NavDropdown>
 
             {user && (user.rol === 'admin' || user.rol === 'cliente') && (
