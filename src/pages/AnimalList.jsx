@@ -12,6 +12,7 @@ const AnimalsList = () => {
   const [animales, setAnimales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [errores, setErrores] = useState({});
   const [page, setPage] = useState(1);
   const [limit] = useState(3);
   const [totalPages, setTotalPages] = useState(1);
@@ -102,27 +103,34 @@ const AnimalsList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const errores = validateAnimalFields(formData);
 
-    if (Object.keys(errores).length > 0) {
-      // Manejar los errores (mostrar en el formulario, etc.)
-      return { success: false, errors: errores };
+    // Obtener los errores de validación
+    const validationErrors = validateAnimalFields(formData);
+    console.log("Validations", validationErrors);
+
+    // Actualizar el estado de errores
+    setErrores(validationErrors);
+
+    // En lugar de usar 'errores', usa 'validationErrors' directamente
+    if (Object.keys(validationErrors).length > 0) {
+      // Si hay errores de validación, no continuar con el submit
+      console.log("Errores en el formulario:", validationErrors);
+      return;
     }
 
-    // Si no hay errores, procede a enviar los datos
+    // Si no hay errores, continúa con el envío del formulario
+    setIsSubmitting(true);
 
-    setIsSubmitting(true); // Desactivar el botón y cambiar el texto a "Generando..."
     try {
       const newAnimal = { ...formData, duenio: user._id, estado: "Mascota" };
 
-      // Enviar el objeto directamente sin FormData()
-      const response = await createAnimal(newAnimal); // Asegúrate de tener esta función en tu helper
+      const response = await createAnimal(newAnimal); // Crear el animal
       const newPetId = response.animal._id;
 
-      // Verifica si hay una imagen que subir
+      // Subir imagen si se seleccionó
       if (formData.imagen) {
         const fileData = new FormData();
-        fileData.append("image", formData.imagen);  // Importante que sea 'image'
+        fileData.append("image", formData.imagen);
 
         const uploadResult = await uploadAnimalImage(newPetId, fileData);
         if (!uploadResult.success) {
@@ -140,18 +148,18 @@ const AnimalsList = () => {
         descripcion: '',
         imagen: null,
         fotoUrl: '',
-        esterilizado: false, // Iniciar como falso
-        vacunas: [], // Iniciar como un array vacío
+        esterilizado: false,
+        vacunas: [],
         peso: '',
         genero: '',
       });
-      setImagePreview(null); // Resetear la vista previa de la imagen
+      setImagePreview(null);
       setUpdateMark(prev => !prev);
     } catch (error) {
       console.error("Error al crear el animal:", error);
       setError('Error al crear el animal');
     } finally {
-      setIsSubmitting(false); // Rehabilitar el botón cuando termine el proceso
+      setIsSubmitting(false);
     }
   };
 
@@ -194,8 +202,12 @@ const AnimalsList = () => {
                 name="nombre"
                 value={formData.nombre}
                 onChange={handleChange}
+                isInvalid={!!errores.nombre}
                 required
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.nombre}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formTipo">
@@ -205,6 +217,7 @@ const AnimalsList = () => {
                 name="tipo"
                 value={formData.tipo}
                 onChange={handleChange}
+                isInvalid={!!errores.tipo}
                 required
               >
                 <option value="">Seleccione...</option>
@@ -215,6 +228,9 @@ const AnimalsList = () => {
                 <option value="Reptil">Reptil</option>
                 <option value="Otro">Otro</option>
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errores.tipo}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formEdad">
@@ -226,8 +242,12 @@ const AnimalsList = () => {
                 onChange={handleChange}
                 min={"0.5"}
                 step={"0.5"}
+                isInvalid={!!errores.edad}
                 required
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.edad}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formRaza">
@@ -237,7 +257,11 @@ const AnimalsList = () => {
                 name="raza"
                 value={formData.raza}
                 onChange={handleChange}
+                isInvalid={!!errores.raza}
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.raza}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formDescripcion">
@@ -247,7 +271,11 @@ const AnimalsList = () => {
                 name="descripcion"
                 value={formData.descripcion}
                 onChange={handleChange}
+                isInvalid={!!errores.descripcion}
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.descripcion}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formEsterilizado">
@@ -294,7 +322,12 @@ const AnimalsList = () => {
                 onChange={handleChange}
                 step="0.1" // Permite incrementar en 0.1
                 min="0.1"  // No permite valores menores a 0.1
+                isInvalid={!!errores.peso}
+                required
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.peso}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formGenero">
@@ -304,12 +337,16 @@ const AnimalsList = () => {
                 name="genero"
                 value={formData.genero}
                 onChange={handleChange}
+                isInvalid={!!errores.genero}
                 required
               >
                 <option value="">Seleccione...</option>
                 <option value="Macho">Macho</option>
                 <option value="Hembra">Hembra</option>
               </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errores.genero}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formImagenToggle">
@@ -331,8 +368,12 @@ const AnimalsList = () => {
                   value={formData.fotoUrl || ''} // Asegúrate de que siempre sea una cadena
                   onChange={handleChange}
                   placeholder="Ingrese la URL de la imagen"
+                  isInvalid={!!errores.imagen}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errores.imagen}
+                </Form.Control.Feedback>
               </Form.Group>
             ) : (
               <Form.Group controlId="formImagen">
@@ -342,7 +383,11 @@ const AnimalsList = () => {
                   name="imagen"
                   accept="image/*"
                   onChange={handleChange}
+                  isInvalid={!!errores.imagen}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errores.imagen}
+                </Form.Control.Feedback>
                 {imagePreview && (
                   <img src={imagePreview} alt="Vista previa" style={{ maxWidth: '150px', marginTop: '10px' }} />
                 )}
@@ -352,6 +397,7 @@ const AnimalsList = () => {
             <Button
               variant="success"
               type="submit"
+              onClick={handleSubmit}
               disabled={isSubmitting} // Deshabilitar el botón durante el envío
             >
               {isSubmitting ? "Cargando..." : "Agregar Mascota"}

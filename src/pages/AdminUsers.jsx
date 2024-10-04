@@ -98,10 +98,11 @@ const AdminUsers = () => {
 
   const handleToggleLockClick = async (user) => {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const token = getToken();
 
     try {
       const updatedUser = { ...user, bloqueado: !user.bloqueado };
-      const response = await putServerData(apiUrl, `/usuarios/${user._id}`, updatedUser);
+      const response = await putServerData(apiUrl, `/usuarios/${user._id}`, updatedUser, token);
 
       setUpdateMark((prevMark) => !prevMark);
       setUpdatedUser(response.usuario);
