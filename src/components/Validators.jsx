@@ -269,8 +269,10 @@ export function validateAnimalFields(data) {
   }
 
   // Valida la imagen (opcional, pero si existe debe ser una URL válida)
-  if (data.imagen && !validarImagenAnimal(data.imagen)) {
-    errors.imagen = "La URL de la imagen no es válida.";
+  if (!data.imagen?.size) {
+    if (data.imagen && !validarImagenAnimal(data.imagen)) {
+      errors.imagen = "La URL de la imagen no es válida.";
+    }
   }
 
   // Retorna los errores, si el objeto está vacío, no hay errores
