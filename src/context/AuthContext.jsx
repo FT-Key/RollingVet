@@ -36,12 +36,6 @@ export const AuthProvider = ({ children }) => {
 
           // Configurar el tiempo de expiración
           const timeToExpire = (decodedToken.exp - currentTime) * 1000;
-          console.log(
-            "Tiempo restante: ",
-            `${Math.floor(timeToExpire / (1000 * 60 * 60))}h`,
-            `${Math.floor((timeToExpire % (1000 * 60 * 60)) / (1000 * 60))}m`,
-            `${Math.floor((timeToExpire % (1000 * 60)) / 1000)}s`
-          );
           setTimeout(checkToken, timeToExpire); // Verificar token antes de expirar
 
         } else {

@@ -1,4 +1,4 @@
-import { Container } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
 import {
   ESTADOS_SUSCRIPCION,
   IDIOMAS,
@@ -8,13 +8,11 @@ import {
   ROLES,
   TEMAS,
 } from "../utils/usersConst.utils";
-import {
-  ESPECIES
-} from "../utils/animalsConst.utils";
+import { ESPECIES } from "../utils/animalsConst.utils";
 import { useState, useEffect } from "react";
 import ProfileImage from "./ProfileImage";
 
-const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
+const UserFormModal = ({ handleChange, editedData, handleEnabledData, errors }) => {
   const [imageOption, setImageOption] = useState("Agregar URL");
   const [showAddress, setShowAddress] = useState(false);
   const [showSecurityQuestions, setShowSecurityQuestions] = useState(false);
@@ -32,19 +30,11 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
   };
 
   const handleAddNewPet = () => {
-    // Verificar si los campos requeridos están completos
     if (newPet.nombre && newPet.tipo && newPet.edad) {
-      // Agregar el ID del dueño a la nueva mascota
       const newPetWithOwner = { ...newPet, dueño: editedData._id };
-
       const updatedMascotas = [...editedData.mascotas, newPetWithOwner];
-
       handleChange({ target: { name: "mascotas", value: updatedMascotas } });
-
-      // Resetear el formulario de nueva mascota
       setNewPet({ nombre: "", tipo: "", edad: "", raza: "" });
-
-      // Cerrar el formulario de nueva mascota
       toggleSection("newPetSection");
     } else {
       alert("Por favor, completa todos los campos requeridos.");
@@ -55,7 +45,6 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
     const updatedMascotas = editedData.mascotas.filter((_, i) => i !== index);
     handleChange({ target: { name: "mascotas", value: updatedMascotas } });
   };
-
 
   const handleImageOptionChange = (e) => {
     setImageOption(e.target.value);
@@ -85,6 +74,7 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
           editedData.fotoPerfil = imageBackUp;
         }
         handleEnabledData("fotosPerfil", !showImageSection);
+        break;
       case "petsSection":
         setShowPetSection(!showPetSection);
         handleEnabledData("mascotas", !showPetSection);
@@ -98,40 +88,15 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
   };
 
   useEffect(() => {
-    if (showAddress) {
-      handleEnabledData("direccion", true);
-    } else {
-      handleEnabledData("direccion", false);
-    }
-
-    if (showSecurityQuestions) {
-      handleEnabledData("preguntasSeguridad", true);
-    } else {
-      handleEnabledData("preguntasSeguridad", false);
-    }
-
-    if (showSocialLinks) {
-      handleEnabledData("enlacesRedesSociales", true);
-    } else {
-      handleEnabledData("enlacesRedesSociales", false);
-    }
-
-    if (showImageSection) {
-      handleEnabledData("fotosPerfil", true);
-    } else {
-      handleEnabledData("fotosPerfil", false);
-    }
-
-    if (showPetSection) {
-      handleEnabledData("mascotas", true);
-    } else {
-      handleEnabledData("mascotas", false);
-    }
-  }, [showAddress, showSecurityQuestions, showSocialLinks, showImageSection, showNewPetSection]);
+    handleEnabledData("direccion", showAddress);
+    handleEnabledData("preguntasSeguridad", showSecurityQuestions);
+    handleEnabledData("enlacesRedesSociales", showSocialLinks);
+    handleEnabledData("fotosPerfil", showImageSection);
+    handleEnabledData("mascotas", showPetSection);
+  }, [showAddress, showSecurityQuestions, showSocialLinks, showImageSection, showPetSection]);
 
   return (
     <Container fluid className="container-adminUsers">
-
       <div>
         <p className="m-0">ID: {editedData.id || "ID"}</p>
       </div>
@@ -140,45 +105,49 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
         <ProfileImage source={editedData.fotoPerfil || ''} />
       </div>
 
-      {/* Botón para mostrar/ocultar la sección de edición de imágenes */}
-      <button className="btn btn-secondary mb-2" onClick={() => toggleSection("imageSection")}>
+      <Button variant="secondary" className="mb-2" onClick={() => toggleSection("imageSection")}>
         {showImageSection ? "Cancelar" : "Editar foto de perfil"}
-      </button>
+      </Button>
 
       {showImageSection && (
-
         <div>
-          <label>Imagen</label>
-          <select value={imageOption} onChange={handleImageOptionChange}>
-            <option value="Agregar URL">Agregar URL</option>
-            <option value="Subir archivo">Subir archivo</option>
-            <option value="Seleccionar existente">Seleccionar imagen ya existente</option>
-          </select>
+          <Form.Group>
+            <Form.Label>Imagen</Form.Label>
+            <Form.Select value={imageOption} onChange={handleImageOptionChange}>
+              <option value="Agregar URL">Agregar URL</option>
+              <option value="Subir archivo">Subir archivo</option>
+              <option value="Seleccionar existente">Seleccionar imagen ya existente</option>
+            </Form.Select>
+          </Form.Group>
 
           {imageOption === "Agregar URL" && (
-            <div>
-              <label>URL de la imagen</label>
-              <input
+            <Form.Group>
+              <Form.Label>URL de la imagen</Form.Label>
+              <Form.Control
                 type="text"
                 name="fotoPerfil"
                 value={editedData.fotoPerfil || ""}
                 onChange={handleChange}
                 placeholder="URL de la imagen"
+                isInvalid={!!errors?.fotoPerfil}
               />
-            </div>
+              <Form.Control.Feedback type="invalid">
+                {errors.fotoPerfil}
+              </Form.Control.Feedback>
+            </Form.Group>
           )}
 
           {imageOption === "Subir archivo" && (
-            <div>
-              <label>Subir archivo</label>
-              <input type="file" name="fotoPerfil" onChange={handleChange} />
-            </div>
+            <Form.Group>
+              <Form.Label>Subir archivo</Form.Label>
+              <Form.Control type="file" name="fotoPerfil" onChange={handleChange} />
+            </Form.Group>
           )}
 
           {imageOption === "Seleccionar existente" && (
-            <div>
-              <label>Seleccionar imagen existente</label>
-              <select name="fotoPerfil" value={editedData.fotoPerfil} onChange={handleChange}>
+            <Form.Group>
+              <Form.Label>Seleccionar imagen existente</Form.Label>
+              <Form.Select name="fotoPerfil" value={editedData.fotoPerfil} onChange={handleChange}>
                 {editedData.fotosPerfil && editedData.fotosPerfil.map((url, index) => {
                   const shortenedUrl = url.length > 35 ? `${url.substring(0, 35)}...` : url;
                   return (
@@ -187,75 +156,75 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
                     </option>
                   );
                 })}
-              </select>
-            </div>
+              </Form.Select>
+            </Form.Group>
           )}
         </div>
       )}
 
-      <div>
-        <label>Nombre de Usuario</label>
-        <input
+      <Form.Group>
+        <Form.Label>Nombre de Usuario</Form.Label>
+        <Form.Control
           type="text"
           name="nombreUsuario"
           value={editedData.nombreUsuario || ""}
           onChange={handleChange}
           placeholder="Nombre de Usuario"
+          isInvalid={!!errors?.nombreUsuario}
         />
-      </div>
+        <Form.Control.Feedback type="invalid">
+          {errors.nombreUsuario}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-      <div>
-        <label>Email</label>
-        <input
+      <Form.Group>
+        <Form.Label>Email</Form.Label>
+        <Form.Control
           type="email"
           name="email"
           value={editedData.email || ""}
           onChange={handleChange}
           placeholder="Email"
+          isInvalid={!!errors?.email}
         />
-      </div>
+        <Form.Control.Feedback type="invalid">
+          {errors.email}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-      {/*<div>
-        <label>Contraseña</label>
-        <input
-          type="password"
-          name="contrasenia"
-          value={editedData.contrasenia || ""}
-          placeholder={
-            editedData.contrasenia
-              ? editedData.contrasenia.replace(/./g, "*")
-              : "Contraseña"
-          }
-          onChange={handleChange}
-        />
-      </div>*/}
-
-      <div>
-        <label>Nombre</label>
-        <input
+      <Form.Group>
+        <Form.Label>Nombre</Form.Label>
+        <Form.Control
           type="text"
           name="nombre"
           value={editedData.nombre || ""}
           onChange={handleChange}
           placeholder="Nombre"
+          isInvalid={!!errors?.nombre}
         />
-      </div>
+        <Form.Control.Feedback type="invalid">
+          {errors.nombre}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-      <div>
-        <label>Apellido</label>
-        <input
+      <Form.Group>
+        <Form.Label>Apellido</Form.Label>
+        <Form.Control
           type="text"
           name="apellido"
           value={editedData.apellido || ""}
           onChange={handleChange}
           placeholder="Apellido"
+          isInvalid={!!errors?.apellido}
         />
-      </div>
+        <Form.Control.Feedback type="invalid">
+          {errors.apellido}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-      {/* Sección de mascotas */}
-      <button className="btn btn-secondary mb-2" onClick={() => toggleSection("petsSection")}>
+      <Button variant="secondary" className="mb-2" onClick={() => toggleSection("petsSection")}>
         {showPetSection ? "Cancelar" : "Agregar/Eliminar Mascotas"}
-      </button>
+      </Button>
 
       {showPetSection && (
         <div>
@@ -264,244 +233,341 @@ const UserFormModal = ({ handleChange, editedData, handleEnabledData }) => {
             {editedData.mascotas.map((mascota, index) => (
               <li key={index}>
                 {mascota.nombre} ({mascota.tipo})
-                <button onClick={() => handleDeletePet(index)}>X</button>
+                <Button variant="danger" onClick={() => handleDeletePet(index)}>X</Button>
               </li>
             ))}
           </ul>
 
-          <button className="btn btn-secondary mb-2" onClick={() => toggleSection("newPetSection")}>
+          <Button variant="secondary" className="mb-2" onClick={() => toggleSection("newPetSection")}>
             {showNewPetSection ? "Cancelar" : "Agregar nueva mascota"}
-          </button>
+          </Button>
 
           {showNewPetSection && (
             <div>
-              <label>Nombre</label>
-              <input
-                type="text"
-                name="nombre"
-                value={newPet.nombre || ""}
-                onChange={(e) => setNewPet({ ...newPet, nombre: e.target.value })}
-                placeholder="Nombre de la mascota"
-              />
+              <Form.Group>
+                <Form.Label>Nombre de la mascota</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="mascota.nombre"
+                  value={newPet.nombre}
+                  onChange={handleNewPetChange}
+                  placeholder="Nombre"
+                  isInvalid={!!errors?.mascota?.nombre}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.mascota?.nombre}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-              <label>Tipo</label>
-              <select
-                name="tipo"
-                value={newPet.tipo || ""}
-                onChange={(e) => setNewPet({ ...newPet, tipo: e.target.value })}
-              >
-                <option value="">Seleccionar tipo</option>
-                {ESPECIES.map((especie, index) => (
-                  <option key={index} value={especie}>
-                    {especie}
-                  </option>
-                ))}
-              </select>
+              <Form.Group>
+                <Form.Label>Tipo de mascota</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="mascota.tipo"
+                  value={newPet.tipo}
+                  onChange={handleNewPetChange}
+                  placeholder="Tipo"
+                  isInvalid={!!errors?.mascota?.tipo}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.mascota?.tipo}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-              <label>Edad</label>
-              <input
-                type="number"
-                name="edad"
-                value={newPet.edad || ""}
-                onChange={(e) => setNewPet({ ...newPet, edad: e.target.value })}
-                placeholder="Edad de la mascota"
-              />
+              <Form.Group>
+                <Form.Label>Edad</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="mascota.edad"
+                  value={newPet.edad}
+                  onChange={handleNewPetChange}
+                  placeholder="Edad"
+                  isInvalid={!!errors?.mascota?.edad}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.mascota?.edad}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-              <label>Raza (Opcional)</label>
-              <input
-                type="text"
-                name="raza"
-                value={newPet.raza || ""}
-                onChange={(e) => setNewPet({ ...newPet, raza: e.target.value })}
-                placeholder="Raza de la mascota"
-              />
+              <Form.Group>
+                <Form.Label>Raza</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="mascota.raza"
+                  value={newPet.raza}
+                  onChange={handleNewPetChange}
+                  placeholder="Raza"
+                  isInvalid={!!errors?.mascota?.raza}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.mascota?.raza}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-              <button className="btn btn-primary" onClick={handleAddNewPet}>
-                Agregar Mascota
-              </button>
+              <Button onClick={handleAddNewPet}>Agregar mascota</Button>
             </div>
           )}
         </div>
       )}
 
-      <button className="btn btn-secondary mb-2" onClick={() => toggleSection("address")}>
-        {showAddress ? "Ocultar Dirección" : "Mostrar Dirección"}
-      </button>
       {showAddress && (
         <div>
-          <label>Dirección</label>
-          <input
-            type="text"
-            name="direccion.calle"
-            value={editedData.direccion?.calle || ""}
-            onChange={handleChange}
-            placeholder="Calle"
-          />
-          <input
-            type="text"
-            name="direccion.ciudad"
-            value={editedData.direccion?.ciudad || ""}
-            onChange={handleChange}
-            placeholder="Ciudad"
-          />
-          <input
-            type="text"
-            name="direccion.estado"
-            value={editedData.direccion?.estado || ""}
-            onChange={handleChange}
-            placeholder="Estado"
-          />
-          <input
-            type="text"
-            name="direccion.codigoPostal"
-            value={editedData.direccion?.codigoPostal || ""}
-            onChange={handleChange}
-            placeholder="Código Postal"
-          />
-          <label>País</label>
-          <select
-            name="direccion.pais"
-            value={editedData.direccion?.pais || ""}
-            onChange={handleChange}
-          >
-            {PAISES.map((pais) => (
-              <option key={pais} value={pais}>
-                {pais}
-              </option>
-            ))}
-          </select>
+          <h3>Dirección</h3>
+          <Form.Group>
+            <Form.Label>Calle</Form.Label>
+            <Form.Control
+              type="text"
+              name="direccion.calle"
+              value={editedData.direccion?.calle || ""}
+              onChange={handleChange}
+              placeholder="Calle"
+              isInvalid={!!errors?.direccion?.calle}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.direccion?.calle}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Ciudad</Form.Label>
+            <Form.Control
+              type="text"
+              name="direccion.ciudad"
+              value={editedData.direccion?.ciudad || ""}
+              onChange={handleChange}
+              placeholder="Ciudad"
+              isInvalid={!!errors?.direccion?.ciudad}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.direccion?.ciudad}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Estado</Form.Label>
+            <Form.Control
+              type="text"
+              name="direccion.estado"
+              value={editedData.direccion?.estado || ""}
+              onChange={handleChange}
+              placeholder="Estado"
+              isInvalid={!!errors?.direccion?.estado}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.direccion?.estado}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Código Postal</Form.Label>
+            <Form.Control
+              type="text"
+              name="direccion.codigoPostal"
+              value={editedData.direccion?.codigoPostal || ""}
+              onChange={handleChange}
+              placeholder="Código Postal"
+              isInvalid={!!errors?.direccion?.codigoPostal}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.direccion?.codigoPostal}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>País</Form.Label>
+            <Form.Control
+              as="select"
+              name="direccion.pais"
+              value={editedData.direccion?.pais || ""}
+              onChange={handleChange}
+              isInvalid={!!errors?.direccion?.pais}
+            >
+              {PAISES.map((pais, index) => (
+                <option key={index} value={pais}>
+                  {pais}
+                </option>
+              ))}
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              {errors.direccion?.pais}
+            </Form.Control.Feedback>
+          </Form.Group>
         </div>
       )}
 
-      <button className="btn btn-secondary mb-2" onClick={() => toggleSection("securityQuestions")}>
-        {showSecurityQuestions ? "Ocultar Preguntas de Seguridad" : "Mostrar Preguntas de Seguridad"}
-      </button>
+      <Button variant="secondary" className="mb-2" onClick={() => toggleSection("securityQuestions")}>
+        {showSecurityQuestions ? "Cancelar" : "Agregar Preguntas de Seguridad"}
+      </Button>
+
       {showSecurityQuestions && (
         <div>
-          {editedData.preguntasSeguridad.map((preguntaSeguridad, index) => (
+          <h3>Preguntas de Seguridad</h3>
+          {editedData.preguntasSeguridad?.map((pregunta, index) => (
             <div key={index}>
-              <label>Pregunta de Seguridad {index + 1}</label>
-              <select
-                name={`preguntasSeguridad[${index}].pregunta`}
-                onChange={handleChange}
-                value={preguntaSeguridad.pregunta || ""}
-              >
-                {PREGUNTAS_SEGURIDAD.map((pregunta) => (
-                  <option key={pregunta} value={pregunta}>
-                    {pregunta}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                name={`preguntasSeguridad[${index}].respuesta`}
-                value={preguntaSeguridad.respuesta || ""}
-                onChange={handleChange}
-                placeholder="Respuesta"
-              />
+              <Form.Group>
+                <Form.Label>Pregunta {index + 1}</Form.Label>
+                <Form.Select
+                  name={`preguntasSeguridad.${index}.pregunta`}
+                  value={pregunta.pregunta || ""}
+                  onChange={handleChange}
+                  isInvalid={!!errors?.preguntasSeguridad?.[index]?.pregunta}
+                >
+                  <option value="">Seleccionar pregunta</option>
+                  {PREGUNTAS_SEGURIDAD.map((p, i) => (
+                    <option key={i} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.preguntasSeguridad?.[index]?.pregunta}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Respuesta</Form.Label>
+                <Form.Control
+                  type="text"
+                  name={`preguntasSeguridad.${index}.respuesta`}
+                  value={pregunta.respuesta || ""}
+                  onChange={handleChange}
+                  placeholder="Respuesta"
+                  isInvalid={!!errors?.preguntasSeguridad?.[index]?.respuesta}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.preguntasSeguridad?.[index]?.respuesta}
+                </Form.Control.Feedback>
+              </Form.Group>
             </div>
           ))}
         </div>
       )}
 
-      <button className="btn btn-secondary mb-2" onClick={() => toggleSection("socialLinks")}>
-        {showSocialLinks ? "Ocultar Enlaces a Redes Sociales" : "Mostrar Enlaces a Redes Sociales"}
-      </button>
+      <Button variant="secondary" className="mb-2" onClick={() => toggleSection("socialLinks")}>
+        {showSocialLinks ? "Cancelar" : "Agregar Enlaces a Redes Sociales"}
+      </Button>
+
       {showSocialLinks && (
         <div>
-          <label>Enlaces a Redes Sociales</label>
-          <input
-            type="text"
-            name="enlacesRedesSociales.twitter"
-            value={editedData.enlacesRedesSociales?.twitter || ""}
-            onChange={handleChange}
-            placeholder="Twitter"
-          />
-          <input
-            type="text"
-            name="enlacesRedesSociales.linkedin"
-            value={editedData.enlacesRedesSociales?.linkedin || ""}
-            onChange={handleChange}
-            placeholder="LinkedIn"
-          />
+          <h3>Enlaces a Redes Sociales</h3>
+          {editedData.enlacesRedesSociales?.map((enlace, index) => (
+            <Form.Group key={index}>
+              <Form.Label>Red Social {index + 1}</Form.Label>
+              <Form.Control
+                type="text"
+                name={`enlacesRedesSociales.${index}`}
+                value={enlace || ""}
+                onChange={handleChange}
+                placeholder="URL de la red social"
+                isInvalid={!!errors?.enlacesRedesSociales?.[index]}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.enlacesRedesSociales?.[index]}
+              </Form.Control.Feedback>
+            </Form.Group>
+          ))}
         </div>
       )}
 
-      {/* <div>
-        <label>Estado de Suscripción</label>
-        <select
+      <Form.Group>
+        <Form.Label>Estado de Suscripción</Form.Label>
+        <Form.Control
+          as="select"
           name="estadoSuscripcion"
           value={editedData.estadoSuscripcion || ""}
           onChange={handleChange}
+          isInvalid={!!errors?.estadoSuscripcion}
         >
-          {ESTADOS_SUSCRIPCION.map((estado) => (
-            <option key={estado} value={estado}>
+          {ESTADOS_SUSCRIPCION.map((estado, index) => (
+            <option key={index} value={estado}>
               {estado}
             </option>
           ))}
-        </select>
-      </div> */}
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {errors.estadoSuscripcion}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-      <div>
-        <label>Idioma</label>
-        <select
+      <Form.Group>
+        <Form.Label>Idioma</Form.Label>
+        <Form.Control
+          as="select"
           name="idioma"
           value={editedData.idioma || ""}
           onChange={handleChange}
+          isInvalid={!!errors?.idioma}
         >
-          {IDIOMAS.map((idioma) => (
-            <option key={idioma} value={idioma}>
+          {IDIOMAS.map((idioma, index) => (
+            <option key={index} value={idioma}>
               {idioma}
             </option>
           ))}
-        </select>
-      </div>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {errors.idioma}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-      <div>
-        <label>Región</label>
-        <select
-          name="region"
-          value={editedData.region || ""}
-          onChange={handleChange}
-        >
-          {REGIONES.map((region) => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label>Rol</label>
-        <select
-          name="rol"
-          value={editedData.rol || ""}
-          onChange={handleChange}
-        >
-          {ROLES.map((rol) => (
-            <option key={rol} value={rol}>
-              {rol}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label>Tema</label>
-        <select
+      <Form.Group>
+        <Form.Label>Tema</Form.Label>
+        <Form.Control
+          as="select"
           name="tema"
           value={editedData.tema || ""}
           onChange={handleChange}
+          isInvalid={!!errors?.tema}
         >
-          {TEMAS.map((tema) => (
-            <option key={tema} value={tema}>
+          {TEMAS.map((tema, index) => (
+            <option key={index} value={tema}>
               {tema}
             </option>
           ))}
-        </select>
-      </div>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {errors.tema}
+        </Form.Control.Feedback>
+      </Form.Group>
 
+      <Form.Group>
+        <Form.Label>Región</Form.Label>
+        <Form.Control
+          as="select"
+          name="region"
+          value={editedData.region || ""}
+          onChange={handleChange}
+          isInvalid={!!errors?.region}
+        >
+          {REGIONES.map((region, index) => (
+            <option key={index} value={region}>
+              {region}
+            </option>
+          ))}
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {errors.region}
+        </Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group>
+        <Form.Label>Rol</Form.Label>
+        <Form.Control
+          as="select"
+          name="rol"
+          value={editedData.rol || ""}
+          onChange={handleChange}
+          isInvalid={!!errors?.rol}
+        >
+          {ROLES.map((rol, index) => (
+            <option key={index} value={rol}>
+              {rol}
+            </option>
+          ))}
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">
+          {errors.rol}
+        </Form.Control.Feedback>
+      </Form.Group>
     </Container>
   );
 };
