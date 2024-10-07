@@ -142,7 +142,11 @@ function BasicForm({ type }) {
         throw new Error('Error en el servidor al iniciar sesión');
       }
     } catch (error) {
-      setErrors({ incorrectLogin: "Usuario o contraseña incorrecta" });
+      if (error.status == 403) {
+        setErrors({ incorrectLogin: error.response.data.msg });
+      } else {
+        setErrors({ incorrectLogin: "Usuario o contraseña incorrecta" });
+      }
       throw new Error('Error en el servidor al iniciar sesión');
     }
   }
