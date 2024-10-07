@@ -17,4 +17,8 @@
   div:first-child {
     align-items: center;
   }
+
+  .invalid-feedback {
+    border: none;
+  }
 }

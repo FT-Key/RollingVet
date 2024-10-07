@@ -106,7 +106,6 @@ const AnimalsList = () => {
 
     // Obtener los errores de validación
     const validationErrors = validateAnimalFields(formData);
-    console.log("Validations", validationErrors);
 
     // Actualizar el estado de errores
     setErrores(validationErrors);
@@ -114,7 +113,6 @@ const AnimalsList = () => {
     // En lugar de usar 'errores', usa 'validationErrors' directamente
     if (Object.keys(validationErrors).length > 0) {
       // Si hay errores de validación, no continuar con el submit
-      console.log("Errores en el formulario:", validationErrors);
       return;
     }
 

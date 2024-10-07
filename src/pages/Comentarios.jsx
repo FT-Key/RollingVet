@@ -48,7 +48,6 @@ const Comentarios = () => {
 
     if (validationErrors && Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      console.log("Errores: ", validationErrors);
       return;
     }
 

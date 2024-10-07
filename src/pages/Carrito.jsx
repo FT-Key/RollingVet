@@ -39,13 +39,12 @@ const Carrito = () => {
     initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY);
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    console.log("Se envia: ", productos)
     const response = await postServerData(apiUrl, "/favncart/carrito/comprarProductosMercadoPago", { productos, returnUrl }, token);
 
     if (response && typeof response === 'string') {
       setIdPreference(response);
     } else {
-      console.log("Error: la respuesta del servidor no es un enlace válido", response);
+      console.error("Error: la respuesta del servidor no es un enlace válido", response);
     }
   };
 

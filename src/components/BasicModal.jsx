@@ -34,6 +34,7 @@ const BasicModal = ({
     // Restablecer editedData cuando se cierra el modal
     if (!show) {
       setEditedData(formData);
+      setErrors({});  // Limpia los errores cuando se cierra el modal
     }
   }, [show, formData]);
 
@@ -151,10 +152,8 @@ const BasicModal = ({
         break;
     }
 
-    //console.log("ValidationErrors.Length: ", Object.keys(validationErrors).length)
     if (validationErrors && Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      console.log("Errores: ", validationErrors);
       setIsLoading(false);
       return;
     }
@@ -264,10 +263,8 @@ const BasicModal = ({
         break;
     }
 
-    //console.log("ValidationErrors.Length: ", Object.keys(validationErrors).length)
     if (validationErrors && Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      console.log("Errores: ", validationErrors);
       setIsLoading(false);
       return;
     }
@@ -428,13 +425,19 @@ const BasicModal = ({
       </Modal.Header>
       <Modal.Body>
         {type === "adminUsers" && (
-          <UserFormModal handleChange={handleChange} editedData={editedData} handleEnabledData={handleEnabledData} />
+          <UserFormModal
+            handleChange={handleChange}
+            editedData={editedData}
+            handleEnabledData={handleEnabledData}
+            errors={errors}
+          />
         )}
 
         {type === "adminProducts" && (
           <ProductsFormModal
             handleChange={handleChange}
             editedData={editedData}
+            errores={errors}
           />
         )}
 

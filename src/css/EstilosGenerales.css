@@ -55,22 +55,40 @@ body {
 }
 
 .btn-primary {
-  --bs-btn-color: #fff; /* Color del texto */
-  --bs-btn-bg: rgb(65, 117, 126); /* Color de fondo normal */
-  --bs-btn-border-color: rgb(65, 117, 126); /* Color del borde normal */
-  
-  --bs-btn-hover-color: #fff; /* Color del texto al pasar el mouse */
-  --bs-btn-hover-bg: rgb(58, 104, 109); /* Color de fondo al pasar el mouse */
-  --bs-btn-hover-border-color: rgb(50, 90, 94); /* Color del borde al pasar el mouse */
-  
-  --bs-btn-focus-shadow-rgb: 49, 132, 253; /* Color de la sombra de enfoque */
-  
-  --bs-btn-active-color: #fff; /* Color del texto al hacer clic */
-  --bs-btn-active-bg: rgb(50, 90, 94); /* Color de fondo al hacer clic */
-  --bs-btn-active-border-color: rgb(45, 80, 83); /* Color del borde al hacer clic */
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Sombra al hacer clic */
-  
-  --bs-btn-disabled-color: #fff; /* Color del texto al deshabilitar */
-  --bs-btn-disabled-bg: rgb(65, 117, 126); /* Color de fondo deshabilitado */
-  --bs-btn-disabled-border-color: rgb(65, 117, 126); /* Color del borde deshabilitado */
+  --bs-btn-color: #fff;
+  /* Color del texto */
+  --bs-btn-bg: rgb(65, 117, 126);
+  /* Color de fondo normal */
+  --bs-btn-border-color: rgb(65, 117, 126);
+  /* Color del borde normal */
+
+  --bs-btn-hover-color: #fff;
+  /* Color del texto al pasar el mouse */
+  --bs-btn-hover-bg: rgb(58, 104, 109);
+  /* Color de fondo al pasar el mouse */
+  --bs-btn-hover-border-color: rgb(50, 90, 94);
+  /* Color del borde al pasar el mouse */
+
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  /* Color de la sombra de enfoque */
+
+  --bs-btn-active-color: #fff;
+  /* Color del texto al hacer clic */
+  --bs-btn-active-bg: rgb(50, 90, 94);
+  /* Color de fondo al hacer clic */
+  --bs-btn-active-border-color: rgb(45, 80, 83);
+  /* Color del borde al hacer clic */
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  /* Sombra al hacer clic */
+
+  --bs-btn-disabled-color: #fff;
+  /* Color del texto al deshabilitar */
+  --bs-btn-disabled-bg: rgb(65, 117, 126);
+  /* Color de fondo deshabilitado */
+  --bs-btn-disabled-border-color: rgb(65, 117, 126);
+  /* Color del borde deshabilitado */
+}
+
+.styles-module_chatFooter__TGv0P form .styles-module_input__WFb9L {
+  color: black !important;
 }

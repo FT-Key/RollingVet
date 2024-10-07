@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 import { formatDate } from "../helpers/FormatDateHTML";
 import ProductImage from "./ProductImage";
 
-const ProductsFormModal = ({ handleChange, editedData }) => {
+const ProductsFormModal = ({ handleChange, editedData, errores }) => {
   const [imageOption, setImageOption] = useState("Agregar URL");
 
   const handleImageOptionChange = (e) => {
@@ -12,172 +12,260 @@ const ProductsFormModal = ({ handleChange, editedData }) => {
 
   return (
     <Container fluid className="container-adminProducts">
-      <div>
-        <p className="m-0">ID: {editedData.id}</p>
-      </div>
+      <Form className="w-100 mb-4 d-flex flex-column gap-3">
+        <h3 className='text-center'>Editar Producto</h3>
 
-      <div>
-        <ProductImage source={editedData.imagenUrl || ''} />
-      </div>
-      {/* Opción para la imagen */}
-      <div>
-        <label>Imagen</label>
-        <select value={imageOption} onChange={handleImageOptionChange}>
-          <option value="Agregar URL">Agregar URL</option>
-          <option value="Subir archivo">Subir archivo</option>
-          <option value="Seleccionar existente">Seleccionar imagen ya existente</option>
-        </select>
+        {/* Imagen */}
+        <div>
+          <p className="m-0">ID: {editedData.id}</p>
+        </div>
+        <div>
+          <ProductImage source={editedData.imagenUrl || ''} />
+        </div>
+        <Form.Group controlId="formImageOption">
+          <Form.Label>Imagen</Form.Label>
+          <Form.Control
+            as="select"
+            value={imageOption}
+            onChange={handleImageOptionChange}
+          >
+            <option value="Agregar URL">Agregar URL</option>
+            <option value="Subir archivo">Subir archivo</option>
+            <option value="Seleccionar existente">Seleccionar imagen ya existente</option>
+          </Form.Control>
 
-        {/* Mostrar input según la opción seleccionada */}
-        {imageOption === "Agregar URL" && (
-          <div>
-            <label>URL de la imagen</label>
-            <input
-              type="text"
-              name="imageUrl"
-              value={editedData.imagenUrl || ""}
-              onChange={handleChange}
-              placeholder="URL de la imagen"
-            />
-          </div>
-        )}
+          {/* Mostrar input según la opción seleccionada */}
+          {imageOption === "Agregar URL" && (
+            <Form.Group controlId="formImageUrl">
+              <Form.Label>URL de la imagen</Form.Label>
+              <Form.Control
+                type="text"
+                name="imagenUrl"
+                value={editedData.imagenUrl || ""}
+                onChange={handleChange}
+                isInvalid={!!errores.imagenUrl}
+                placeholder="URL de la imagen"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errores.imagenUrl}
+              </Form.Control.Feedback>
+            </Form.Group>
+          )}
 
-        {imageOption === "Subir archivo" && (
-          <div>
-            <label>Subir archivo</label>
-            <input type="file" name="imagenUrl" onChange={handleChange} />
-          </div>
-        )}
+          {imageOption === "Subir archivo" && (
+            <Form.Group controlId="formUploadImage">
+              <Form.Label>Subir archivo</Form.Label>
+              <Form.Control
+                type="file"
+                name="imagenUrl"
+                onChange={handleChange}
+                isInvalid={!!errores.imagenUrl}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errores.imagenUrl}
+              </Form.Control.Feedback>
+            </Form.Group>
+          )}
 
-        {imageOption === "Seleccionar existente" && (
-          <div>
-            <label>Seleccionar imagen existente</label>
-            <select name="imagenUrl" value={editedData.imagenUrl} onChange={handleChange}>
-              {editedData.imagenesUrls && editedData.imagenesUrls.map((url, index) => {
-                const shortenedUrl = url.length > 35 ? `${url.substring(0, 35)}...` : url;
-                return (
-                  <option key={index} value={url}>
-                    {shortenedUrl}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        )}
-      </div>
+          {imageOption === "Seleccionar existente" && (
+            <Form.Group controlId="formSelectImage">
+              <Form.Label>Seleccionar imagen existente</Form.Label>
+              <Form.Control
+                as="select"
+                name="imagenUrl"
+                value={editedData.imagenUrl || ""}
+                onChange={handleChange}
+                isInvalid={!!errores.imagenUrl}
+              >
+                {editedData.imagenesUrls &&
+                  editedData.imagenesUrls.map((url, index) => {
+                    const shortenedUrl =
+                      url.length > 35 ? `${url.substring(0, 35)}...` : url;
+                    return (
+                      <option key={index} value={url}>
+                        {shortenedUrl}
+                      </option>
+                    );
+                  })}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errores.imagenUrl}
+              </Form.Control.Feedback>
+            </Form.Group>
+          )}
+        </Form.Group>
 
-      <div>
-        <label>Nombre</label>
-        <input
-          type="text"
-          name="nombre"
-          value={editedData.nombre || ""}
-          onChange={handleChange}
-          placeholder="Nombre del producto"
-        />
-      </div>
-      <div>
-        <label>Precio</label>
-        <input
-          type="number"
-          name="precio"
-          value={editedData.precio || ""}
-          onChange={handleChange}
-          placeholder="Precio"
-        />
-      </div>
-      <div>
-        <label>Descripción</label>
-        <textarea
-          name="descripcion"
-          value={editedData.descripcion || ""}
-          onChange={handleChange}
-          placeholder="Descripción del producto"
-        />
-      </div>
-      <div>
-        <label>Categoría</label>
-        <input
-          type="text"
-          name="categoria"
-          value={editedData.categoria || ""}
-          onChange={handleChange}
-          placeholder="Categoría"
-        />
-      </div>
-      <div>
-        <label>Stock</label>
-        <input
-          type="number"
-          name="cantidadEnStock"
-          value={editedData.cantidadEnStock || ""}
-          onChange={handleChange}
-          placeholder="Stock"
-        />
-      </div>
-      <div>
-        <label>Marca</label>
-        <input
-          type="text"
-          name="proveedor"
-          value={editedData.proveedor || ""}
-          onChange={handleChange}
-          placeholder="Marca"
-        />
-      </div>
-      <div>
-        <label>Código de barras</label>
-        <input
-          type="text"
-          name="codigoDeBarras"
-          value={editedData.codigoDeBarras || ""}
-          onChange={handleChange}
-          placeholder="Código de barras"
-        />
-      </div>
+        {/* Nombre */}
+        <Form.Group controlId="formNombre">
+          <Form.Label>Nombre</Form.Label>
+          <Form.Control
+            type="text"
+            name="nombre"
+            value={editedData.nombre || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.nombre}
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.nombre}
+          </Form.Control.Feedback>
+        </Form.Group>
 
-      <div>
-        <label>Calificaciones</label>
-        <input
-          type="number"
-          name="calificaciones"
-          value={editedData.calificaciones.toString() || ""}
-          onChange={handleChange}
-          step="0.1"
-          min="0"
-          max="5"
-          placeholder="Calificación (0-5)"
-        />
-      </div>
-      <div>
-        <label>Garantía</label>
-        <input
-          type="text"
-          name="garantia"
-          value={editedData.garantia || ""}
-          onChange={handleChange}
-          placeholder="Garantía"
-        />
-      </div>
-      <div>
-        <label>Fecha de Ingreso</label>
-        <input
-          type="date"
-          name="fechaDeIngreso"
-          value={formatDate(editedData.fechaDeIngreso) || ""}
-          onChange={handleChange}
-        />
-      </div>
-      <div>
-        <label>Descuento</label>
-        <input
-          type="text"
-          name="descuento"
-          value={editedData.descuento || ""}
-          onChange={handleChange}
-          placeholder="Descuento"
-        />
-      </div>
+        {/* Precio */}
+        <Form.Group controlId="formPrecio">
+          <Form.Label>Precio</Form.Label>
+          <Form.Control
+            type="number"
+            name="precio"
+            value={editedData.precio || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.precio}
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.precio}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Descripción */}
+        <Form.Group controlId="formDescripcion">
+          <Form.Label>Descripción</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="descripcion"
+            value={editedData.descripcion || ""}
+            onChange={handleChange}
+            placeholder="Descripción del producto"
+          />
+        </Form.Group>
+
+        {/* Categoría */}
+        <Form.Group controlId="formCategoria">
+          <Form.Label>Categoría</Form.Label>
+          <Form.Control
+            type="text"
+            name="categoria"
+            value={editedData.categoria || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.categoria}
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.categoria}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Stock */}
+        <Form.Group controlId="formStock">
+          <Form.Label>Stock</Form.Label>
+          <Form.Control
+            type="number"
+            name="cantidadEnStock"
+            value={editedData.cantidadEnStock || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.cantidadEnStock}
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.cantidadEnStock}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Marca */}
+        <Form.Group controlId="formProveedor">
+          <Form.Label>Marca</Form.Label>
+          <Form.Control
+            type="text"
+            name="proveedor"
+            value={editedData.proveedor || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.proveedor}
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.proveedor}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Código de barras */}
+        <Form.Group controlId="formCodigoBarras">
+          <Form.Label>Código de barras</Form.Label>
+          <Form.Control
+            type="text"
+            name="codigoDeBarras"
+            value={editedData.codigoDeBarras || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.codigoDeBarras}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.codigoDeBarras}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Calificaciones */}
+        <Form.Group controlId="formCalificaciones">
+          <Form.Label>Calificaciones</Form.Label>
+          <Form.Control
+            type="number"
+            name="calificaciones"
+            value={editedData.calificaciones?.toString() || ""}
+            onChange={handleChange}
+            step="0.1"
+            min="0"
+            max="5"
+            isInvalid={!!errores.calificaciones}
+            placeholder="Calificación (0-5)"
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.calificaciones}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Garantía */}
+        <Form.Group controlId="formGarantia">
+          <Form.Label>Garantía</Form.Label>
+          <Form.Control
+            type="text"
+            name="garantia"
+            value={editedData.garantia || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.garantia}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.garantia}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Fecha de Ingreso */}
+        <Form.Group controlId="formFechaIngreso">
+          <Form.Label>Fecha de Ingreso</Form.Label>
+          <Form.Control
+            type="date"
+            name="fechaDeIngreso"
+            value={formatDate(editedData.fechaDeIngreso) || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.fechaDeIngreso}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.fechaDeIngreso}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Descuento */}
+        <Form.Group controlId="formDescuento">
+          <Form.Label>Descuento</Form.Label>
+          <Form.Control
+            type="text"
+            name="descuento"
+            value={editedData.descuento || ""}
+            onChange={handleChange}
+            isInvalid={!!errores.descuento}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errores.descuento}
+          </Form.Control.Feedback>
+        </Form.Group>
+      </Form>
     </Container>
   );
 };

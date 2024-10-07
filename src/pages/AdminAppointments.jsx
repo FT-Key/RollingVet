@@ -53,7 +53,7 @@ const AdminAppointments = () => {
       // Aplanar los turnos de la página actual
       aplanarTurnos(response.fechaTurnos, currentPage);
     } catch (err) {
-      console.log(err); // Log del error para depuración
+      console.error(err); // Log del error para depuración
       if (err.message === "No se recibió respuesta del servidor.") {
         setError('La fecha no tiene turnos habilitados.');
         setTurnos([]);

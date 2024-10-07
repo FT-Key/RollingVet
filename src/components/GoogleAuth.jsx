@@ -36,7 +36,7 @@ const GoogleAuth = ({ useParameter }) => {
 
   const handleError = (error) => {
     console.log("Inicio de sesión fallido");
-    console.log(error);
+    console.error(error);
   };
 
   const handleLogin = async () => {
