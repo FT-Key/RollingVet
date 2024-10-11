@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import "../css/BasicModal.css";
 import {
-  //Productos
   validarNombreProducto,
   validarDescripcion,
   validarPrecio,
@@ -17,7 +16,7 @@ import {
   validarCalificaciones,
   validarGarantia,
   validarDescuento,
-  //Usuarios
+  
   validarNombreUsuario,
   validarContraseniaUsuario,
   validarCorreoElectronico,
@@ -50,7 +49,6 @@ const BasicModal = ({ type, show, onHide, userData, functionUpdateData, productD
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // Actualizar el estado en función del tipo de datos
     if (type === "adminProducts") {
       setFormData(productData);
     } else if (type === "adminUsers") {
@@ -113,12 +111,10 @@ const BasicModal = ({ type, show, onHide, userData, functionUpdateData, productD
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      console.log(errors);
       return;
     }
 
     try {
-      // Llamar a la función putServerData para actualizar el producto en el servidor
       let updatedData;
       switch (true) {
         case type === "adminUsers":
@@ -144,7 +140,7 @@ const BasicModal = ({ type, show, onHide, userData, functionUpdateData, productD
 
       setFormData(editedData);
       functionUpdateData(prevMark => !prevMark);
-      onHide(); // Cerrar el modal
+      onHide();
     } catch (error) {
       console.error('Error al guardar el producto:', error);
     }
@@ -730,8 +726,6 @@ const BasicModal = ({ type, show, onHide, userData, functionUpdateData, productD
   );
 };
 
-// Constantes para los campos de usuarios
-
 const IDIOMAS = ['Español', 'Inglés', 'Francés', 'Alemán', 'Italiano'];
 const TEMAS = ['Claro', 'Oscuro'];
 const PREGUNTAS_SEGURIDAD = [
@@ -749,7 +743,5 @@ const PAISES = [
   "Perú", "Reino Unido", "Rusia", "Sudáfrica", "Uruguay", "Venezuela"
 ];
 const ESTADOS_SUSCRIPCION = ["Premium", "Gratis"];
-
-//
 
 export default BasicModal;

@@ -9,8 +9,8 @@ import { getAppointments, getOneAppointment } from '../helpers/ServerAppointment
 import { Helmet } from 'react-helmet-async';
 
 const AdminAppointments = () => {
-  const [turnos, setTurnos] = useState([]); // Turnos aplanados para la página actual
-  const [fechaTurnos, setFechaTurnos] = useState([]); // Guardar las 20 fechas con turnos
+  const [turnos, setTurnos] = useState([]);
+  const [fechaTurnos, setFechaTurnos] = useState([]);
   const [fecha, setFecha] = useState(() => {
     const today = new Date();
     return today.toISOString().split('T')[0]; // Convierte la fecha a 'YYYY-MM-DD'
@@ -19,10 +19,9 @@ const AdminAppointments = () => {
   const [error, setError] = useState('');
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(1); // Cambia esto al límite que prefieras para cada página
+  const [limit, setLimit] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Función para obtener turnos de 20 fechas
   const obtenerTurnos = async (fecha = '') => {
     setLoading(true);
     setError('');
@@ -30,30 +29,27 @@ const AdminAppointments = () => {
     try {
       let response;
       if (!fecha) {
-        response = await getAppointments(1, 20); // Traemos 20 fechas con turnos de una sola vez
+        response = await getAppointments(1, 20);
       } else {
         response = await getOneAppointment(fecha);
       }
 
-      // Asegurarse de que response exista y tenga la estructura esperada
       if (!response) {
         throw new Error('No se recibió respuesta del servidor.');
       }
 
-      // Asegurarse de que response sea siempre un array
       if (fecha && !response.fechaTurnos && response._id) {
-        response.fechaTurnos = [response];  // Si es un objeto, lo convierte en un array
+        response.fechaTurnos = [response]; 
         setCurrentPage(1);
         setTotalPages(1);
       } else if (response.fechaTurnos) {
-        setFechaTurnos(response.fechaTurnos); // Guardamos las fechas con turnos
+        setFechaTurnos(response.fechaTurnos);
         setTotalPages(response.pagination.totalTurnos);
       }
 
-      // Aplanar los turnos de la página actual
       aplanarTurnos(response.fechaTurnos, currentPage);
     } catch (err) {
-      console.error(err); // Log del error para depuración
+      console.error(err);
       if (err.message === "No se recibió respuesta del servidor.") {
         setError('La fecha no tiene turnos habilitados.');
         setTurnos([]);
@@ -70,12 +66,11 @@ const AdminAppointments = () => {
     const inicio = (pagina - 1) * turnosPorPagina;
     const fin = inicio + turnosPorPagina;
 
-    // Aplanar solo los turnos de las fechas correspondientes a la página actual
     const turnosAplanados = fechas.slice(inicio, fin).flatMap(item =>
       Array.isArray(item.turnos) ? item.turnos.map(turno => ({
         fecha: item.fecha,
         ...turno
-      })) : [] // Si no es un array, devuelve un array vacío
+      })) : []
     );
 
     setTurnos(turnosAplanados);
@@ -94,7 +89,6 @@ const AdminAppointments = () => {
   };
 
   const handleBuscarClick = () => {
-    // Al hacer una búsqueda por fecha, resetear a la página 1
     setCurrentPage(1);
     obtenerTurnos(fecha);
   };
@@ -108,7 +102,6 @@ const AdminAppointments = () => {
         estado: 'completado'
       };
       await putServerData(apiUrl, `/turnos/modificarTurno/${turnoId}`, body, token);
-      // Actualiza la lista de turnos después de completar
       obtenerTurnos(fecha);
     } catch (error) {
       setError('Error al completar el turno.');
@@ -128,7 +121,6 @@ const AdminAppointments = () => {
         modalidad: 'online'
       };
       await putServerData(apiUrl, `/turnos/modificarTurno/${turnoId}`, body, token);
-      // Actualiza la lista de turnos después de liberar
       obtenerTurnos(fecha);
     } catch (error) {
       setError('Error al liberar el turno.');

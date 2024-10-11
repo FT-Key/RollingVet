@@ -12,15 +12,15 @@ import {
 import { useAuth } from '../context/AuthContext';
 import Loading from "../components/Loading";
 import { Col, Container, Row } from "react-bootstrap";
-import Zoom from '../components/Zoom'; // Importa el componente Zoom
+import Zoom from '../components/Zoom';
 import { RedirectToLogin } from "../helpers/Redirects";
 import { Helmet } from 'react-helmet-async';
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const [producto, setProducto] = useState(null);
-  const [cart, setCart] = useState([]); // Nuevo estado para el carrito
-  const [favorites, setFavorites] = useState([]); // Nuevo estado para los favoritos
+  const [cart, setCart] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const { user, carrito, favoritos, setUpdateMark, setBooleanUpdateMark } = useAuth();
   const navigate = useNavigate();
 
@@ -110,7 +110,6 @@ const ProductDetail = () => {
             </Col>
 
             <Col xs={12} md={6}>
-              {/* Envuelve la imagen dentro del componente Zoom */}
               <Zoom imageUrl={producto.imagenUrl}>
               </Zoom>
             </Col>

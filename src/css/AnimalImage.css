@@ -3,14 +3,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #d2d2d285; /* 'dimgrey' con opacidad del 50% */
+  background-color: #d2d2d285;
   padding: 0;
 }
 
 .animal-container {
   position: relative;
-  aspect-ratio: 1 / 1; /* Cuadrado */
-  background-clip: content-box; /* Asegura que el color se vea solo en las áreas no enmascaradas */
+  aspect-ratio: 1 / 1;
+  background-clip: content-box;
   overflow: hidden;
 }
 

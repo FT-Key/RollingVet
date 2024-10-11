@@ -1,6 +1,6 @@
 import React from "react";
 import Pagination from "react-bootstrap/Pagination";
-import '../css/PaginationComponent.css'; // Importa el archivo de estilos
+import '../css/PaginationComponent.css';
 
 const PaginationComponent = ({ totalPages, currentPage, setPage }) => {
 
@@ -10,7 +10,6 @@ const PaginationComponent = ({ totalPages, currentPage, setPage }) => {
     }
   };
 
-  // Función para generar los 9 espacios de paginación
   const getPageItems = () => {
     const pages = [];
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { postServerData } from '../helpers/ServerCalling';
-import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
+import { useAuth } from '../context/AuthContext';
 import { redirectAfterLogin } from '../helpers/Redirects';
 import { validateRegisterFields } from './Validators';
 import '../css/BasicForm.css';
@@ -10,10 +10,8 @@ import '../css/BasicForm.css';
 function BasicForm({ type }) {
 
   const navigate = useNavigate();
-  const { loginContext } = useAuth(); // Usar loginContext para manejar el login
+  const { loginContext } = useAuth();
   const [errors, setErrors] = useState({});
-
-  // Estados
   const [formLogin, setFormLogin] = useState({
     userName: '',
     userPass: '',
@@ -26,9 +24,7 @@ function BasicForm({ type }) {
     userPassConf: ''
   });
   const [clearForm, setClearForm] = useState(false);
-  //
 
-  // useEffect para observar cambios en el tipo y limpiar los formularios
   useEffect(() => {
     setFormLogin({
       userName: '',
@@ -42,18 +38,14 @@ function BasicForm({ type }) {
       userPassConf: ''
     });
 
-    // Seteo el clearForm para limpiar los formularios al desmontar el componente
     return () => {
       setClearForm(true);
     };
   }, [clearForm]);
 
-  // Funciones
-  ////CHANGE
-
   const handleChangeRegister = (ev) => {
     if (type !== "registro") {
-      return console.log("Error al cargar página de registro.");
+      return;
     }
 
     setFormRegister({ ...formRegister, [ev.target.name]: ev.target.value });
@@ -61,19 +53,18 @@ function BasicForm({ type }) {
 
   const handleChangeLogin = (ev) => {
     if (type !== "inicioSesion") {
-      return console.log("Error al cargar página de inicio de sesión.");
+      return;
     }
 
     const { name, value, type: inputType, checked } = ev.target;
     setFormLogin({ ...formLogin, [name]: inputType === 'checkbox' ? checked : value });
   }
 
-  ////CLICK
   const handleClickRegister = async (ev) => {
     ev.preventDefault();
 
     if (type !== "registro") {
-      return console.log("Error al cargar página de registro.");
+      return;
     }
 
     const validationErrors = validateRegisterFields(formRegister);
@@ -95,24 +86,20 @@ function BasicForm({ type }) {
 
       if (serverResponse.nuevoUsuario && serverResponse.token) {
 
-        const { token: jwtToken } = serverResponse; // Desestructura el token del JSON
+        const { token: jwtToken } = serverResponse;
 
         loginContext(jwtToken);
         redirectAfterLogin(navigate);
-        console.log("Registro exitoso")
 
       } else if (!serverResponse.nuevoUsuario) {
         throw new Error('Error en el servidor al registrarse');
       }
     } catch (error) {
-      // Revisar si el error tiene un mensaje de error retornado por el servidor
       if (error instanceof Error && error.response) {
-        // Si el servidor devuelve un mensaje personalizado, lo mostramos
         const serverMessage = error.response.data.msg || 'Error desconocido en el servidor';
         setErrors({ incorrectRegister: serverMessage });
         throw new Error(serverMessage);
       } else {
-        // Lanzar un mensaje de error genérico si no hay mensaje en la respuesta
         throw new Error('Error en el servidor al registrarse');
       }
     }
@@ -122,7 +109,7 @@ function BasicForm({ type }) {
     ev.preventDefault();
 
     if (type !== "inicioSesion") {
-      return console.log("Error al cargar página de inicio de sesión.");
+      return;
     }
 
     try {
@@ -132,11 +119,10 @@ function BasicForm({ type }) {
       const serverResponse = await postServerData(apiUrl, '/login', formLogin);
 
       if (serverResponse.token) {
-        const { token: jwtToken } = serverResponse; // Desestructura el token del JSON
+        const { token: jwtToken } = serverResponse;
 
         loginContext(jwtToken);
         redirectAfterLogin(navigate);
-        console.log("Sesión iniciada con éxito")
 
       } else if (!serverResponse.token) {
         throw new Error('Error en el servidor al iniciar sesión');
@@ -151,7 +137,6 @@ function BasicForm({ type }) {
     }
   }
 
-  // Constantes
   const TEXT_TYPE = {
     registro: "Registrarse",
     inicioSesion: "Iniciar Sesión"
@@ -171,7 +156,6 @@ function BasicForm({ type }) {
     registro: handleClickRegister,
     inicioSesion: handleClickLogin,
   };
-  //
 
   return (
     <>
@@ -187,7 +171,7 @@ function BasicForm({ type }) {
             placeholder="Nombre de usuario"
             value={type === 'registro' ? formRegister.userName : formLogin.userName}
             onChange={CHANGE_TYPE[type]}
-            isInvalid={!!errors.userName} // Agrega esto
+            isInvalid={!!errors.userName}
             autoComplete="username"
           />
           <Form.Control.Feedback type="invalid">{errors.userName}</Form.Control.Feedback>
@@ -202,7 +186,7 @@ function BasicForm({ type }) {
               placeholder="Email"
               value={formRegister.userEmail}
               onChange={CHANGE_TYPE[type]}
-              isInvalid={!!errors.userEmail} // Agrega esto
+              isInvalid={!!errors.userEmail}
             />
             <Form.Control.Feedback type="invalid">{errors.userEmail}</Form.Control.Feedback>
           </Form.Group>
@@ -216,7 +200,7 @@ function BasicForm({ type }) {
             placeholder="Contraseña"
             value={type === 'registro' ? formRegister.userPass : formLogin.userPass}
             onChange={CHANGE_TYPE[type]}
-            isInvalid={!!errors.userPass} // Agrega esto
+            isInvalid={!!errors.userPass}
           />
           <Form.Control.Feedback type="invalid">{errors.userPass}</Form.Control.Feedback>
         </Form.Group>
@@ -238,7 +222,7 @@ function BasicForm({ type }) {
               placeholder="Repetir contraseña"
               value={formRegister.userPassConf}
               onChange={CHANGE_TYPE[type]}
-              isInvalid={!!errors.userPassConf} // Agrega esto
+              isInvalid={!!errors.userPassConf}
             />
             <Form.Control.Feedback type="invalid">{errors.userPassConf}</Form.Control.Feedback>
           </Form.Group>

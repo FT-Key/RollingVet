@@ -16,43 +16,43 @@ const AdminAnimals = () => {
     fotoUrl: "",
     tipo: "Perro",
     raza: "",
-    edad: 0.5, // Usualmente números deben inicializarse con null
+    edad: 0.5,
     genero: "Macho",
     descripcion: "",
     estado: "En Adopción",
     esterilizado: false,
-    peso: 0.5, // Para números, null es adecuado si no hay valor
+    peso: 0.5,
     plan: null,
-    historialMedico: [], // Array vacío para el historial médico
+    historialMedico: [],
     nuevoEventoHistorial: "",
-    vacunas: [], // Array vacío para las vacunas
-    ultimaVisitaVeterinaria: new Date(), // Usamos new Date() para fechas
-    creadoEn: new Date(), // Fecha de creación en el momento actual
-    actualizadoEn: new Date(), // Fecha de actualización en el momento actual
+    vacunas: [],
+    ultimaVisitaVeterinaria: new Date(),
+    creadoEn: new Date(),
+    actualizadoEn: new Date(),
   };
-  const [allAnimals, setAllAnimals] = useState([]); // Animales traídos del servidor
-  const [currentAnimals, setCurrentAnimals] = useState([]); // Animales mostrados en la página actual
+  const [allAnimals, setAllAnimals] = useState([]);
+  const [currentAnimals, setCurrentAnimals] = useState([]);
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [isNew, setIsNew] = useState(false)
   // PAGINACION
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 5; // Número de animales por página
+  const limit = 5;
   const [totalPages, setTotalPages] = useState(1);
-  const [totalAnimalesServidor, setTotalAnimalesServidor] = useState(0); // Total de animales disponibles en el servidor
-  const [fetchedAnimalsCount, setFetchedAnimalsCount] = useState(0); // Cantidad de animales cargados
+  const [totalAnimalesServidor, setTotalAnimalesServidor] = useState(0);
+  const [fetchedAnimalsCount, setFetchedAnimalsCount] = useState(0);
 
   const ANIMAL_BATCH_SIZE = 50;
 
   useEffect(() => {
     const fetchInitialAnimals = async () => {
       try {
-        const data = await getAnimals(1, ANIMAL_BATCH_SIZE); // Trae los primeros 50 animales
+        const data = await getAnimals(1, ANIMAL_BATCH_SIZE);
         setAllAnimals(data.animales);
         setTotalAnimalesServidor(data.pagination.totalAnimales);
         setFetchedAnimalsCount(data.animales.length);
-        setTotalPages(Math.ceil(data.pagination.totalAnimales / limit)); // Calcula el total de páginas en base a los animales en el servidor
+        setTotalPages(Math.ceil(data.pagination.totalAnimales / limit));
       } catch (error) {
         console.error("Error trayendo animales:", error);
       }
@@ -65,13 +65,11 @@ const AdminAnimals = () => {
     const start = (currentPage - 1) * limit;
     const end = start + limit;
 
-    // Verifica si se necesitan más animales del servidor
     if (end > fetchedAnimalsCount && fetchedAnimalsCount < totalAnimalesServidor) {
-      // Llamar al servidor para obtener más animales
       const fetchMoreAnimals = async () => {
         try {
-          const data = await getAnimals(fetchedAnimalsCount / limit + 1, ANIMAL_BATCH_SIZE); // Solicitar los próximos 50 animales
-          setAllAnimals((prevAnimals) => [...prevAnimals, ...data.animales]); // Agregar los nuevos animales
+          const data = await getAnimals(fetchedAnimalsCount / limit + 1, ANIMAL_BATCH_SIZE);
+          setAllAnimals((prevAnimals) => [...prevAnimals, ...data.animales]);
           setFetchedAnimalsCount(fetchedAnimalsCount + data.animales.length);
         } catch (error) {
           console.error("Error trayendo más animales:", error);
@@ -80,7 +78,7 @@ const AdminAnimals = () => {
 
       fetchMoreAnimals();
     } else {
-      setCurrentAnimals(allAnimals.slice(start, end)); // Animales a mostrar en la página actual
+      setCurrentAnimals(allAnimals.slice(start, end));
     }
   }, [currentPage, allAnimals, fetchedAnimalsCount, totalAnimalesServidor]);
 

@@ -9,7 +9,6 @@ import { Helmet } from 'react-helmet-async';
 const Favoritos = () => {
   const { favoritos, setUpdateMark, setBooleanUpdateMark } = useAuth();
 
-  // Función para manejar la eliminación de un favorito
   const handleRemoveFavorite = async (productId) => {
     const removeFromFavsFunction = async () => {
       await removeFromFavs(productId);
@@ -29,16 +28,13 @@ const Favoritos = () => {
         <Row className="row-cols-sm-1 row-cols-md-2 row-cols-lg-3 my-3 custom-row g-3">
           {favoritos.map((prod) => (
             <Col className="p-0" key={prod._id}>
-              {/* Contenedor para posicionar el botón relativo a la tarjeta */}
               <div className="position-relative">
-                {/* Botón X para eliminar */}
                 <Button
                   className="fav-remove-btn"
                   onClick={() => handleRemoveFavorite(prod._id)}
                 >
                   X
                 </Button>
-                {/* Card */}
                 <BasicCard data={prod} type={"productCard"} />
               </div>
             </Col>

@@ -3,7 +3,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import CustomButton from "../components/CustomButton";
-import BasicModal from "../components/BasicModal"; // Verifica que la ruta sea correcta
+import BasicModal from "../components/BasicModal";
 import "../css/AdminUsers.css";
 import { putServerData, deleteServerData } from "../helpers/ServerCalling";
 import { confirmAlert } from "react-confirm-alert";
@@ -17,8 +17,8 @@ import { getToken } from "../helpers/Token.helper";
 
 const AdminUsers = () => {
   const { user } = useAuth();
-  const [users, setUsers] = useState([]); // Todos los usuarios cargados
-  const [loadedUsers, setLoadedUsers] = useState([]); // Usuarios cargados en bloques
+  const [users, setUsers] = useState([]);
+  const [loadedUsers, setLoadedUsers] = useState([]);
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -28,61 +28,53 @@ const AdminUsers = () => {
   const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
-  const USERS_BATCH_SIZE = 50; // Cantidad de usuarios que se cargan por llamada al servidor
+  const USERS_BATCH_SIZE = 50;
 
   useEffect(() => {
     if (updatedUser && updatedUser._id) {
       setLoadedUsers((prevUsers) => {
-        // Comprobar si updatedUser solo tiene el atributo _id
         const hasOnlyId = Object.keys(updatedUser).length === 1 && updatedUser._id;
 
         if (hasOnlyId) {
-          // Eliminar el usuario con el _id especificado
           return prevUsers.filter((user) => user._id !== updatedUser._id);
         } else {
-          // Buscar coincidencia por _id y reemplazar el usuario
           return prevUsers.map((user) =>
             user._id === updatedUser._id ? updatedUser : user
           );
         }
       });
 
-      // Reiniciar el estado de updatedUser a un objeto vacío
       setUpdatedUser({});
     }
   }, [updatedUser]);
 
   useEffect(() => {
-    let isMounted = true; // Variable para saber si el componente está montado
+    let isMounted = true;
 
     const fetchUsers = async () => {
       while (true) {
         try {
-          const data = await getUsers(currentPage, USERS_BATCH_SIZE); // Obtener usuarios en lotes de 50
+          const data = await getUsers(currentPage, USERS_BATCH_SIZE);
 
           if (isMounted) {
-            // Agregar usuarios nuevos al estado, sin duplicar
             setLoadedUsers((prevUsers) => [...prevUsers, ...data.usuarios]);
-
-            // Calcular el total de páginas basadas en los usuarios cargados
             setTotalPages(Math.ceil(data.pagination.totalUsuarios / limit));
           }
-          break; // Salir del bucle si la petición es exitosa
+          break;
         } catch (error) {
           console.error("Error trayendo usuarios:", error);
-          if (!isMounted) return; // Salir si el componente se desmontó
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
+          if (!isMounted) return;
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       }
     };
 
-    // Llamar a la función solo si no se han cargado suficientes usuarios para paginar
     if (loadedUsers.length < currentPage * limit) {
       fetchUsers();
     }
 
     return () => {
-      isMounted = false; // Marcar como desmontado al limpiar el efecto
+      isMounted = false;
     };
   }, [updateMark, currentPage]);
 
@@ -131,7 +123,6 @@ const AdminUsers = () => {
 
             setUpdateMark(prevMark => !prevMark);
 
-            // Elimina el contenedor del alert del DOM después de cerrar el alert
             const alertContainer = document.querySelector(
               ".react-confirm-alert"
             );
@@ -143,7 +134,6 @@ const AdminUsers = () => {
         {
           label: "No",
           onClick: () => {
-            // Elimina el contenedor del alert del DOM después de cerrar el alert
             const alertContainer = document.querySelector(
               ".react-confirm-alert"
             );
@@ -156,14 +146,12 @@ const AdminUsers = () => {
     });
   };
 
-  // Obtener usuarios paginados basados en el estado actual
   const paginatedUsers = useMemo(() => {
     const startIndex = (currentPage - 1) * limit;
     const endIndex = startIndex + limit;
     return loadedUsers.slice(startIndex, endIndex);
   }, [loadedUsers, currentPage, limit]);
 
-  // Cálculo para agregar espacios vacíos
   const fillEmptySpaces = useMemo(() => {
     return Array(limit - paginatedUsers.length).fill(null);
   }, [paginatedUsers.length, limit]);

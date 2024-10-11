@@ -32,15 +32,13 @@ const Home = () => {
     const cargarDatos = async () => {
       while (true) {
         try {
-          // Llamada para obtener todos los productos y animales en una sola vez
-          const dataProductos = await getProducts(); // Aquí podrías ajustar para obtener 30 productos
-          const dataAdopcion = await getAnimals(1, 30, { estado: "En Adopción" }); // Aquí podrías ajustar para obtener 30 animales
+          const dataProductos = await getProducts();
+          const dataAdopcion = await getAnimals(1, 30, { estado: "En Adopción" });
 
           if (isMounted) {
             setProductos(dataProductos.productos);
             setAnimalesAdopcion(dataAdopcion.animales);
 
-            // Calcular el total de páginas
             setTotalPagesProd(Math.ceil(dataProductos.productos.length / limitProd));
             setTotalPagesAnimal(Math.ceil(dataAdopcion.animales.length / limitAnimal));
           }
@@ -66,7 +64,6 @@ const Home = () => {
     };
   }, [limitProd, limitAnimal]);
 
-  // Obtener los productos y animales a mostrar según la página actual
   const productosActuales = productos.slice((currentPageProd - 1) * limitProd, currentPageProd * limitProd);
   const animalesActuales = animalesAdopcion.slice((currentPageAnimal - 1) * limitAnimal, currentPageAnimal * limitAnimal);
 
@@ -76,7 +73,6 @@ const Home = () => {
         <title>RollingVet</title>
       </Helmet>
       
-      {/* Sección de presentación */}
       <section className="home-hero">
         <img src="/Veterinaria-frente.png" alt="Veterinaria" className="hero-background" />
         <div className="hero-content text-center">
@@ -95,24 +91,20 @@ const Home = () => {
         <TradeMarkSlider time={"20s"} />
       </section>
 
-      {/* Sección del carrusel de profesionales */}
       <section className="carousel-section">
         <h2 className="text-center fw-bold">Te presentamos a nuestros especialistas</h2>
         <CarouselFade data={PROFESIONALES} type="profesionales" />
       </section>
 
-      {/* Sección de los 3 planes */}
       <section>
         <PlansSection />
       </section>
 
-      {/* Sección del carrusel de productos destacados */}
       <section className="carousel-section">
         <h2 className="text-center fw-bold">Echa un vistazo a nuestros productos Destacados</h2>
         {productosCarrusel && <CarouselFade data={productosCarrusel} type={"productCarousel"} />}
       </section>
 
-      {/* Sección de productos */}
       <section className="products-section">
         <Container>
           <h2 className="text-center fw-bold">Nuestros Productos</h2>
@@ -131,7 +123,6 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* Sección de adopción */}
       <section className="adoption-section">
         <Container>
           <h2 className="text-center fw-bold">Salva una vida, adopta una mascota</h2>

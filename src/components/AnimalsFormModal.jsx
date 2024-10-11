@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Container, Form } from "react-bootstrap";
-import AnimalImage from "./AnimalImage"; // Componente para mostrar la imagen del animal
-import { formatDate } from "../helpers/FormatDateHTML"; // Formatear fechas
-import { PLANES, ESTADOS_ANIMAL, ESPECIES, VACUNAS } from "../utils/animalsConst.utils"; // Importar constantes
+import AnimalImage from "./AnimalImage";
+import { formatDate } from "../helpers/FormatDateHTML";
+import { PLANES, ESTADOS_ANIMAL, ESPECIES, VACUNAS } from "../utils/animalsConst.utils";
 
 const AnimalsFormModal = ({ handleChange, editedData }) => {
   const [imageOption, setImageOption] = useState("");
@@ -26,7 +26,7 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
       </div>
 
       <div>
-        <AnimalImage source={editedData.fotoUrl || ""} /> {/* Mostrar imagen del animal */}
+        <AnimalImage source={editedData.fotoUrl || ""} />
       </div>
 
       <button
@@ -105,7 +105,6 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
         />
       </div>
 
-      {/* Campo para el género */}
       <div>
         <label>Género</label>
         <select
@@ -184,14 +183,12 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
 
       <div>
         <label>Historial Médico</label>
-        {/* Listar el historial médico existente */}
         <ul>
           {editedData.historialMedico?.map((evento, index) => (
             <li key={index}>{evento}</li>
           ))}
         </ul>
 
-        {/* Input para agregar un nuevo evento al historial */}
         <input
           type="text"
           name="nuevoEventoHistorial"
@@ -200,7 +197,6 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
           placeholder="Agregar nuevo evento médico"
         />
 
-        {/* Botón para agregar el nuevo evento al array de historial médico */}
         <button
           type="button"
           onClick={() => {
@@ -212,7 +208,7 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
                 },
               });
               handleChange({
-                target: { name: "nuevoEventoHistorial", value: "" }, // Limpiar el input después de agregar
+                target: { name: "nuevoEventoHistorial", value: "" },
               });
             }
           }}

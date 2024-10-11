@@ -1,7 +1,6 @@
-// FloatingButton.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../css/FloatingButton.css'; // Asegúrate de importar el archivo CSS
+import '../css/FloatingButton.css';
 
 const FloatingButton = () => {
   return (

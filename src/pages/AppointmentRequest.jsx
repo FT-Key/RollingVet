@@ -32,7 +32,7 @@ const AppointmentRequest = () => {
   const [descripcion, setDescripcion] = useState('');
   const [turnos, setTurnos] = useState([]);
   const [horaSeleccionada, setHoraSeleccionada] = useState('');
-  const [modalidad, setModalidad] = useState('online'); // Valor por defecto
+  const [modalidad, setModalidad] = useState('online');
   const [updateMark, setUpdateMark] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -88,7 +88,7 @@ const AppointmentRequest = () => {
         hora: horaSeleccionada,
         tipoAtencion,
         descripcion,
-        modalidad // Enviar la modalidad seleccionada
+        modalidad
       }, token);
 
       if (response && response.turno) {
@@ -97,11 +97,10 @@ const AppointmentRequest = () => {
         setDescripcion('');
         setModalidad('online');
         setUpdateMark(prev => !prev);
-        setErrorMessage('');  // Limpiar mensaje de error
+        setErrorMessage('');
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        // Mostrar el mensaje de error del servidor
         setErrorMessage(error.response.data.message || 'Error al solicitar el turno.');
         alert(error.response.data.message);
       } else {
@@ -138,7 +137,7 @@ const AppointmentRequest = () => {
           </select>
           <div className='turnosContainer'>
             {errorMessage
-              ? <p className='text-center m-0 error-message'>{errorMessage}</p> // Mostrar el mensaje de error
+              ? <p className='text-center m-0 error-message'>{errorMessage}</p>
               : (turnos.length > 0
                 ? turnos.map((turno) => (
                   turno.estado != 'cancelado'
