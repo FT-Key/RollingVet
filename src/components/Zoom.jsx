@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import '../css/Zoom.css';
 
 const Zoom = ({ imageUrl }) => {
-  const [aspectRatio, setAspectRatio] = useState(1); // Estado para manejar el aspect ratio
+  const [aspectRatio, setAspectRatio] = useState(1);
 
   useEffect(() => {
     const imageZoom = document.getElementById('imageZoom');
@@ -12,12 +12,11 @@ const Zoom = ({ imageUrl }) => {
     let zoomX = 0;
     let zoomY = 0;
 
-    // Crear una nueva imagen para obtener las dimensiones
     const img = new Image();
     img.src = imageUrl;
     img.onload = () => {
       const { width, height } = img;
-      setAspectRatio(width / height); // Actualiza el aspect ratio con las dimensiones de la imagen
+      setAspectRatio(width / height);
     };
 
     imageZoom.style.backgroundImage = `url(${imageUrl})`;

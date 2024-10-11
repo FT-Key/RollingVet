@@ -8,7 +8,7 @@ export const fetchServerData = async (dominio, ruta, token = '') => {
         ...(token && { Authorization: `Bearer ${token}` }),
       }
     });
-    return response.data;  // Axios ya convierte la respuesta a JSON automáticamente
+    return response.data;
   } catch (error) {
     console.error("Error al obtener datos:", error);
     throw error;
@@ -22,11 +22,10 @@ export const postServerData = async (dominio, ruta, body, token = "") => {
     const response = await axios.post(`${dominio}${ruta}`, body, {
       headers: {
         ...(token && { Authorization: `Bearer ${token}` }),
-        // Axios maneja automáticamente el Content-Type, pero si no es FormData, lo especificamos manualmente
         ...(!isFormData && { "Content-Type": "application/json" }),
       }
     });
-    return response.data;  // Axios ya convierte la respuesta a JSON automáticamente
+    return response.data;
   } catch (error) {
     console.error("Error al enviar datos:", error);
     throw error;
@@ -41,7 +40,7 @@ export const putServerData = async (dominio, ruta, body, token = '') => {
         ...(token && { Authorization: `Bearer ${token}` }),
       }
     });
-    return response.data;  // Axios ya convierte la respuesta a JSON automáticamente
+    return response.data;
   } catch (error) {
     console.error("Error al actualizar datos:", error);
     throw error;
@@ -56,7 +55,7 @@ export const deleteServerData = async (dominio, ruta, token = '') => {
         ...(token && { Authorization: `Bearer ${token}` }),
       }
     });
-    return response.data;  // Axios ya convierte la respuesta a JSON automáticamente
+    return response.data;
   } catch (error) {
     console.error("Error al eliminar datos:", error);
     throw error;

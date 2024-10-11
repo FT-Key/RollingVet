@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/TradeMarkSlider.css"; // Asegúrate de crear un archivo CSS separado para los estilos.
+import "../css/TradeMarkSlider.css";
 
 const TradeMarkSlider = ({ time, width, height }) => {
   const marcas = [

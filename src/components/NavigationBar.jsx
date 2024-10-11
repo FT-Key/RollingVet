@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Nav, NavDropdown, Modal, Button } from 'react-bootstrap'; // Importa Modal y Button
+import { Navbar, Nav, NavDropdown, Modal, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { useAuth } from '../context/AuthContext';
 import '../css/NavigationBar.css';
 import SVG from './SVG';
 import { RedirectToLogin, RedirectToRegister } from '../helpers/Redirects';
-/* import Weather from './Weather'; */
-import DonationForm from '../components/DonationsForm'; // Importa el componente DonationForm
+import DonationForm from '../components/DonationsForm';
 
 function NavigationBar() {
   const { user, carrito, favoritos, logoutContext } = useAuth();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
-  const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const setNavbarHeight = () => {
@@ -58,11 +57,6 @@ function NavigationBar() {
           <Nav className="mr-auto">
             <Nav.Link className='ps-2' as={Link} to="/" onClick={() => setExpanded(false)}>Inicio</Nav.Link>
 
-            {/* <NavDropdown className='ps-2' title="Clima" id="clima-nav-dropdown">
-              <Weather center={true} />
-            </NavDropdown> */}
-
-            {/* Aquí agregas el botón para abrir el modal de donación */}
             <Nav.Link className='ps-2' onClick={() => setShowModal(true)}>Donar</Nav.Link>
 
             <NavDropdown className='ps-2' title="Servicios" id="basics-nav-dropdown">
@@ -136,7 +130,6 @@ function NavigationBar() {
         </Navbar.Collapse>
       </Navbar>
 
-      {/* Modal para Donaciones */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Hacer una Donación</Modal.Title>

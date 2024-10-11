@@ -33,6 +33,6 @@ export async function getOneAppointment(fecha) {
     return response;
   } catch (error) {
     console.error("Error fetching product:", error);
-    return null; // o puedes manejar el error de otra forma, dependiendo de tu aplicación
+    return null;
   }
 }

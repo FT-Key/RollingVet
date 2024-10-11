@@ -1,13 +1,12 @@
 import React from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 
-// Define el array de libraries fuera del componente
-const libraries = ['places']; // Agrega más bibliotecas si es necesario
+const libraries = ['places'];
 
 const MapComponent = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries, // Usa la variable estática para evitar la recreación del array
+    libraries,
   });
 
   const mapStyles = {

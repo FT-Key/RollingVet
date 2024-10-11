@@ -26,15 +26,13 @@ const Contacto = () => {
   const manejarEnvio = async (e) => {
     e.preventDefault();
 
-    // Validar los campos antes de enviar el formulario
     const erroresValidados = validateContactFields(formData);
 
     if (Object.keys(erroresValidados).length > 0) {
-      setErrores(erroresValidados); // Mostrar errores específicos
+      setErrores(erroresValidados);
       return;
     }
 
-    // Si no hay errores, proceder con el envío del formulario
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await axios.post(`${apiUrl}/contacto`, formData);
@@ -80,7 +78,7 @@ const Contacto = () => {
                 name="nombre"
                 value={formData.nombre}
                 onChange={manejarCambio}
-                isInvalid={!!errores.nombre} // Añadir validación visual
+                isInvalid={!!errores.nombre}
               />
               <Form.Control.Feedback type="invalid">
                 {errores.nombre}
@@ -95,7 +93,7 @@ const Contacto = () => {
                 name="email"
                 value={formData.email}
                 onChange={manejarCambio}
-                isInvalid={!!errores.email} // Añadir validación visual
+                isInvalid={!!errores.email}
               />
               <Form.Control.Feedback type="invalid">
                 {errores.email}
@@ -121,7 +119,7 @@ const Contacto = () => {
                 name="asunto"
                 value={formData.asunto}
                 onChange={manejarCambio}
-                isInvalid={!!errores.asunto} // Añadir validación visual
+                isInvalid={!!errores.asunto}
               />
               <Form.Control.Feedback type="invalid">
                 {errores.asunto}
@@ -137,7 +135,7 @@ const Contacto = () => {
                 name="mensaje"
                 value={formData.mensaje}
                 onChange={manejarCambio}
-                isInvalid={!!errores.mensaje} // Añadir validación visual
+                isInvalid={!!errores.mensaje}
               />
               <Form.Control.Feedback type="invalid">
                 {errores.mensaje}

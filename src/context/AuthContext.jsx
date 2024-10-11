@@ -7,10 +7,10 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Usuario basado en JWT
-  const [firebaseUser, setFirebaseUser] = useState(null); // Usuario de Firebase
+  const [user, setUser] = useState(null);
+  const [firebaseUser, setFirebaseUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [tokenExpiry, setTokenExpiry] = useState(null); // Tiempo de expiración del token
+  const [tokenExpiry, setTokenExpiry] = useState(null);
   const [carrito, setCarrito] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [updateMark, setUpdateMark] = useState();
@@ -28,15 +28,13 @@ export const AuthProvider = ({ children }) => {
           setUser(decodedToken);
           setTokenExpiry(decodedToken.exp);
 
-          // Cargar el carrito y favoritos al autenticarse
           const cartData = await getCart();
           const favsData = await getFavs();
           setCarrito(cartData.productos || []);
           setFavoritos(favsData.productos || []);
 
-          // Configurar el tiempo de expiración
           const timeToExpire = (decodedToken.exp - currentTime) * 1000;
-          setTimeout(checkToken, timeToExpire); // Verificar token antes de expirar
+          setTimeout(checkToken, timeToExpire);
 
         } else {
           removeToken();
@@ -103,10 +101,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setFirebaseUser(currentUser);
-
-      // Opcional: sincroniza el estado del usuario JWT con Firebase si es necesario
       if (currentUser) {
-        // Si tienes una función que verifica o sincroniza el JWT con el usuario de Firebase, hazlo aquí
       }
 
       setLoading(false);
@@ -130,12 +125,11 @@ export const AuthProvider = ({ children }) => {
         ...otherUserData,
       };
 
-      setUser(user); // Establece el usuario basado en JWT
+      setUser(user);
       setToken(token);
 
       await clearCart();
 
-      // Llamar a checkToken para establecer el temporizador y actualizar favoritos
       checkToken();
     } catch (error) {
       console.error("Error al iniciar sesión en loginContext:", error);

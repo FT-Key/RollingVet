@@ -2,31 +2,30 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
 import { useAuth } from "../context/AuthContext";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
-import { getPlanes, comprarPlan } from "../helpers/ServerPlans"; // Helper para obtener los planes y realizar la compra
-import { getToken } from "../helpers/Token.helper"; // Para obtener el token del usuario
+import { getPlanes, comprarPlan } from "../helpers/ServerPlans";
+import { getToken } from "../helpers/Token.helper";
 import { Helmet } from 'react-helmet-async';
 import { getAnimals } from '../helpers/ServerAnimals';
 import PaginationComponent from '../components/PaginationComponent';
 
 const Planes = () => {
-  const [planes, setPlanes] = useState([]); // Estado para los planes obtenidos del servidor
-  const [mascotas, setMascotas] = useState([]); // Estado para controlar el modal
+  const [planes, setPlanes] = useState([]);
+  const [mascotas, setMascotas] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedMascota, setSelectedMascota] = useState(null);
-  const [idPreference, setIdPreference] = useState(null); // Estado para la preferencia de pago
-  const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
+  const [idPreference, setIdPreference] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(3);
   const [totalPages, setTotalPages] = useState(1);
   const { user } = useAuth();
 
   useEffect(() => {
-    // Inicializar Mercado Pago
-    initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY); // Asegúrate de que la PUBLIC_KEY esté configurada en tus variables de entorno
-    // Obtener los planes desde el servidor al cargar el componente
+    initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY);
+    
     const fetchPlanes = async () => {
       try {
-        const apiPlanes = await getPlanes(); // Llama al helper que obtiene los planes
+        const apiPlanes = await getPlanes();
         setPlanes(apiPlanes.planes);
       } catch (error) {
         console.error("Error al obtener los planes:", error);
@@ -34,7 +33,7 @@ const Planes = () => {
     };
     const fetchMascotas = async () => {
       try {
-        const misMascotas = await getAnimals(page, limit, { duenio: user._id, estado: "Mascota" }); // Llama al helper que obtiene los planes
+        const misMascotas = await getAnimals(page, limit, { duenio: user._id, estado: "Mascota" });
         setMascotas(misMascotas.animales);
         if (misMascotas.pagination) {
           setTotalPages(
@@ -73,8 +72,8 @@ const Planes = () => {
 
       try {
         const response = await comprarPlan(planSeleccionado, mascotaSeleccionada, returnUrl);
-        setIdPreference(response); // Setear la preferencia de MercadoPago
-        setShowModal(true); // Muestra el modal
+        setIdPreference(response);
+        setShowModal(true);
       } catch (error) {
         console.error("Error al procesar el pago:", error);
       }
@@ -155,7 +154,6 @@ const Planes = () => {
         </Button>
       </div>
 
-      {/* Modal para MercadoPago Wallet */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Completar Pago</Modal.Title>

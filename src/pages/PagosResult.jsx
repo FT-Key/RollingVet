@@ -1,17 +1,17 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa'; // Usaremos react-icons para los íconos
+import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
 import '../css/PagosResult.css';
 import { useEffect } from 'react';
-import { useAuth } from "../context/AuthContext"; // Importa el contexto
+import { useAuth } from "../context/AuthContext";
 import { Helmet } from 'react-helmet-async';
 
 const PagosResult = () => {
-  const { result } = useParams(); // Obtiene el valor del parámetro 'result' de la URL
+  const { result } = useParams();
   const navigate = useNavigate();
-  const { clearCart } = useAuth(); // Usa el carrito y la función para eliminar  
+  const { clearCart } = useAuth();
 
   const handleBackToHome = () => {
-    navigate('/'); // Navega a la página de inicio
+    navigate('/');
   };
 
   useEffect(() => {

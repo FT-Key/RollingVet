@@ -17,14 +17,12 @@ const AppointmentList = () => {
       const token = getToken();
 
       try {
-        // Cambiar la ruta para obtener los turnos del usuario específico
         const response = await fetchServerData(apiUrl, '/turnos/listaTurnos', token);
 
         if (Array.isArray(response) && response.length > 0) {
-          // Transforma las fechas antes de actualizar el estado
           const listaTurnos = response.map(turno => ({
             ...turno,
-            fecha: formatDate(turno.fecha), // Asegúrate de que la función formatDate maneje el formato deseado
+            fecha: formatDate(turno.fecha),
           }));
 
           setTurnos(listaTurnos);
@@ -41,7 +39,6 @@ const AppointmentList = () => {
     const token = getToken();
 
     try {
-      // Cambiar la ruta para obtener los turnos del usuario específico
       const response = await putServerData(apiUrl, '/turnos/cancelarTurno', { turnoId }, token);
 
       setUpdateMark(prev => !prev);

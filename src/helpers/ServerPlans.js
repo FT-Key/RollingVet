@@ -1,7 +1,6 @@
 import { fetchServerData, postServerData, putServerData, deleteServerData } from "./ServerCalling";
 import { getToken } from "./Token.helper";
 
-// Obtener todos los planes con paginación
 export async function getPlanes(page, limit) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const rawData = await fetchServerData(apiUrl, `/planes?${page ? `page=${page}&` : ''}${limit ? `limit=${limit}` : ''}`);
@@ -18,7 +17,6 @@ export async function getPlanes(page, limit) {
   };
 }
 
-// Obtener un plan específico por ID
 export async function getOnePlan(planId) {
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -37,10 +35,9 @@ export async function getOnePlan(planId) {
   }
 }
 
-// Crear un nuevo plan (solo para admin)
 export async function postPlan(planData) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken(); // Obtén el token del almacenamiento local
+  const token = getToken();
 
   if (token) {
     try {
@@ -55,7 +52,6 @@ export async function postPlan(planData) {
   }
 }
 
-// Actualizar un plan existente (solo para admin)
 export async function putPlan(planId, planData) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = getToken();
@@ -73,7 +69,6 @@ export async function putPlan(planId, planData) {
   }
 }
 
-// Eliminar un plan (solo para admin)
 export async function deletePlan(planId) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = getToken();
@@ -92,21 +87,18 @@ export async function deletePlan(planId) {
 }
 
 export async function comprarPlan(planSeleccionado, mascotaSeleccionada, returnUrl) {
-  const apiUrl = import.meta.env.VITE_API_URL; // Asegúrate de tener la variable de entorno configurada
-  const token = getToken(); // Obtén el token del almacenamiento local
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = getToken();
 
   try {
-    // Preparamos el cuerpo de la solicitud con los datos necesarios
     const body = {
       planSeleccionado,
       mascotaSeleccionada,
       returnUrl
     };
 
-    // Usamos la función putServerData para hacer la solicitud PUT al servidor
     const response = await putServerData(apiUrl, `/planes/comprarPlan`, body, token);
 
-    // Devolvemos la URL generada por Mercado Pago para redirigir al usuario
     return response.url;
   } catch (error) {
     console.error("Error en la compra del plan:", error);

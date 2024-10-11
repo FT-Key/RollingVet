@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import '../css/CarouselFade.css'
 
 function CarouselFade({ data, type }) {
-  // Use useMemo para evitar recalcuar en cada render
   const randomItems = useMemo(() => getRandomItems(data, 3), [data]);
 
   return (
@@ -49,7 +48,6 @@ function CarouselFade({ data, type }) {
 }
 
 const getRandomItems = (array, numItems) => {
-  // Shuffle array and get the first `numItems` items
   const shuffled = array.slice().sort(() => 0.5 - Math.random());
   return shuffled.slice(0, numItems);
 };

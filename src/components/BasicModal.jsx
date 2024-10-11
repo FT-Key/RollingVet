@@ -31,15 +31,13 @@ const BasicModal = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Restablecer editedData cuando se cierra el modal
     if (!show) {
       setEditedData(formData);
-      setErrors({});  // Limpia los errores cuando se cierra el modal
+      setErrors({});
     }
   }, [show, formData]);
 
   useEffect(() => {
-    // Actualizar el estado en función del tipo de datos
     if (type === "adminProducts") {
       setFormData(productData);
     } else if (type === "adminUsers") {
@@ -58,7 +56,6 @@ const BasicModal = ({
     const updatedData = { ...editedData };
 
     if (inputType === "file") {
-      // Solo almacenar el archivo en una variable temporal, sin modificar el editedData
       if (files && files.length > 0) {
 
         // Crear un enlace temporal para mostrar la imagen
@@ -68,7 +65,6 @@ const BasicModal = ({
         updatedData[name] = fileUrl;
       }
     } else if (inputType === "date") {
-      // Convertir la fecha del input (HTML) al formato de fecha de JavaScript
       updatedData[name] = new Date(value);
     } else if (name.includes("[")) {
       // Lógica para manejar arrays
@@ -94,9 +90,8 @@ const BasicModal = ({
       };
     } else {
       // Para campos no anidados
-      // Verificación especial para el campo de calificaciones
       if (name === "calificaciones") {
-        updatedData[name] = parseFloat(value); // Convertir el valor a float
+        updatedData[name] = parseFloat(value);
       } else {
         updatedData[name] = inputType === "checkbox" ? checked : value;
       }
@@ -106,27 +101,25 @@ const BasicModal = ({
   };
 
   const handleSaveChanges = async () => {
-    setIsLoading(true); // Inicia el estado de carga
+    setIsLoading(true);
     let validationErrors;
 
     switch (true) {
+      // Elimina el campo fotoPerfil si comienza con 'blob:'
       case type === "adminUsers":
         if (typeof editedData.fotoPerfil === "string" && editedData.fotoPerfil.startsWith("blob:")) {
-          // Elimina el campo fotoPerfil si comienza con 'blob:'
           delete editedData.fotoPerfil;
         }
         break;
 
       case type === "adminProducts":
         if (typeof editedData.imagenUrl === "string" && editedData.imagenUrl.startsWith("blob:")) {
-          // Elimina el campo imageUrl si comienza con 'blob:'
           delete editedData.imagenUrl;
         }
         break;
 
       case type === "adminAnimals":
         if (typeof editedData.fotoUrl === "string" && editedData.fotoUrl.startsWith("blob:")) {
-          // Elimina el campo imageUrl si comienza con 'blob:'
           delete editedData.fotoUrl;
         }
         break;
@@ -162,7 +155,6 @@ const BasicModal = ({
       let newObjectData;
       const { uploadedFile, ...productDataWithoutFile } = editedData;
 
-      // Hacer la petición PUT para actualizar el producto, excluyendo el archivo
       let updatedData;
 
       switch (true) {
@@ -187,7 +179,7 @@ const BasicModal = ({
       // Si hay un archivo seleccionado, realizar la subida en una llamada separada
       if (uploadedFile) {
         const fileData = new FormData();
-        fileData.append("image", uploadedFile);  // Importante que sea 'image'
+        fileData.append("image", uploadedFile);
 
         let uploadResponse;
         switch (true) {
@@ -219,29 +211,28 @@ const BasicModal = ({
       if (typeof functionNewUpdatedData === 'function') {
         functionNewUpdatedData(newObjectData);
       }
-      onHide(); // Cerrar el modal
+      onHide();
     } catch (error) {
       console.error("Error al guardar el producto:", error);
     } finally {
-      setIsLoading(false); // Finaliza el estado de carga
+      setIsLoading(false);
     }
   };
 
   const handleCreate = async () => {
-    setIsLoading(true); // Inicia el estado de carga
+    setIsLoading(true);
     let validationErrors;
 
     switch (true) {
+      // Elimina el campo imageUrl si comienza con 'blob:'
       case type === "adminProducts":
         if (typeof editedData.imagenUrl === "string" && editedData.imagenUrl.startsWith("blob:")) {
-          // Elimina el campo imageUrl si comienza con 'blob:'
           delete editedData.imagenUrl;
         }
         break;
 
       case type === "adminAnimals":
         if (typeof editedData.fotoUrl === "string" && editedData.fotoUrl.startsWith("blob:")) {
-          // Elimina el campo imageUrl si comienza con 'blob:'
           delete editedData.fotoUrl;
         }
         break;
@@ -272,7 +263,6 @@ const BasicModal = ({
     try {
       const { uploadedFile, ...productDataWithoutFile } = editedData;
 
-      // Hacer la petición PUT para actualizar el producto, excluyendo el archivo
       let updatedData;
 
       switch (true) {
@@ -291,7 +281,7 @@ const BasicModal = ({
       // Si hay un archivo seleccionado, realizar la subida en una llamada separada
       if (uploadedFile) {
         const fileData = new FormData();
-        fileData.append("image", uploadedFile);  // Importante que sea 'image'
+        fileData.append("image", uploadedFile);
 
         let uploadResponse;
         switch (true) {
@@ -314,16 +304,15 @@ const BasicModal = ({
 
       setFormData(editedData);
       functionUpdateData((prevMark) => !prevMark);
-      onHide(); // Cerrar el modal
+      onHide();
     } catch (error) {
       console.error("Error al guardar el producto:", error);
     } finally {
-      setIsLoading(false); // Finaliza el estado de carga
+      setIsLoading(false);
     }
   };
 
   const handleEnabledData = (section, isEnabled) => {
-    // Clonamos editedData para no modificar el estado directamente
     const updatedData = { ...editedData };
 
     switch (section) {
@@ -403,7 +392,6 @@ const BasicModal = ({
         break;
     }
 
-    // Actualizamos el estado con los datos modificados
     setEditedData(updatedData);
   };
 

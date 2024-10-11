@@ -1,32 +1,26 @@
-import { jwtDecode } from 'jwt-decode'; // Necesitas instalar la librería jwt-decode
+import { jwtDecode } from 'jwt-decode';
 
 export const isTokenValid = (token) => {
-  if (!token) return false; // Verifica si el token está presente
+  if (!token) return false;
 
   try {
-    const decoded = jwtDecode(token); // Decodifica el token sin verificar firma
-    const currentTime = Date.now() / 1000; // Tiempo actual en segundos
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
 
     if (decoded.exp < currentTime) {
-      // Token ha expirado
-      console.log("Sesión expirada.")
       return false;
     }
 
-    // Token válido
     return true;
   } catch (error) {
-    // Error al decodificar o token inválido
     return false;
   }
 }
 
-// Obtener el token del sessionStorage con manejo de errores
 export function getToken() {
   try {
     const token = sessionStorage.getItem("authToken");
     if (!token) {
-      console.warn("No se encontró el token de autorización");
       return null;
     }
     return token;
@@ -38,16 +32,14 @@ export function getToken() {
 
 export const decodeToken = (token) => {
   try {
-    // Decodifica el token JWT
     const decodedToken = jwtDecode(token);
     return decodedToken;
   } catch (error) {
     console.error("Error al decodificar el token:", error);
-    return null; // Retorna null en caso de error
+    return null;
   }
 };
 
-// Guardar el token en sessionStorage con manejo de errores
 export function setToken(token) {
   try {
     if (!token) {
@@ -59,7 +51,6 @@ export function setToken(token) {
   }
 }
 
-// Eliminar el token del sessionStorage con manejo de errores
 export function removeToken() {
   try {
     sessionStorage.removeItem("authToken");
@@ -67,4 +58,3 @@ export function removeToken() {
     console.error("Error al eliminar el token de autorización:", error);
   }
 }
-

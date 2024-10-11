@@ -1,30 +1,30 @@
 import React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getOneAnimal } from "../helpers/ServerAnimals"; // Helper para obtener un animal
+import { getOneAnimal } from "../helpers/ServerAnimals";
 import "../css/AnimalDetail.css";
 import Loading from "../components/Loading";
 import { Col, Container, Row, Button } from "react-bootstrap";
-import Zoom from '../components/Zoom'; // Componente Zoom para las imágenes
+import Zoom from '../components/Zoom';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from "../context/AuthContext";
 
 const AnimalDetail = () => {
   const { user } = useAuth();
-  const { animalId } = useParams(); // Usamos animalId en lugar de productId
+  const { animalId } = useParams();
   const [animal, setAnimal] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAnimal = async () => {
-      const data = await getOneAnimal(animalId); // Helper para obtener un animal
+      const data = await getOneAnimal(animalId);
       setAnimal(data);
     };
     fetchAnimal();
   }, [animalId]);
 
   const handleBack = () => {
-    navigate(-1); // Regresa a la página anterior
+    navigate(-1);
   };
 
   if (!animal) {
@@ -45,7 +45,6 @@ const AnimalDetail = () => {
             </Col>
 
             <Col xs={12} md={6}>
-              {/* Componente Zoom para la imagen del animal */}
               <Zoom imageUrl={animal.fotoUrl}>
               </Zoom>
             </Col>
@@ -83,7 +82,6 @@ const AnimalDetail = () => {
                 {new Date(animal.creadoEn).toLocaleDateString()}
               </p>
 
-              {/* Mostrar vacunas si existen */}
               {animal.vacunas && animal.vacunas.length > 0 && (
                 <>
                   <p><strong>Vacunas:</strong></p>
@@ -97,7 +95,6 @@ const AnimalDetail = () => {
                 </>
               )}
 
-              {/* Mostrar historial médico si existe */}
               {animal.historialMedico && animal.historialMedico.length > 0 && (
                 <>
                   <p><strong>Historial médico:</strong></p>

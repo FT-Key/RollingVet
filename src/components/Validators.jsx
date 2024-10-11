@@ -1,5 +1,4 @@
 import {
-  //Productos
   validarNombreProducto,
   validarDescripcion,
   validarPrecio,
@@ -12,10 +11,8 @@ import {
   validarCalificaciones,
   validarGarantia,
   validarDescuento,
-  //Usuarios
+
   validarNombreUsuario,
-  /* validarContraseniaUsuario,
-  validarContraseniaUsuarioGoogle, */
   validarCorreoElectronico,
   validarNombre,
   validarApellido,
@@ -48,8 +45,6 @@ import {
   esComentarioValido,
   esCalificacionValida,
   validarContraseniaUsuario,
-  //Animales
-
 } from "../helpers/Validations";
 
 import {
@@ -72,16 +67,6 @@ export function validateUserFields(data) {
   if (!validarCorreoElectronico(data.email)) {
     validationErrors.email = "Email inválido";
   }
-
-  /* if (data.tipoRegistro == "normal") {
-    if (!validarContraseniaUsuario(data.contrasenia)) {
-      validationErrors.contrasenia = "Contraseña inválida";
-    }
-  } else if (data.tipoRegistro == "google") {
-    if (!validarContraseniaUsuarioGoogle(data.contrasenia)) {
-      validationErrors.contrasenia = "Contraseña inválida";
-    }
-  } */
 
   if (!validarNombre(data.nombre)) {
     validationErrors.nombre = "Nombre inválido";
@@ -233,49 +218,39 @@ export function validateProductFields(data) {
 export function validateAnimalFields(data) {
   const errors = {};
 
-  // Valida el nombre
   if (!validarNombreAnimal(data.nombre)) {
     errors.nombre = "El nombre debe contener al menos 2 caracteres y solo letras.";
   }
 
-  // Valida el tipo (por ejemplo, perro, gato, etc.)
   if (!validarTipoAnimal(data.tipo)) {
     errors.tipo = "El tipo de animal es obligatorio y debe ser válido (e.g., perro, gato).";
   }
 
-  // Valida la raza
   if (data.raza && !validarRazaAnimal(data.raza)) {
     errors.raza = "La raza debe contener al menos 3 caracteres y solo letras.";
   }
 
-  // Valida la edad (debe ser un número positivo)
   if (!validarEdadAnimal(data.edad)) {
     errors.edad = "La edad debe ser un número positivo.";
   }
 
-  // Valida la descripción (opcional, pero si existe debe ser válida)
   if (data.descripcion && !validarDescripcionAnimal(data.descripcion)) {
     errors.descripcion = "La descripción debe tener entre 10 y 200 caracteres.";
   }
 
-  // Valida el peso (debe ser un número positivo)
   if (!validarPesoAnimal(data.peso)) {
     errors.peso = "El peso debe ser un número positivo.";
   }
 
-  // Valida el género (debe ser 'Macho' o 'Hembra')
   if (!validarGeneroAnimal(data.genero)) {
     errors.genero = "El género debe ser 'Macho' o 'Hembra'.";
   }
 
-  // Valida la imagen (opcional, pero si existe debe ser una URL válida)
   if (!data.imagen?.size) {
     if (data.imagen && !validarImagenAnimal(data.imagen)) {
       errors.imagen = "La URL de la imagen no es válida.";
     }
   }
-
-  // Retorna los errores, si el objeto está vacío, no hay errores
   return errors;
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { auth, googleProvider } from '../firebase/firebaseConfig.js'; // Importa tu configuración de Firebase
-import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
+import { auth, googleProvider } from '../firebase/firebaseConfig.js';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { postServerData } from '../helpers/ServerCalling.js';
@@ -14,11 +14,9 @@ const GoogleAuth = ({ useParameter }) => {
     try {
       const credential = GoogleAuthProvider.credentialFromResult(result);
 
-      // Obtén el access_token
-      const accessToken = credential.accessToken; // Asegúrate de que accessToken esté disponible
-      const idToken = credential.idToken; // Aún puedes usar el id_token si lo necesitas
+      const accessToken = credential.accessToken;
+      const idToken = credential.idToken;
 
-      // Envía el access_token al servidor para su verificación
       const apiUrl = import.meta.env.VITE_API_URL;
       const ruta = useParameter === "login" ? "/login" : "/register";
 
@@ -26,7 +24,6 @@ const GoogleAuth = ({ useParameter }) => {
 
       const { token: jwtToken } = serverData;
 
-      // Llama al login del contexto global
       loginContext(jwtToken);
       navigate('/');
     } catch (error) {
@@ -35,15 +32,14 @@ const GoogleAuth = ({ useParameter }) => {
   };
 
   const handleError = (error) => {
-    console.log("Inicio de sesión fallido");
     console.error(error);
   };
 
   const handleLogin = async () => {
-    const provident = new GoogleAuthProvider(); // Utilice 'GoogleAuthProvider' directamente
+    const provident = new GoogleAuthProvider();
     provident.setCustomParameters({ prompt: 'select_account' });
     try {
-      const result = await signInWithPopup(auth, provident); // Utilice 'provider' directamente aquí
+      const result = await signInWithPopup(auth, provident);
       handleSuccess(result);
     } catch (error) {
       alert(error.message);

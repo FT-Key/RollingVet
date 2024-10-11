@@ -15,7 +15,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
       <Form className="w-100 mb-4 d-flex flex-column gap-3">
         <h3 className='text-center'>Editar Producto</h3>
 
-        {/* Imagen */}
         <div>
           <p className="m-0">ID: {editedData.id}</p>
         </div>
@@ -34,7 +33,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
             <option value="Seleccionar existente">Seleccionar imagen ya existente</option>
           </Form.Control>
 
-          {/* Mostrar input según la opción seleccionada */}
           {imageOption === "Agregar URL" && (
             <Form.Group controlId="formImageUrl">
               <Form.Label>URL de la imagen</Form.Label>
@@ -95,7 +93,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           )}
         </Form.Group>
 
-        {/* Nombre */}
         <Form.Group controlId="formNombre">
           <Form.Label>Nombre</Form.Label>
           <Form.Control
@@ -111,7 +108,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Precio */}
         <Form.Group controlId="formPrecio">
           <Form.Label>Precio</Form.Label>
           <Form.Control
@@ -127,7 +123,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Descripción */}
         <Form.Group controlId="formDescripcion">
           <Form.Label>Descripción</Form.Label>
           <Form.Control
@@ -139,7 +134,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           />
         </Form.Group>
 
-        {/* Categoría */}
         <Form.Group controlId="formCategoria">
           <Form.Label>Categoría</Form.Label>
           <Form.Control
@@ -155,7 +149,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Stock */}
         <Form.Group controlId="formStock">
           <Form.Label>Stock</Form.Label>
           <Form.Control
@@ -171,7 +164,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Marca */}
         <Form.Group controlId="formProveedor">
           <Form.Label>Marca</Form.Label>
           <Form.Control
@@ -187,7 +179,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Código de barras */}
         <Form.Group controlId="formCodigoBarras">
           <Form.Label>Código de barras</Form.Label>
           <Form.Control
@@ -202,7 +193,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Calificaciones */}
         <Form.Group controlId="formCalificaciones">
           <Form.Label>Calificaciones</Form.Label>
           <Form.Control
@@ -221,7 +211,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Garantía */}
         <Form.Group controlId="formGarantia">
           <Form.Label>Garantía</Form.Label>
           <Form.Control
@@ -236,7 +225,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Fecha de Ingreso */}
         <Form.Group controlId="formFechaIngreso">
           <Form.Label>Fecha de Ingreso</Form.Label>
           <Form.Control
@@ -251,7 +239,6 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Descuento */}
         <Form.Group controlId="formDescuento">
           <Form.Label>Descuento</Form.Label>
           <Form.Control

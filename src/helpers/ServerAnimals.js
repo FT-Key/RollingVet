@@ -1,18 +1,14 @@
 import { deleteServerData, fetchServerData, postServerData, putServerData } from "./ServerCalling";
 import { getToken } from "./Token.helper";
 
-// Obtener todos los animales con paginación
 export async function getAnimals(page, limit, filters = {}) {
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  // Construir la cadena de consulta (query string) a partir de los filtros
   const queryParams = new URLSearchParams();
 
-  // Añadir paginación
   if (page) queryParams.append('page', page);
   if (limit) queryParams.append('limit', limit);
 
-  // Añadir filtros dinámicos
   for (const key in filters) {
     if (filters[key] !== undefined && filters[key] !== null) {
       queryParams.append(key, filters[key]);
@@ -21,7 +17,6 @@ export async function getAnimals(page, limit, filters = {}) {
 
   const rawData = await fetchServerData(apiUrl, `/animales?${queryParams.toString()}`);
 
-  // Convertir las fechas a Date si existen
   const data = rawData.animales.map((animal) => ({
     ...animal,
     fechaNacimiento: animal.fechaNacimiento ? new Date(animal.fechaNacimiento) : null,
@@ -42,13 +37,11 @@ export async function getAnimals(page, limit, filters = {}) {
   };
 }
 
-// Obtener un solo animal por ID
 export async function getOneAnimal(animalId) {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const rawData = await fetchServerData(apiUrl, `/animales/${animalId}`);
 
-  // Convertir las fechas a Date si existen
   const data = {
     ...rawData,
     fechaNacimiento: rawData.fechaNacimiento ? new Date(rawData.fechaNacimiento) : null,
@@ -61,80 +54,69 @@ export async function getOneAnimal(animalId) {
 
 export async function postAnimal(body) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken(); // Obtén el token del almacenamiento local
+  const token = getToken();
   if (token) {
     try {
       await postServerData(
-        apiUrl, // Tu dominio
+        apiUrl,
         `/animales`,
-        body, // No necesitas un body para agregar al carrito
+        body,
         token
       );
     } catch (error) {
       console.error("Error creando animal:", error);
     }
-  } else {
-    console.log("No se encontro token de autorización");
   }
 }
 
 export async function putAnimal(animalId, body) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken(); // Obtén el token del almacenamiento local
+  const token = getToken();
   if (token) {
     try {
       await putServerData(
-        apiUrl, // Tu dominio
+        apiUrl, 
         `/animales/${animalId}`,
-        body, // No necesitas un body para agregar al carrito
+        body,
         token
       );
     } catch (error) {
       console.error("Error editando animal:", error);
     }
-  } else {
-    console.log("No se encontro token de autorización");
   }
 }
 
 export async function deleteAnimal(animalId) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken(); // Obtén el token del almacenamiento local
+  const token = getToken();
   if (token) {
     try {
       await deleteServerData(apiUrl, `/animales/${animalId}`, token);
     } catch (error) {
       console.error("Error eliminando animal:", error);
     }
-  } else {
-    console.log("No se encontro token de autorización");
   }
 }
 
-// Subir una imagen de perfil de un animal
 export async function uploadAnimalImage(animalId, body) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = getToken();
 
   try {
-    // Llamar a postServerData para subir la imagen
     const response = await postServerData(apiUrl, `/animales/agregarFotoAnimal/${animalId}`, body, token);
 
-    // Si la respuesta no es exitosa, lanzar un error
     if (!response.msg) {
       const errorData = response;
       throw new Error(errorData.msg || "Error al subir la imagen");
     }
 
-    // Si la respuesta es exitosa, obtener los datos
     const data = await response.msg;
 
     return {
       success: true,
-      data,  // Devuelve los datos de la respuesta
+      data,
     };
   } catch (error) {
-    // En caso de error, devolver un objeto con el mensaje de error
     return {
       success: false,
       data: null,
@@ -146,7 +128,7 @@ export async function uploadAnimalImage(animalId, body) {
 export async function createAnimal(body) {
 
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken(); // Obtén el token del almacenamiento local
+  const token = getToken();
 
   if (token) {
     try {
@@ -155,7 +137,5 @@ export async function createAnimal(body) {
     } catch (error) {
       console.error("Error creando mascota:", error);
     }
-  } else {
-    console.log("No se encontro token de autorización");
   }
 }

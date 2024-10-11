@@ -3,7 +3,7 @@ import '../css/Footer.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import Weather from './Weather';
 import MapComponent from './MapComponent';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'; // Importar íconos
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -24,9 +24,9 @@ const Footer = () => {
                 <Link to="/comentarios" className={'link-footer'}>Califícanos</Link>
               </div>
               <div className={'socialLinks-footer'}>
-                <Link to={'/NotFound'} className={'link-footer'}><FaFacebook size={24} /></Link> {/* Icono Facebook */}
-                <Link to={'/NotFound'} className={'link-footer'}><FaTwitter size={24} /></Link>  {/* Icono Twitter */}
-                <Link to={'/NotFound'} className={'link-footer'}><FaInstagram size={24} /></Link> {/* Icono Instagram */}
+                <Link to={'/NotFound'} className={'link-footer'}><FaFacebook size={24} /></Link>
+                <Link to={'/NotFound'} className={'link-footer'}><FaTwitter size={24} /></Link>
+                <Link to={'/NotFound'} className={'link-footer'}><FaInstagram size={24} /></Link>
               </div>
             </div>
           </Col>

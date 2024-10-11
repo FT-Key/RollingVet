@@ -58,7 +58,7 @@ const Comentarios = () => {
       setCalificacion(0);
       setModalShow(false);
       setUpdateMark(prev => !prev);
-      setErrors({}); // Limpiar errores al agregar comentario exitosamente
+      setErrors({});
     } catch (error) {
       console.error("Error al agregar comentario:", error);
     }
@@ -76,10 +76,10 @@ const Comentarios = () => {
           console.error("Error al eliminar comentario:", error);
         }
       } else {
-        console.log("No posee permisos suficientes para borrar comentarios");
+        alert("No posee permisos suficientes para borrar comentarios");
       }
     } else {
-      console.log("Debe registrarse para borrar comentarios");
+      alert("Debe registrarse para borrar comentarios");
     }
   };
 
@@ -105,7 +105,6 @@ const Comentarios = () => {
           {comentariosActuales.map((comentario) => (
             <li key={comentario._id} className='d-flex justify-content-between align-items-center'>
               <p className='d-flex align-items-center'>
-                {/* Estrellas llenas */}
                 {Array.from({ length: comentario.calificacion }, (_, index) => (
                   <SVG
                     name={'star'}
@@ -115,7 +114,6 @@ const Comentarios = () => {
                     key={`${comentario._id + index}`}
                   />
                 ))}
-                {/* Estrellas vacías */}
                 {Array.from({ length: 5 - comentario.calificacion }, (_, index) => (
                   <SVG
                     name={'star'}
@@ -138,7 +136,6 @@ const Comentarios = () => {
           {fillEmptySpaces.map((_, index) => (
             <li key={`empty-${index}`} className='d-flex justify-content-between align-items-center comentarioVacio'>
               <p className='d-flex align-items-center'>
-                {/* Estrellas vacías */}
                 {Array.from({ length: 5 }, (_, starIndex) => (
                   <SVG
                     name={'star'}
@@ -155,7 +152,6 @@ const Comentarios = () => {
         </ul>
       </div>
 
-      {/* Componente de paginación */}
       {totalPages > 1 && (
         <PaginationComponent
           totalPages={totalPages}
@@ -178,9 +174,9 @@ const Comentarios = () => {
                 value={nuevoComentario}
                 onChange={(e) => setNuevoComentario(e.target.value)}
                 placeholder="Escribe tu comentario"
-                isInvalid={!!errors.texto} // Muestra el borde rojo si hay error
+                isInvalid={!!errors.texto} 
               />
-              <Form.Control.Feedback type="invalid">{errors.texto}</Form.Control.Feedback> {/* Mensaje de error */}
+              <Form.Control.Feedback type="invalid">{errors.texto}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formCalificacion">
               <Form.Label>Calificación</Form.Label>
@@ -188,7 +184,7 @@ const Comentarios = () => {
                 as="select"
                 value={calificacion}
                 onChange={(e) => setCalificacion(Number(e.target.value))}
-                isInvalid={!!errors.calificacion} // Muestra el borde rojo si hay error
+                isInvalid={!!errors.calificacion}
               >
                 {[0, 1, 2, 3, 4, 5].map((estrella) => (
                   <option key={estrella} value={estrella}>
@@ -196,7 +192,7 @@ const Comentarios = () => {
                   </option>
                 ))}
               </Form.Control>
-              <Form.Control.Feedback type="invalid">{errors.calificacion}</Form.Control.Feedback> {/* Mensaje de error */}
+              <Form.Control.Feedback type="invalid">{errors.calificacion}</Form.Control.Feedback>
             </Form.Group>
           </Form>
         </Modal.Body>

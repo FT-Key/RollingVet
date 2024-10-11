@@ -46,28 +46,8 @@ abbr[title] {
   width: 4rem;
 }
 
-/* .carrito-icon,
-.favoritos-icon {
-  width: 24px;
-  height: 24px;
-}
-
-.carrito-icon.empty,
-.favoritos-icon.empty {
-  fill: black;
-}
-
-.carrito-icon.has-items {
-  fill: green;
-}
-
-.favoritos-icon.has-items {
-  fill: yellow;
-} */
-
 .cart-item-count,
 .favs-item-count {
-  /* Ajusta el color según el diseño */
   aspect-ratio: 1/1;
   border-radius: 50%;
   margin-bottom: auto;

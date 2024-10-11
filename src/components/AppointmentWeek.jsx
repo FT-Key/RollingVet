@@ -1,5 +1,5 @@
 import React from 'react';
-import { postServerData } from '../helpers/ServerCalling';  // Asegúrate de tener una función para enviar datos al servidor
+import { postServerData } from '../helpers/ServerCalling';
 import { getToken } from '../helpers/Token.helper';
 import { Button } from 'react-bootstrap';
 

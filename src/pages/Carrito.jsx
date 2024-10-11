@@ -1,5 +1,5 @@
-import { useAuth } from "../context/AuthContext"; // Importa el contexto
-import { Col, Row, Button, Form, Modal } from "react-bootstrap"; // Agrega Modal
+import { useAuth } from "../context/AuthContext";
+import { Col, Row, Button, Form, Modal } from "react-bootstrap";
 import { useEffect, useMemo, useState } from "react";
 import '../css/Carrito.css';
 import { postServerData } from "../helpers/ServerCalling";
@@ -10,13 +10,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
 
 const Carrito = () => {
-  const { carrito, setUpdateMark, setBooleanUpdateMark, cantidades, handleCantidadChange } = useAuth(); // Usa el carrito y la función para eliminar
+  const { carrito, setUpdateMark, setBooleanUpdateMark, cantidades, handleCantidadChange } = useAuth();
   const [idPreference, setIdPreference] = useState(null);
-  const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setUpdateMark('cart'); // Se hace un setUpdateMark con 'cart' al iniciar el componente para que el contexto actualice el carrito y se seteen las cantidades iniciales si aún no hay cantidades previas
+    setUpdateMark('cart');
   });
 
   const handleCantidadChangeLocal = (id, nuevaCantidad) => {
@@ -31,7 +31,7 @@ const Carrito = () => {
       const returnUrl = `${window.location.origin}/pagos/result`;
 
       await methodMercadoPago(bodyProductos, returnUrl, token);
-      setShowModal(true); // Abre el modal cuando se obtiene el ID de preferencia
+      setShowModal(true);
     }
   };
 
@@ -58,7 +58,6 @@ const Carrito = () => {
     }
   };
 
-  // Cálculo del precio total con useMemo
   const totalPrice = useMemo(() => {
     if (carrito.length > 0 && cantidades) {
       return carrito.reduce((total, prod) => {
@@ -140,7 +139,6 @@ const Carrito = () => {
         </div>
       )}
 
-      {/* Modal para MercadoPago Wallet */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Completar Pago</Modal.Title>

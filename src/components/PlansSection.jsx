@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { getPlanes } from "../helpers/ServerPlans"; // Asegúrate de que la ruta sea correcta
+import { getPlanes } from "../helpers/ServerPlans";
 import '../css/PlansSection.css';
 
 const PlansSection = () => {
@@ -11,7 +11,7 @@ const PlansSection = () => {
     const fetchPlanes = async () => {
       try {
         const apiPlanes = await getPlanes();
-        setPlanes(apiPlanes.planes); // Ajusta según cómo regresen los datos desde el servidor
+        setPlanes(apiPlanes.planes);
       } catch (error) {
         console.error("Error al obtener los planes:", error);
       }

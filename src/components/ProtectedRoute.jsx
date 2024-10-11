@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
   useEffect(() => {
     if (loading) {
-      return; // No necesitas devolver nada aquí.
+      return;
     }
   
     if (!user) {
@@ -32,7 +32,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   }, [loading, user, navigate, requiredRole]);  
 
   if (loading || !user) {
-    return <Loading />; // Puedes usar un spinner o cualquier otro indicador de carga
+    return <Loading />;
   }
 
   return children;

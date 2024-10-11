@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAnimals, deleteAnimal, createAnimal, uploadAnimalImage } from '../helpers/ServerAnimals.js'; // Asegúrate de importar createAnimal
-import BasicCard from '../components/BasicCard.jsx';
+import { getAnimals, deleteAnimal, createAnimal, uploadAnimalImage } from '../helpers/ServerAnimals.js';
 import { Col, Container, Row, Form, Button } from 'react-bootstrap';
 import PaginationComponent from '../components/PaginationComponent.jsx';
 import { Helmet } from 'react-helmet-async';
@@ -18,7 +17,7 @@ const AnimalsList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [updateMark, setUpdateMark] = useState(false);
 
-  const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado para controlar si el formulario está siendo enviado
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     nombre: '',
@@ -28,14 +27,14 @@ const AnimalsList = () => {
     descripcion: '',
     imagen: null,
     fotoUrl: '',
-    esterilizado: false, // Iniciar como falso
-    vacunas: [], // Iniciar como un array vacío
+    esterilizado: false,
+    vacunas: [],
     peso: '',
     genero: '',
   });
 
-  const [imagePreview, setImagePreview] = useState(null); // Estado para la vista previa de la imagen
-  const [useUrl, setUseUrl] = useState(false); // Estado para elegir entre subir imagen o usar URL
+  const [imagePreview, setImagePreview] = useState(null);
+  const [useUrl, setUseUrl] = useState(false);
 
   useEffect(() => {
     const fetchAnimals = async () => {
@@ -90,42 +89,35 @@ const AnimalsList = () => {
     }
   };
 
-  // Cuando cambias a usar la URL
   const handleToggleUrl = () => {
     setUseUrl(prev => !prev);
     setFormData(prevData => ({
       ...prevData,
-      imagen: null, // Limpiar la imagen al cambiar a URL
-      fotoUrl: prevData.fotoUrl || '', // Asegúrate de que fotoUrl sea una cadena vacía
+      imagen: null,
+      fotoUrl: prevData.fotoUrl || '',
     }));
-    setImagePreview(null); // Limpiar la vista previa al cambiar a URL
+    setImagePreview(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Obtener los errores de validación
     const validationErrors = validateAnimalFields(formData);
 
-    // Actualizar el estado de errores
     setErrores(validationErrors);
 
-    // En lugar de usar 'errores', usa 'validationErrors' directamente
     if (Object.keys(validationErrors).length > 0) {
-      // Si hay errores de validación, no continuar con el submit
       return;
     }
 
-    // Si no hay errores, continúa con el envío del formulario
     setIsSubmitting(true);
 
     try {
       const newAnimal = { ...formData, duenio: user._id, estado: "Mascota" };
 
-      const response = await createAnimal(newAnimal); // Crear el animal
+      const response = await createAnimal(newAnimal);
       const newPetId = response.animal._id;
 
-      // Subir imagen si se seleccionó
       if (formData.imagen) {
         const fileData = new FormData();
         fileData.append("image", formData.imagen);
@@ -137,7 +129,6 @@ const AnimalsList = () => {
         }
       }
 
-      // Resetear el formulario
       setFormData({
         nombre: '',
         tipo: '',
@@ -318,8 +309,8 @@ const AnimalsList = () => {
                 name="peso"
                 value={formData.peso}
                 onChange={handleChange}
-                step="0.1" // Permite incrementar en 0.1
-                min="0.1"  // No permite valores menores a 0.1
+                step="0.1"
+                min="0.1"
                 isInvalid={!!errores.peso}
                 required
               />
@@ -363,7 +354,7 @@ const AnimalsList = () => {
                 <Form.Control
                   type="text"
                   name="fotoUrl"
-                  value={formData.fotoUrl || ''} // Asegúrate de que siempre sea una cadena
+                  value={formData.fotoUrl || ''}
                   onChange={handleChange}
                   placeholder="Ingrese la URL de la imagen"
                   isInvalid={!!errores.imagen}
@@ -396,7 +387,7 @@ const AnimalsList = () => {
               variant="success"
               type="submit"
               onClick={handleSubmit}
-              disabled={isSubmitting} // Deshabilitar el botón durante el envío
+              disabled={isSubmitting}
             >
               {isSubmitting ? "Cargando..." : "Agregar Mascota"}
             </Button>

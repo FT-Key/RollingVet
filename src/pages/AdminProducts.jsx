@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import CustomButton from "../components/CustomButton";
-import BasicModal from "../components/BasicModal"; // Verifica que la ruta sea correcta
+import BasicModal from "../components/BasicModal";
 import "../css/AdminProducts.css";
 import { putServerData, deleteServerData } from "../helpers/ServerCalling";
 import { confirmAlert } from "react-confirm-alert";
@@ -16,7 +16,7 @@ const AdminProducts = () => {
   const emptyProduct = {
     id: "",
     imagenUrl: "",
-    imagenesUrls: [], // Para la opción de seleccionar imagen existente
+    imagenesUrls: [],
     nombre: "",
     precio: "",
     descripcion: "",
@@ -24,12 +24,12 @@ const AdminProducts = () => {
     cantidadEnStock: "",
     proveedor: "",
     codigoDeBarras: "",
-    calificaciones: 0, // Comienza en 0
+    calificaciones: 0,
     garantia: "",
-    fechaDeIngreso: new Date(), // Este formato depende de cómo estés manejando las fechas
+    fechaDeIngreso: new Date(),
     descuento: ""
   };
-  const [loadedProducts, setLoadedProducts] = useState([]); // Productos cargados en bloques
+  const [loadedProducts, setLoadedProducts] = useState([]);
   const [updateMark, setUpdateMark] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -40,61 +40,54 @@ const AdminProducts = () => {
   const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
-  const PRODUCTS_BATCH_SIZE = 50; // Cantidad de productos que se cargan por llamada al servidor
+  const PRODUCTS_BATCH_SIZE = 50;
 
   useEffect(() => {
     if (updatedProduct && updatedProduct._id) {
       setLoadedProducts((prevProducts) => {
-        // Comprobar si updatedProduct solo tiene el atributo _id
         const hasOnlyId = Object.keys(updatedProduct).length === 1 && updatedProduct._id;
 
         if (hasOnlyId) {
-          // Eliminar el producto con el _id especificado
           return prevProducts.filter((product) => product._id !== updatedProduct._id);
         } else {
-          // Buscar coincidencia por _id y reemplazar el producto
           return prevProducts.map((product) =>
             product._id === updatedProduct._id ? updatedProduct : product
           );
         }
       });
 
-      // Reiniciar el estado de updatedProduct a un objeto vacío
       setUpdatedProduct({});
     }
   }, [updatedProduct]);
 
   useEffect(() => {
-    let isMounted = true; // Variable para saber si el componente está montado
+    let isMounted = true;
 
     const fetchProducts = async () => {
       while (true) {
         try {
-          const data = await getProducts(currentPage, PRODUCTS_BATCH_SIZE); // Obtener productos en lotes de 50
+          const data = await getProducts(currentPage, PRODUCTS_BATCH_SIZE);
 
           if (isMounted) {
-            // Agregar productos nuevos al estado, sin duplicar
             setLoadedProducts((prevProducts) => [...prevProducts, ...data.productos]);
 
-            // Calcular el total de páginas basadas en los productos cargados
             setTotalPages(Math.ceil(data.pagination.totalProductos / limit));
           }
-          break; // Salir del bucle si la petición es exitosa
+          break;
         } catch (error) {
           console.error("Error trayendo productos:", error);
-          if (!isMounted) return; // Salir si el componente se desmontó
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // Esperar 1 segundo antes de reintentar
+          if (!isMounted) return;
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       }
     };
 
-    // Llamar a la función solo si no se han cargado suficientes productos para paginar
     if (loadedProducts.length < currentPage * limit) {
       fetchProducts();
     }
 
     return () => {
-      isMounted = false; // Marcar como desmontado al limpiar el efecto
+      isMounted = false;
     };
   }, [updateMark, currentPage]);
 
@@ -144,7 +137,6 @@ const AdminProducts = () => {
               console.error("Error eliminando producto:", error);
             }
 
-            // Elimina el contenedor del alert del DOM después de cerrar el alert
             const alertContainer = document.querySelector(
               ".react-confirm-alert"
             );
@@ -156,7 +148,6 @@ const AdminProducts = () => {
         {
           label: "No",
           onClick: () => {
-            // Elimina el contenedor del alert del DOM después de cerrar el alert
             const alertContainer = document.querySelector(
               ".react-confirm-alert"
             );
@@ -169,14 +160,12 @@ const AdminProducts = () => {
     });
   };
 
-  // Obtener productos paginados basados en el estado actual
   const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * limit;
     const endIndex = startIndex + limit;
     return loadedProducts.slice(startIndex, endIndex);
   }, [loadedProducts, currentPage, limit]);
 
-  // Cálculo para agregar espacios vacíos
   const fillEmptySpaces = useMemo(() => {
     return Array(limit - paginatedProducts.length).fill(null);
   }, [paginatedProducts.length, limit]);
@@ -213,7 +202,6 @@ const AdminProducts = () => {
           <Col xs={12} md={1}>Eliminar</Col>
         </Row>
 
-        {/* Renderizar los productos paginados */}
         {paginatedProducts.map((product) => (
           <Row key={product.id} className="text-center" style={{ background: "white" }}>
             <Col xs={12} md={1}>{product.id}</Col>

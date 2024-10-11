@@ -5,16 +5,14 @@ import "../css/BasicCard.css";
 
 function BasicCard({ data, type, onDelete, optionDeleteAnimal = false }) {
   const handleDelete = async () => {
-    // Muestra un cuadro de confirmación antes de eliminar
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este animal?");
     if (confirmDelete) {
       try {
         if (onDelete) {
-          await onDelete(data._id); // Llama a la función onDelete para eliminar el animal
+          await onDelete(data._id);
         }
       } catch (error) {
         console.error("Error al eliminar el animal:", error);
-        // Aquí podrías mostrar un mensaje de error al usuario
       }
     }
   };
@@ -61,7 +59,7 @@ function BasicCard({ data, type, onDelete, optionDeleteAnimal = false }) {
               </Button>
               {optionDeleteAnimal &&
                 (<Button
-                  variant="danger" // Cambia el color del botón a rojo para eliminar
+                  variant="danger"
                   onClick={handleDelete}
                 >
                   Eliminar
