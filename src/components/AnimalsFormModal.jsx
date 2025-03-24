@@ -241,6 +241,7 @@ const AnimalsFormModal = ({ handleChange, editedData }) => {
           name="ultimaVisitaVeterinaria"
           value={formatDate(editedData.ultimaVisitaVeterinaria) || ""}
           onChange={handleChange}
+          onClick={(e) => e.target.showPicker()}
         />
       </div>
 

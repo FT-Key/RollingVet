@@ -39,7 +39,7 @@ const AdminAppointments = () => {
       }
 
       if (fecha && !response.fechaTurnos && response._id) {
-        response.fechaTurnos = [response]; 
+        response.fechaTurnos = [response];
         setCurrentPage(1);
         setTotalPages(1);
       } else if (response.fechaTurnos) {
@@ -101,7 +101,7 @@ const AdminAppointments = () => {
       const body = {
         estado: 'completado'
       };
-      await putServerData(apiUrl, `/turnos/modificarTurno/${turnoId}`, body, token);
+      await putServerData(apiUrl, `/turnos/${turnoId}`, body, token);
       obtenerTurnos(fecha);
     } catch (error) {
       setError('Error al completar el turno.');
@@ -120,7 +120,7 @@ const AdminAppointments = () => {
         tipoAtencion: 'Consulta de producto',
         modalidad: 'online'
       };
-      await putServerData(apiUrl, `/turnos/modificarTurno/${turnoId}`, body, token);
+      await putServerData(apiUrl, `/turnos/${turnoId}`, body, token);
       obtenerTurnos(fecha);
     } catch (error) {
       setError('Error al liberar el turno.');
@@ -147,6 +147,7 @@ const AdminAppointments = () => {
                   id="fecha"
                   value={fecha}
                   onChange={handleFechaChange}
+                  onClick={(e) => e.target.showPicker()}
                   className="mx-sm-3"
                 />
                 <Button variant="primary" onClick={handleBuscarClick}>

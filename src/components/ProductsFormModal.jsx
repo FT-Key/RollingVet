@@ -232,6 +232,7 @@ const ProductsFormModal = ({ handleChange, editedData, errores }) => {
             name="fechaDeIngreso"
             value={formatDate(editedData.fechaDeIngreso) || ""}
             onChange={handleChange}
+            onClick={(e) => e.target.showPicker()}
             isInvalid={!!errores.fechaDeIngreso}
           />
           <Form.Control.Feedback type="invalid">

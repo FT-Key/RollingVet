@@ -66,7 +66,7 @@ export async function addToCart(idProducto) {
     try {
       await postServerData(
         apiUrl,
-        `/favncart/carrito/agregar/${idProducto}`,
+        `/favncart/carrito/${idProducto}`,
         {},
         token
       );
@@ -83,7 +83,7 @@ export async function addToFav(idProducto) {
     try {
       await postServerData(
         apiUrl,
-        `/favncart/fav/agregar/${idProducto}`,
+        `/favncart/fav/${idProducto}`,
         {},
         token
       );
@@ -126,7 +126,7 @@ export async function removeFromCart(idProducto) {
     try {
       await deleteServerData(
         apiUrl,
-        `/favncart/carrito/quitar/${idProducto}`,
+        `/favncart/carrito/${idProducto}`,
         token
       );
     } catch (error) {
@@ -142,7 +142,7 @@ export async function removeFromFavs(idProducto) {
     try {
       await deleteServerData(
         apiUrl,
-        `/favncart/fav/quitar/${idProducto}`,
+        `/favncart/fav/${idProducto}`,
         token
       );
     } catch (error) {

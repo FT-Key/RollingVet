@@ -5,7 +5,7 @@ export async function getAppointments(page, limit) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = getToken();
 
-  const rawData = await fetchServerData(apiUrl, `/turnos/obtener?${page ? `page=${page}&` : ''}${limit ? `limit=${limit}` : ''}`, token);
+  const rawData = await fetchServerData(apiUrl, `/turnos?${page ? `page=${page}&` : ''}${limit ? `limit=${limit}` : ''}`, token);
 
   return {
     fechaTurnos: rawData.fechaTurnos,
@@ -24,7 +24,7 @@ export async function getOneAppointment(fecha) {
   const token = getToken();
 
   try {
-    const response = await fetchServerData(apiUrl, `/turnos/obtener/${fecha}`, token);
+    const response = await fetchServerData(apiUrl, `/turnos/${fecha}`, token);
 
     if (!response._id) {
       throw new Error("Error fetching appointment data");

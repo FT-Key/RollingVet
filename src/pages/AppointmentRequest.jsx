@@ -47,7 +47,7 @@ const AppointmentRequest = () => {
     const token = getToken();
 
     try {
-      const response = await fetchServerData(apiUrl, `/turnos/obtener/${fecha}`, token);
+      const response = await fetchServerData(apiUrl, `/turnos/${fecha}`, token);
       setTurnos(response.turnos || []);
       setErrorMessage('');
     } catch (error) {
@@ -83,7 +83,7 @@ const AppointmentRequest = () => {
     }
 
     try {
-      const response = await postServerData(apiUrl, '/turnos/solicitarTurno', {
+      const response = await postServerData(apiUrl, '/turnos', {
         fecha,
         hora: horaSeleccionada,
         tipoAtencion,
@@ -122,6 +122,7 @@ const AppointmentRequest = () => {
             value={fecha}
             min={today}
             onChange={(e) => setFecha(e.target.value)}
+            onClick={(e) => e.target.showPicker()}
             required
           />
           <select
