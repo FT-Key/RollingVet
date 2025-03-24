@@ -1,0 +1,57 @@
+.fav-remove-btn {
+  background-color: #dc3545;
+  border: none;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  font-size: .75rem;
+  color: white;
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 2;
+}
+
+.fav-remove-btn:hover {
+  background-color: #c82333;
+}
+
+.favorites-empty{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.empty-favorites {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.empty-favorites-img {
+  width: 150px;
+  height: auto;
+}
+
+.empty-favorites-message {
+  font-size: 2rem;
+  color: #333;
+}
+
+.empty-favorites-text {
+  font-size: 1rem;
+  color: #666;
+}

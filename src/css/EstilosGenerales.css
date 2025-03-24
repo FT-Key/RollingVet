@@ -1,0 +1,80 @@
+:root {
+  --color-dark-1: rgb(19, 27, 1);
+  /* #131B01 */
+  --color-dark-2-claro: rgb(100, 152, 161);
+  --color-dark-2-oscuro: rgb(35, 87, 96);
+  --color-dark-2: rgb(65, 117, 126);
+  /* #41757E */
+  --color-dark-3: rgb(112, 90, 86);
+  /* #705A56 */
+  --color-mid-1: rgb(130, 96, 61);
+  /* #82603D */
+  --color-mid-2: rgb(151, 83, 61);
+  /* #97533D */
+  --color-mid-3: rgb(165, 180, 98);
+  /* #A5B462 */
+  --color-mid-4: rgb(179, 205, 18);
+  /* #B3CD12 */
+  --color-light-1: rgb(197, 193, 117);
+  /* #C5C175 */
+  --color-light-2: rgb(201, 176, 156);
+  /* #C9B09C */
+  --color-light-3: rgb(221, 123, 24);
+  /* #DD7B18 */
+  --color-light-4: rgb(129, 210, 203);
+  /* #81D2CB */
+  --color-light-5: rgb(242, 240, 238);
+  /* #F2F0EE */
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-image: repeating-linear-gradient(90deg,
+      var(--color-light-4) 0 1px,
+      transparent 2px 200px),
+    repeating-linear-gradient(0deg,
+      var(--color-light-4) 0 1px,
+      transparent 2px 200px),
+    radial-gradient(at 50% 50%, var(--color-light-5), var(--color-light-4));
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .btn-close {
+    margin: inherit !important;
+  }
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: rgb(65, 117, 126);
+  --bs-btn-border-color: rgb(65, 117, 126);
+
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: rgb(58, 104, 109);
+  --bs-btn-hover-border-color: rgb(50, 90, 94);
+
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: rgb(50, 90, 94);
+  --bs-btn-active-border-color: rgb(45, 80, 83);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: rgb(65, 117, 126);
+  --bs-btn-disabled-border-color: rgb(65, 117, 126);
+}
+
+.styles-module_chatFooter__TGv0P form .styles-module_input__WFb9L {
+  color: black !important;
+}

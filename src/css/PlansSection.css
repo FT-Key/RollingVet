@@ -1,0 +1,38 @@
+.plans-section {
+  padding: 50px 0;
+
+  img {
+      width: 100%;
+      object-fit: contain;
+      overflow: hidden;
+      border-radius: 5px;
+  }
+}
+
+.plan-card:hover {
+  transform: scale(1.025);
+}
+
+.plan-card {
+  border: solid 1px black;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: .5rem -.5rem 1rem rgba(0, 0, 0, 0.2);
+  height: 100%;
+  background-color: var(--color-light-2);
+}
+
+.plan-card h3 {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.plan-card p {
+  color: #fff;
+  font-size: 1.20rem;
+  margin-top: 1rem;
+}
+
+.custom-row{
+  row-gap: 1rem;
+}

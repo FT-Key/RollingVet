@@ -1,0 +1,64 @@
+.comentariosPage {
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .list-unstyled {
+    padding: 0;
+  }
+
+  .list-unstyled li {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+  }
+
+  .list-unstyled li:hover {
+    background-color: #e9ecef;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .modal-header {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  .btn-delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: .7rem;
+    width: 1rem;
+    height: 1rem;
+    padding: 5px;
+  }
+
+  .comentarioVacio {
+    * {
+      opacity: 0;
+    }
+  }
+}

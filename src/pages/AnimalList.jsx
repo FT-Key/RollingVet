@@ -1,0 +1,402 @@
+import React, { useEffect, useState } from 'react';
+import { getAnimals, deleteAnimal, createAnimal, uploadAnimalImage } from '../helpers/ServerAnimals.js';
+import { Col, Container, Row, Form, Button } from 'react-bootstrap';
+import PaginationComponent from '../components/PaginationComponent.jsx';
+import { Helmet } from 'react-helmet-async';
+import { useAuth } from "../context/AuthContext";
+import { validateAnimalFields } from '../components/Validators.jsx';
+
+const AnimalsList = () => {
+  const { user } = useAuth();
+  const [animales, setAnimales] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [errores, setErrores] = useState({});
+  const [page, setPage] = useState(1);
+  const [limit] = useState(3);
+  const [totalPages, setTotalPages] = useState(1);
+  const [updateMark, setUpdateMark] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
+    nombre: '',
+    tipo: '',
+    edad: '',
+    raza: '',
+    descripcion: '',
+    imagen: null,
+    fotoUrl: '',
+    esterilizado: false,
+    vacunas: [],
+    peso: '',
+    genero: '',
+  });
+
+  const [imagePreview, setImagePreview] = useState(null);
+  const [useUrl, setUseUrl] = useState(false);
+
+  useEffect(() => {
+    const fetchAnimals = async () => {
+      setLoading(true);
+      try {
+        const result = await getAnimals(page, limit, { duenio: user._id, estado: "Mascota" });
+        setAnimales(result.animales);
+        if (result.pagination) {
+          setTotalPages(
+            Math.ceil(
+              result.pagination.totalAnimales / (result.pagination.limit || result.pagination.totalAnimales)
+            )
+          );
+        } else {
+          setTotalPages(1);
+        }
+        setLoading(false);
+      } catch (err) {
+        setError('Error al cargar los animales');
+        setLoading(false);
+      }
+    };
+
+    fetchAnimals();
+  }, [page, limit, updateMark]);
+
+  const deletePet = async (animalId) => {
+    try {
+      await deleteAnimal(animalId);
+      setUpdateMark(prev => !prev);
+    } catch (error) {
+      console.error("Error al eliminar el animal:", error);
+      setError('Error al eliminar el animal');
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    // Manejar la selección de archivo para la imagen
+    if (name === "imagen" && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setImagePreview(URL.createObjectURL(file)); // Crear una URL para la vista previa
+      setFormData(prevData => ({
+        ...prevData,
+        imagen: file, // Guardar el archivo en el estado
+      }));
+    }
+  };
+
+  const handleToggleUrl = () => {
+    setUseUrl(prev => !prev);
+    setFormData(prevData => ({
+      ...prevData,
+      imagen: null,
+      fotoUrl: prevData.fotoUrl || '',
+    }));
+    setImagePreview(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const validationErrors = validateAnimalFields(formData);
+
+    setErrores(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const newAnimal = { ...formData, duenio: user._id, estado: "Mascota" };
+
+      const response = await createAnimal(newAnimal);
+      const newPetId = response.animal._id;
+
+      if (formData.imagen) {
+        const fileData = new FormData();
+        fileData.append("image", formData.imagen);
+
+        const uploadResult = await uploadAnimalImage(newPetId, fileData);
+        if (!uploadResult.success) {
+          console.error("Error al subir la imagen:", uploadResult.message);
+          setError(uploadResult.message);
+        }
+      }
+
+      setFormData({
+        nombre: '',
+        tipo: '',
+        edad: '',
+        raza: '',
+        descripcion: '',
+        imagen: null,
+        fotoUrl: '',
+        esterilizado: false,
+        vacunas: [],
+        peso: '',
+        genero: '',
+      });
+      setImagePreview(null);
+      setUpdateMark(prev => !prev);
+    } catch (error) {
+      console.error("Error al crear el animal:", error);
+      setError('Error al crear el animal');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (loading) return <p>Cargando...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
+    <>
+      <Helmet>
+        <title>Mis Mascotas</title>
+      </Helmet>
+
+      <h2 className='text-center py-3'>Mis mascotas</h2>
+      <Container>
+
+        {animales.length > 0 ? (
+          <>
+            <Container className="animal-grid">
+              <Row>
+                {animales.map((animal) => (
+                  <Col key={animal._id} sm={12} md={4}>
+                    <BasicCard data={animal} type="animalCard" onDelete={deletePet} optionDeleteAnimal={true} />
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+            <PaginationComponent totalPages={totalPages} currentPage={page} setPage={setPage} />
+          </>
+        ) : (
+          <h2 className='text-center py-5'>No tiene mascota registradas</h2>
+        )}
+
+        <div className='d-flex flex-column justify-content-center align-items-center'>
+          <Form onSubmit={handleSubmit} className="w-50 mb-4 d-flex flex-column gap-3">
+            <h3 className='text-center'>Agregar Nueva Mascota</h3>
+            <Form.Group controlId="formNombre">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                type="text"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                isInvalid={!!errores.nombre}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errores.nombre}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formTipo">
+              <Form.Label>Tipo</Form.Label>
+              <Form.Control
+                as="select"
+                name="tipo"
+                value={formData.tipo}
+                onChange={handleChange}
+                isInvalid={!!errores.tipo}
+                required
+              >
+                <option value="">Seleccione...</option>
+                <option value="Perro">Perro</option>
+                <option value="Gato">Gato</option>
+                <option value="Ave">Ave</option>
+                <option value="Conejo">Conejo</option>
+                <option value="Reptil">Reptil</option>
+                <option value="Otro">Otro</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errores.tipo}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formEdad">
+              <Form.Label>Edad (años)</Form.Label>
+              <Form.Control
+                type="number"
+                name="edad"
+                value={formData.edad}
+                onChange={handleChange}
+                min={"0.5"}
+                step={"0.5"}
+                isInvalid={!!errores.edad}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errores.edad}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formRaza">
+              <Form.Label>Raza</Form.Label>
+              <Form.Control
+                type="text"
+                name="raza"
+                value={formData.raza}
+                onChange={handleChange}
+                isInvalid={!!errores.raza}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errores.raza}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formDescripcion">
+              <Form.Label>Descripción</Form.Label>
+              <Form.Control
+                as="textarea"
+                name="descripcion"
+                value={formData.descripcion}
+                onChange={handleChange}
+                isInvalid={!!errores.descripcion}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errores.descripcion}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formEsterilizado">
+              <Form.Check
+                type="checkbox"
+                label="¿Está esterilizado?"
+                name="esterilizado"
+                checked={formData.esterilizado}
+                onChange={(e) => setFormData(prevData => ({
+                  ...prevData,
+                  esterilizado: e.target.checked,
+                }))}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formVacunas">
+              <Form.Label>Vacunas</Form.Label>
+              {["Rabia", "Parvovirus", "Distemper", "Hepatitis", "Leptospirosis", "Bordetella"].map(vacuna => (
+                <Form.Check
+                  key={vacuna}
+                  type="checkbox"
+                  label={vacuna}
+                  name="vacunas"
+                  checked={formData.vacunas.includes(vacuna)}
+                  onChange={(e) => {
+                    const isChecked = e.target.checked;
+                    setFormData(prevData => ({
+                      ...prevData,
+                      vacunas: isChecked
+                        ? [...prevData.vacunas, vacuna]
+                        : prevData.vacunas.filter(v => v !== vacuna),
+                    }));
+                  }}
+                />
+              ))}
+            </Form.Group>
+
+            <Form.Group controlId="formPeso">
+              <Form.Label>Peso (kg)</Form.Label>
+              <Form.Control
+                type="number"
+                name="peso"
+                value={formData.peso}
+                onChange={handleChange}
+                step="0.1"
+                min="0.1"
+                isInvalid={!!errores.peso}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errores.peso}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formGenero">
+              <Form.Label>Género</Form.Label>
+              <Form.Control
+                as="select"
+                name="genero"
+                value={formData.genero}
+                onChange={handleChange}
+                isInvalid={!!errores.genero}
+                required
+              >
+                <option value="">Seleccione...</option>
+                <option value="Macho">Macho</option>
+                <option value="Hembra">Hembra</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errores.genero}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formImagenToggle">
+              <Form.Check
+                type="switch"
+                id="custom-switch"
+                label="Usar URL de imagen"
+                checked={useUrl}
+                onChange={handleToggleUrl}
+              />
+            </Form.Group>
+
+            {useUrl ? (
+              <Form.Group controlId="formfotoUrl">
+                <Form.Label>URL de Imagen</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="fotoUrl"
+                  value={formData.fotoUrl || ''}
+                  onChange={handleChange}
+                  placeholder="Ingrese la URL de la imagen"
+                  isInvalid={!!errores.imagen}
+                  required
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errores.imagen}
+                </Form.Control.Feedback>
+              </Form.Group>
+            ) : (
+              <Form.Group controlId="formImagen">
+                <Form.Label>Subir Imagen</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="imagen"
+                  accept="image/*"
+                  onChange={handleChange}
+                  isInvalid={!!errores.imagen}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errores.imagen}
+                </Form.Control.Feedback>
+                {imagePreview && (
+                  <img src={imagePreview} alt="Vista previa" style={{ maxWidth: '150px', marginTop: '10px' }} />
+                )}
+              </Form.Group>
+            )}
+
+            <Button
+              variant="success"
+              type="submit"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Cargando..." : "Agregar Mascota"}
+            </Button>
+          </Form>
+        </div>
+
+      </Container>
+    </>
+  );
+};
+
+export default AnimalsList;

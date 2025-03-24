@@ -1,0 +1,7 @@
+.google-login{
+    display: flex;
+    border: solid 1px #ddd;
+    padding: .5rem;
+    justify-content: center;
+    align-items: center;
+}

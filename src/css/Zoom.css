@@ -1,0 +1,9 @@
+#imageZoom {
+  aspect-ratio: 1 / 1;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  cursor: -webkit-zoom-in;
+  max-height: 100%;
+}
