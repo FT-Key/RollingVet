@@ -8,6 +8,7 @@ Se prepara este proyecto como template para el proyecto final de RollingCode com
 🔴 Mantener sesión iniciada
 🔴 Comentarios
 🔴 Profesionales
+🟠 Corregir error con AdminAppointments al traer las fechas
 🟠 Deploy
 🟠 Validaciones (Animales, Usuarios, turnos)
 🟠 Filtros
