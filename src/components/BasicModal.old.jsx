@@ -700,7 +700,10 @@ const BasicModal = ({ type, show, onHide, userData, functionUpdateData, productD
                 name="releaseDate"
                 value={editedData.releaseDate || ''}
                 onChange={handleChange}
+<<<<<<< HEAD
                 onClick={(e) => e.target.showPicker()}
+=======
+>>>>>>> main
               />
             </div>
             <div>
