@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAnimals, deleteAnimal, createAnimal, uploadAnimalImage } from '../helpers/ServerAnimals.js';
 import { Col, Container, Row, Form, Button } from 'react-bootstrap';
 import PaginationComponent from '../components/PaginationComponent.jsx';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from "../context/AuthContext";
 import { validateAnimalFields } from '../components/Validators.jsx';
+import BasicCard from '../components/BasicCard.jsx';
 
 const AnimalsList = () => {
   const { user } = useAuth();
